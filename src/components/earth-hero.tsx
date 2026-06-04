@@ -14,6 +14,25 @@ type ArcPath = {
   color: string;
 };
 
+type DataCenterSite = {
+  name: string;
+  lat: number;
+  lon: number;
+};
+
+const dataCenterSites: DataCenterSite[] = [
+  { name: "Northern Virginia", lat: 39.04, lon: -77.49 },
+  { name: "Dallas", lat: 32.78, lon: -96.8 },
+  { name: "Silicon Valley", lat: 37.39, lon: -122.08 },
+  { name: "Sao Paulo", lat: -23.55, lon: -46.63 },
+  { name: "Dublin", lat: 53.35, lon: -6.26 },
+  { name: "Frankfurt", lat: 50.11, lon: 8.68 },
+  { name: "Mumbai", lat: 19.07, lon: 72.88 },
+  { name: "Singapore", lat: 1.35, lon: 103.82 },
+  { name: "Tokyo", lat: 35.68, lon: 139.76 },
+  { name: "Sydney", lat: -33.87, lon: 151.21 },
+];
+
 function seededRandom(seed: number) {
   let value = seed;
 
@@ -34,8 +53,77 @@ function spherePoint(index: number, count: number, radius: number) {
   );
 }
 
+function latLonToSpherePoint(lat: number, lon: number, radius: number) {
+  const latRad = THREE.MathUtils.degToRad(lat);
+  const lonRad = THREE.MathUtils.degToRad(lon + 90);
+  const horizontalRadius = Math.cos(latRad) * radius;
+
+  return new THREE.Vector3(
+    Math.sin(lonRad) * horizontalRadius,
+    Math.sin(latRad) * radius,
+    Math.cos(lonRad) * horizontalRadius,
+  );
+}
+
+function DataCenterMarker({
+  index,
+  site,
+}: {
+  index: number;
+  site: DataCenterSite;
+}) {
+  const pulseRef = useRef<THREE.Mesh>(null);
+  const surfacePoint = useMemo(() => latLonToSpherePoint(site.lat, site.lon, 1.105), [site.lat, site.lon]);
+  const normal = useMemo(() => surfacePoint.clone().normalize(), [surfacePoint]);
+  const beaconPosition = useMemo(() => normal.clone().multiplyScalar(1.17), [normal]);
+  const orientation = useMemo(
+    () => new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), normal),
+    [normal],
+  );
+
+  useFrame(({ clock }) => {
+    if (!pulseRef.current) {
+      return;
+    }
+
+    const pulse = 1 + Math.sin(clock.getElapsedTime() * 2.8 + index * 0.65) * 0.22;
+    pulseRef.current.scale.setScalar(pulse);
+  });
+
+  return (
+    <group>
+      <mesh position={surfacePoint}>
+        <sphereGeometry args={[0.026, 18, 18]} />
+        <meshBasicMaterial color="#e7fbff" transparent opacity={0.96} />
+      </mesh>
+      <mesh ref={pulseRef} position={surfacePoint}>
+        <sphereGeometry args={[0.052, 18, 18]} />
+        <meshBasicMaterial color="#59d9ff" transparent opacity={0.22} depthWrite={false} />
+      </mesh>
+      <mesh position={beaconPosition} quaternion={orientation}>
+        <cylinderGeometry args={[0.008, 0.02, 0.14, 12]} />
+        <meshBasicMaterial color="#5fe7ff" transparent opacity={0.82} />
+      </mesh>
+      <mesh position={normal.clone().multiplyScalar(1.112)} quaternion={orientation}>
+        <torusGeometry args={[0.055, 0.004, 8, 36]} />
+        <meshBasicMaterial color="#8bf4ff" transparent opacity={0.62} />
+      </mesh>
+    </group>
+  );
+}
+
+function DataCenterMarkers() {
+  return (
+    <group>
+      {dataCenterSites.map((site, index) => (
+        <DataCenterMarker key={site.name} index={index} site={site} />
+      ))}
+    </group>
+  );
+}
+
 function PhysicalEarth() {
-  const earthRef = useRef<THREE.Mesh>(null);
+  const earthRef = useRef<THREE.Group>(null);
   const atmosphereRef = useRef<THREE.Mesh>(null);
   const loadedTexture = useLoader(THREE.TextureLoader, "/textures/earth-blue-marble.jpg");
   const texture = useMemo(() => {
@@ -59,10 +147,13 @@ function PhysicalEarth() {
 
   return (
     <group position={physicalCenter}>
-      <mesh ref={earthRef}>
-        <sphereGeometry args={[1.08, 96, 96]} />
-        <meshStandardMaterial map={texture} roughness={0.85} metalness={0.02} />
-      </mesh>
+      <group ref={earthRef}>
+        <mesh>
+          <sphereGeometry args={[1.08, 96, 96]} />
+          <meshStandardMaterial map={texture} roughness={0.85} metalness={0.02} />
+        </mesh>
+        <DataCenterMarkers />
+      </group>
       <mesh ref={atmosphereRef} scale={1.04}>
         <sphereGeometry args={[1.1, 64, 64]} />
         <meshBasicMaterial color="#77b9ff" transparent opacity={0.12} side={THREE.BackSide} />
