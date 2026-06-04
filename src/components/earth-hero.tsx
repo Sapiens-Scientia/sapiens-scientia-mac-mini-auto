@@ -176,20 +176,9 @@ function DigitalEarth() {
     };
   }, []);
 
-  useFrame(({ clock }, delta) => {
-    const elapsed = clock.getElapsedTime();
-
+  useFrame(({ clock }) => {
     if (shellRef.current) {
-      shellRef.current.rotation.y += delta * 0.08;
-      shellRef.current.rotation.x = Math.sin(elapsed * 0.35) * 0.04;
-    }
-
-    if (nodesRef.current) {
-      nodesRef.current.rotation.y -= delta * 0.1;
-    }
-
-    if (linksRef.current) {
-      linksRef.current.rotation.y -= delta * 0.1;
+      shellRef.current.rotation.x = Math.sin(clock.getElapsedTime() * 0.35) * 0.025;
     }
   });
 
