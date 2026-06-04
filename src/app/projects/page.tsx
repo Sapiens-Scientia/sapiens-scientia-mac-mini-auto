@@ -2,16 +2,8 @@ import Link from "next/link";
 
 const projectLinks = [
   {
-    href: "https://github.com/Sapiens-Scientia/sapiensscientia.com",
-    label: "SapiensScientia.com Repository",
-  },
-  {
-    href: "https://science.nasa.gov/earth/earth-observatory/blue-marble-next-generation/",
-    label: "NASA Blue Marble",
-  },
-  {
-    href: "https://threejs.org/",
-    label: "Three.js",
+    href: "https://earthview3d.vercel.app/",
+    label: "EarthView 3D",
   },
 ];
 

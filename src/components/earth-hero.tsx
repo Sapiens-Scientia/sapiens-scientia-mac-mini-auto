@@ -178,9 +178,18 @@ function DigitalEarth() {
     };
   }, []);
 
-  useFrame(({ clock }) => {
+  useFrame(({ clock }, delta) => {
     if (shellRef.current) {
-      shellRef.current.rotation.x = Math.sin(clock.getElapsedTime() * 0.35) * 0.025;
+      shellRef.current.rotation.y += delta * 0.08;
+      shellRef.current.rotation.x = Math.sin(clock.getElapsedTime() * 0.35) * 0.04;
+    }
+
+    if (nodesRef.current) {
+      nodesRef.current.rotation.y -= delta * 0.1;
+    }
+
+    if (linksRef.current) {
+      linksRef.current.rotation.y -= delta * 0.1;
     }
   });
 
@@ -448,11 +457,6 @@ function Scene() {
 export function EarthHero() {
   return (
     <section className="relative min-h-screen bg-black">
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-10 px-5 pt-6 text-center sm:pt-8">
-        <h1 className="text-balance text-3xl font-semibold tracking-normal text-white sm:text-5xl">
-          Sapiens Scientia
-        </h1>
-      </div>
       <div className="absolute inset-0">
         <Canvas
           camera={{ position: [0, 0.28, 6.35], fov: 45 }}
