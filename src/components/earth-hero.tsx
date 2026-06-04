@@ -1,7 +1,9 @@
 "use client";
 
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
-import { Billboard, Line, OrbitControls, Stars, Text } from "@react-three/drei";
+import { Billboard, Html, Line, OrbitControls, Stars, Text } from "@react-three/drei";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Suspense, useMemo, useRef } from "react";
 import * as THREE from "three";
 
@@ -225,6 +227,90 @@ function DigitalEarth() {
   );
 }
 
+function FeaturedDigitalNode() {
+  const router = useRouter();
+  const nodeRef = useRef<THREE.Mesh>(null);
+  const position: [number, number, number] = [
+    digitalCenter.x - 0.18,
+    digitalCenter.y + 0.14,
+    digitalCenter.z + 1.18,
+  ];
+
+  useFrame(({ clock }) => {
+    if (!nodeRef.current) {
+      return;
+    }
+
+    const pulse = 1 + Math.sin(clock.getElapsedTime() * 3.4) * 0.16;
+    nodeRef.current.scale.setScalar(pulse);
+  });
+
+  const openProjects = () => {
+    router.push("/projects");
+  };
+
+  const handleActivate = (event: { stopPropagation: () => void }) => {
+    event.stopPropagation();
+    openProjects();
+  };
+
+  return (
+    <group
+      position={position}
+      onClick={handleActivate}
+      onPointerDown={handleActivate}
+      onPointerOver={() => {
+        document.body.style.cursor = "pointer";
+      }}
+      onPointerOut={() => {
+        document.body.style.cursor = "";
+      }}
+    >
+      <mesh>
+        <sphereGeometry args={[0.24, 24, 24]} />
+        <meshBasicMaterial transparent opacity={0} depthTest={false} depthWrite={false} />
+      </mesh>
+      <mesh ref={nodeRef} renderOrder={20}>
+        <sphereGeometry args={[0.082, 32, 32]} />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0.98} depthTest={false} />
+      </mesh>
+      <mesh renderOrder={19}>
+        <sphereGeometry args={[0.14, 32, 32]} />
+        <meshBasicMaterial color="#58d7ff" transparent opacity={0.18} depthTest={false} />
+      </mesh>
+      <Billboard position={[0, 0.28, 0.08]} follow lockX={false} lockY={false} lockZ={false}>
+        <Text
+          anchorX="center"
+          anchorY="middle"
+          color="#ffffff"
+          fontSize={0.12}
+          fontWeight={700}
+          outlineColor="#00111f"
+          outlineWidth={0.01}
+          renderOrder={21}
+          onClick={handleActivate}
+          onPointerDown={handleActivate}
+        >
+          Sapiens Scientia
+        </Text>
+      </Billboard>
+      <Html position={[0, 0.17, 0.1]} center zIndexRange={[40, 0]}>
+        <Link
+          href="/projects"
+          aria-label="Open Sapiens Scientia projects"
+          className="block h-28 w-72 cursor-pointer"
+          onPointerEnter={() => {
+            document.body.style.cursor = "pointer";
+          }}
+          onPointerLeave={() => {
+            document.body.style.cursor = "";
+          }}
+        />
+      </Html>
+    </group>
+  );
+}
+
 function DataConnectors() {
   const pulsesRef = useRef<THREE.Group>(null);
 
@@ -338,6 +424,7 @@ function Scene() {
       <Stars radius={16} depth={24} count={900} factor={2.4} saturation={0} fade speed={0.18} />
       <PhysicalEarth />
       <DigitalEarth />
+      <FeaturedDigitalNode />
       <DataConnectors />
       <GlobeLabel
         position={[physicalCenter.x, physicalCenter.y + 1.42, physicalCenter.z + 0.08]}
