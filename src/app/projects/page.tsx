@@ -21,7 +21,7 @@ export default function ProjectsPage() {
 
       <section className="mx-auto flex max-w-3xl flex-col gap-10">
         <div>
-          <p className="mb-3 text-sm font-medium uppercase tracking-[0.24em] text-blue-300">
+          <p className="mb-3 text-xl font-medium uppercase tracking-[0.24em] text-blue-300">
             Sapiens Scientia
           </p>
           <h1 className="text-5xl font-semibold tracking-normal sm:text-7xl">Projects</h1>

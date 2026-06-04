@@ -10,7 +10,8 @@ import * as THREE from "three";
 const physicalCenter = new THREE.Vector3(-1.9, -0.08, 0);
 const digitalCenter = new THREE.Vector3(1.9, -0.08, 0);
 const metaCenter = new THREE.Vector3(0, -0.08, 0);
-const labelFont = "/fonts/barlow-condensed-bold.ttf";
+const labelFont = "/fonts/barlow-condensed-light.ttf";
+const earthLabelFont = "/fonts/barlow-condensed-bold.ttf";
 
 type ArcPath = {
   curve: THREE.CatmullRomCurve3;
@@ -318,9 +319,7 @@ function FeaturedDigitalNode({ digitalPosition }: { digitalPosition: THREE.Vecto
           color="#ffffff"
           font={labelFont}
           fontSize={0.12}
-          fontWeight={700}
-          outlineColor="#00111f"
-          outlineWidth={0.01}
+          fontWeight={300}
           renderOrder={21}
           onClick={handleActivate}
           onPointerDown={handleActivate}
@@ -435,7 +434,7 @@ function GlobeLabel({
         anchorX="center"
         anchorY="middle"
         color="#ffffff"
-        font={labelFont}
+        font={earthLabelFont}
         fontSize={0.18}
         fontWeight={700}
         outlineColor="#000000"
@@ -477,9 +476,9 @@ function MetaEarthLabel({
           anchorX="center"
           anchorY="middle"
           color={isMerged ? "#b8ecff" : "#ffffff"}
-          font={labelFont}
+          font={earthLabelFont}
           fontSize={0.17}
-          fontWeight={800}
+          fontWeight={700}
           outlineColor="#000000"
           outlineWidth={0.012}
           renderOrder={12}
