@@ -262,6 +262,7 @@ function DigitalEarth({ targetPosition }: { targetPosition: THREE.Vector3 }) {
 function FeaturedDigitalNode() {
   const router = useRouter();
   const nodeRef = useRef<THREE.Mesh>(null);
+  const labelRef = useRef<THREE.Mesh>(null);
   const position: [number, number, number] = [-0.18, 0.14, 1.18];
 
   useFrame(({ clock }) => {
@@ -271,6 +272,14 @@ function FeaturedDigitalNode() {
 
     const pulse = 1 + Math.sin(clock.getElapsedTime() * 3.4) * 0.16;
     nodeRef.current.scale.setScalar(pulse);
+
+    const material = labelRef.current?.material;
+
+    if (material && !Array.isArray(material)) {
+      material.depthTest = false;
+      material.depthWrite = false;
+      material.needsUpdate = true;
+    }
   });
 
   const openProjects = () => {
@@ -308,13 +317,14 @@ function FeaturedDigitalNode() {
       </mesh>
       <Billboard position={[0, 0.28, 0.08]} follow lockX={false} lockY={false} lockZ={false}>
         <Text
+          ref={labelRef}
           anchorX="center"
           anchorY="middle"
           color="#ffffff"
           font={labelFont}
           fontSize={0.12}
           fontWeight={300}
-          renderOrder={21}
+          renderOrder={50}
           onClick={handleActivate}
           onPointerDown={handleActivate}
         >
