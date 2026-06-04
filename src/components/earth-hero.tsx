@@ -1,7 +1,7 @@
 "use client";
 
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
-import { Line, OrbitControls, Stars } from "@react-three/drei";
+import { Billboard, Line, OrbitControls, Stars, Text } from "@react-three/drei";
 import { Suspense, useMemo, useRef } from "react";
 import * as THREE from "three";
 
@@ -239,6 +239,31 @@ function DataConnectors() {
   );
 }
 
+function GlobeLabel({
+  children,
+  position,
+}: {
+  children: string;
+  position: [number, number, number];
+}) {
+  return (
+    <Billboard position={position} follow lockX={false} lockY={false} lockZ={false}>
+      <Text
+        anchorX="center"
+        anchorY="middle"
+        color="#ffffff"
+        fontSize={0.18}
+        fontWeight={700}
+        outlineColor="#000000"
+        outlineWidth={0.012}
+        renderOrder={10}
+      >
+        {children}
+      </Text>
+    </Billboard>
+  );
+}
+
 function Scene() {
   return (
     <>
@@ -251,6 +276,14 @@ function Scene() {
       <PhysicalEarth />
       <DigitalEarth />
       <DataConnectors />
+      <GlobeLabel
+        position={[physicalCenter.x, physicalCenter.y + 1.42, physicalCenter.z + 0.08]}
+      >
+        Physical Earth
+      </GlobeLabel>
+      <GlobeLabel position={[digitalCenter.x, digitalCenter.y + 1.42, digitalCenter.z + 0.08]}>
+        Digital Earth
+      </GlobeLabel>
       <OrbitControls
         enablePan={false}
         enableZoom={false}
@@ -269,18 +302,6 @@ export function EarthHero() {
         <h1 className="text-balance text-3xl font-semibold tracking-normal text-white sm:text-5xl">
           Sapiens Scientia
         </h1>
-      </div>
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-10 grid grid-cols-2 px-5 pt-[12vh] text-center sm:px-8 lg:px-16">
-        <div>
-          <p className="text-balance text-2xl font-semibold tracking-normal text-white sm:text-4xl">
-            Physical Earth
-          </p>
-        </div>
-        <div>
-          <p className="text-balance text-2xl font-semibold tracking-normal text-white sm:text-4xl">
-            Digital Earth
-          </p>
-        </div>
       </div>
       <div className="absolute inset-0">
         <Canvas
