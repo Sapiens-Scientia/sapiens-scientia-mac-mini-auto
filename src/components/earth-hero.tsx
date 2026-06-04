@@ -4,11 +4,12 @@ import { Canvas, useFrame, useLoader } from "@react-three/fiber";
 import { Billboard, Html, Line, OrbitControls, Stars, Text } from "@react-three/drei";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Suspense, useMemo, useRef } from "react";
+import { Suspense, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 
 const physicalCenter = new THREE.Vector3(-1.9, -0.08, 0);
 const digitalCenter = new THREE.Vector3(1.9, -0.08, 0);
+const metaCenter = new THREE.Vector3(0, -0.08, 0);
 
 type ArcPath = {
   curve: THREE.CatmullRomCurve3;
@@ -102,9 +103,11 @@ function DataCenterMarkers() {
   );
 }
 
-function PhysicalEarth() {
+function PhysicalEarth({ targetPosition }: { targetPosition: THREE.Vector3 }) {
+  const groupRef = useRef<THREE.Group>(null);
   const earthRef = useRef<THREE.Group>(null);
   const atmosphereRef = useRef<THREE.Mesh>(null);
+  const hasPositionedRef = useRef(false);
   const loadedTexture = useLoader(THREE.TextureLoader, "/textures/earth-blue-marble.jpg");
   const texture = useMemo(() => {
     const clonedTexture = loadedTexture.clone();
@@ -116,6 +119,15 @@ function PhysicalEarth() {
   }, [loadedTexture]);
 
   useFrame((_, delta) => {
+    if (groupRef.current) {
+      if (!hasPositionedRef.current) {
+        groupRef.current.position.copy(targetPosition);
+        hasPositionedRef.current = true;
+      }
+
+      groupRef.current.position.lerp(targetPosition, 1 - Math.pow(0.0008, delta));
+    }
+
     if (earthRef.current) {
       earthRef.current.rotation.y += delta * 0.12;
     }
@@ -126,7 +138,7 @@ function PhysicalEarth() {
   });
 
   return (
-    <group position={physicalCenter}>
+    <group ref={groupRef}>
       <group ref={earthRef}>
         <mesh>
           <sphereGeometry args={[1.08, 96, 96]} />
@@ -146,10 +158,12 @@ function PhysicalEarth() {
   );
 }
 
-function DigitalEarth() {
+function DigitalEarth({ targetPosition }: { targetPosition: THREE.Vector3 }) {
+  const groupRef = useRef<THREE.Group>(null);
   const shellRef = useRef<THREE.Mesh>(null);
   const nodesRef = useRef<THREE.Points>(null);
   const linksRef = useRef<THREE.LineSegments>(null);
+  const hasPositionedRef = useRef(false);
 
   const { nodePositions, linkPositions } = useMemo(() => {
     const nodes: number[] = [];
@@ -179,6 +193,15 @@ function DigitalEarth() {
   }, []);
 
   useFrame(({ clock }, delta) => {
+    if (groupRef.current) {
+      if (!hasPositionedRef.current) {
+        groupRef.current.position.copy(targetPosition);
+        hasPositionedRef.current = true;
+      }
+
+      groupRef.current.position.lerp(targetPosition, 1 - Math.pow(0.0008, delta));
+    }
+
     if (shellRef.current) {
       shellRef.current.rotation.y += delta * 0.08;
       shellRef.current.rotation.x = Math.sin(clock.getElapsedTime() * 0.35) * 0.04;
@@ -194,7 +217,7 @@ function DigitalEarth() {
   });
 
   return (
-    <group position={digitalCenter}>
+    <group ref={groupRef}>
       <mesh ref={shellRef}>
         <sphereGeometry args={[1.12, 96, 96]} />
         <meshPhysicalMaterial
@@ -236,13 +259,13 @@ function DigitalEarth() {
   );
 }
 
-function FeaturedDigitalNode() {
+function FeaturedDigitalNode({ digitalPosition }: { digitalPosition: THREE.Vector3 }) {
   const router = useRouter();
   const nodeRef = useRef<THREE.Mesh>(null);
   const position: [number, number, number] = [
-    digitalCenter.x - 0.18,
-    digitalCenter.y + 0.14,
-    digitalCenter.z + 1.18,
+    digitalPosition.x - 0.18,
+    digitalPosition.y + 0.14,
+    digitalPosition.z + 1.18,
   ];
 
   useFrame(({ clock }) => {
@@ -422,7 +445,70 @@ function GlobeLabel({
   );
 }
 
+function MetaEarthLabel({
+  isMerged,
+  onToggle,
+}: {
+  isMerged: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <Billboard position={[0, metaCenter.y + 1.56, 0.16]} follow lockX={false} lockY={false} lockZ={false}>
+      <group
+        onClick={(event) => {
+          event.stopPropagation();
+          onToggle();
+        }}
+        onPointerOver={() => {
+          document.body.style.cursor = "pointer";
+        }}
+        onPointerOut={() => {
+          document.body.style.cursor = "";
+        }}
+      >
+        <mesh>
+          <planeGeometry args={[1.05, 0.32]} />
+          <meshBasicMaterial transparent opacity={0} depthWrite={false} />
+        </mesh>
+        <Text
+          anchorX="center"
+          anchorY="middle"
+          color={isMerged ? "#b8ecff" : "#ffffff"}
+          fontSize={0.17}
+          fontWeight={800}
+          outlineColor="#000000"
+          outlineWidth={0.012}
+          renderOrder={12}
+        >
+          Meta Earth
+        </Text>
+        <Html position={[0, 0, 0.04]} center zIndexRange={[35, 0]}>
+          <button
+            type="button"
+            aria-label={isMerged ? "Separate Meta Earth" : "Merge into Meta Earth"}
+            className="block h-16 w-64 cursor-pointer bg-transparent outline-none focus:outline-none"
+            onClick={(event) => {
+              event.stopPropagation();
+              onToggle();
+            }}
+            onPointerEnter={() => {
+              document.body.style.cursor = "pointer";
+            }}
+            onPointerLeave={() => {
+              document.body.style.cursor = "";
+            }}
+          />
+        </Html>
+      </group>
+    </Billboard>
+  );
+}
+
 function Scene() {
+  const [isMerged, setIsMerged] = useState(false);
+  const physicalTarget = isMerged ? metaCenter : physicalCenter;
+  const digitalTarget = isMerged ? metaCenter : digitalCenter;
+
   return (
     <>
       <color attach="background" args={["#000000"]} />
@@ -431,18 +517,23 @@ function Scene() {
       <pointLight position={[2.9, 1.6, 2.2]} intensity={3.2} color="#278aff" />
       <pointLight position={[0, 1.4, 2.8]} intensity={1.3} color="#8ff2ff" />
       <Stars radius={16} depth={24} count={900} factor={2.4} saturation={0} fade speed={0.18} />
-      <PhysicalEarth />
-      <DigitalEarth />
-      <FeaturedDigitalNode />
-      <DataConnectors />
-      <GlobeLabel
-        position={[physicalCenter.x, physicalCenter.y + 1.42, physicalCenter.z + 0.08]}
-      >
-        Physical Earth
-      </GlobeLabel>
-      <GlobeLabel position={[digitalCenter.x, digitalCenter.y + 1.42, digitalCenter.z + 0.08]}>
-        Digital Earth
-      </GlobeLabel>
+      <PhysicalEarth targetPosition={physicalTarget} />
+      <DigitalEarth targetPosition={digitalTarget} />
+      <FeaturedDigitalNode digitalPosition={digitalTarget} />
+      {!isMerged && <DataConnectors />}
+      {!isMerged && (
+        <>
+          <GlobeLabel
+            position={[physicalCenter.x, physicalCenter.y + 1.42, physicalCenter.z + 0.08]}
+          >
+            Physical Earth
+          </GlobeLabel>
+          <GlobeLabel position={[digitalCenter.x, digitalCenter.y + 1.42, digitalCenter.z + 0.08]}>
+            Digital Earth
+          </GlobeLabel>
+        </>
+      )}
+      <MetaEarthLabel isMerged={isMerged} onToggle={() => setIsMerged((value) => !value)} />
       <OrbitControls
         enablePan={false}
         enableZoom={false}
