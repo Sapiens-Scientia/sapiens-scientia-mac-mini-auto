@@ -12,6 +12,7 @@ const digitalCenter = new THREE.Vector3(1.9, -0.08, 0);
 const metaCenter = new THREE.Vector3(0, -0.08, 0);
 const labelFont = "/fonts/barlow-condensed-light.ttf";
 const earthLabelFont = "/fonts/barlow-condensed-bold.ttf";
+const earthViewUrl = "https://earthview3d.vercel.app/";
 
 type ArcPath = {
   curve: THREE.CatmullRomCurve3;
@@ -120,6 +121,10 @@ function PhysicalEarth({ targetPosition }: { targetPosition: THREE.Vector3 }) {
     return clonedTexture;
   }, [loadedTexture]);
 
+  const openEarthView = () => {
+    window.location.href = earthViewUrl;
+  };
+
   useFrame((_, delta) => {
     if (groupRef.current) {
       if (!hasPositionedRef.current) {
@@ -140,7 +145,26 @@ function PhysicalEarth({ targetPosition }: { targetPosition: THREE.Vector3 }) {
   });
 
   return (
-    <group ref={groupRef}>
+    <group
+      ref={groupRef}
+      onClick={(event) => {
+        event.stopPropagation();
+        openEarthView();
+      }}
+      onPointerOver={() => {
+        document.body.style.cursor = "pointer";
+      }}
+      onPointerOut={() => {
+        document.body.style.cursor = "";
+      }}
+    >
+      <Html position={[0, 0.2, 1.24]} center zIndexRange={[30, 0]}>
+        <a
+          href={earthViewUrl}
+          aria-label="Open EarthView 3D"
+          className="block h-96 w-96 cursor-pointer bg-transparent"
+        />
+      </Html>
       <group ref={earthRef}>
         <mesh>
           <sphereGeometry args={[1.08, 96, 96]} />
@@ -427,26 +451,66 @@ function DataConnectors() {
 
 function GlobeLabel({
   children,
+  onClick,
   position,
 }: {
   children: string;
+  onClick?: () => void;
   position: [number, number, number];
 }) {
   return (
     <Billboard position={position} follow lockX={false} lockY={false} lockZ={false}>
-      <Text
-        anchorX="center"
-        anchorY="middle"
-        color="#ffffff"
-        font={earthLabelFont}
-        fontSize={0.18}
-        fontWeight={700}
-        outlineColor="#000000"
-        outlineWidth={0.012}
-        renderOrder={10}
+      <group
+        onClick={(event) => {
+          if (!onClick) {
+            return;
+          }
+
+          event.stopPropagation();
+          onClick();
+        }}
+        onPointerOver={() => {
+          if (onClick) {
+            document.body.style.cursor = "pointer";
+          }
+        }}
+        onPointerOut={() => {
+          if (onClick) {
+            document.body.style.cursor = "";
+          }
+        }}
       >
-        {children}
-      </Text>
+        <mesh>
+          <planeGeometry args={[1.3, 0.3]} />
+          <meshBasicMaterial transparent opacity={0} depthWrite={false} />
+        </mesh>
+        {onClick && (
+          <Html position={[0, 0, 0.04]} center zIndexRange={[35, 0]}>
+            <button
+              type="button"
+              aria-label={`Open ${children}`}
+              className="block h-14 w-56 cursor-pointer bg-transparent outline-none focus:outline-none"
+              onClick={(event) => {
+                event.stopPropagation();
+                onClick();
+              }}
+            />
+          </Html>
+        )}
+        <Text
+          anchorX="center"
+          anchorY="middle"
+          color="#ffffff"
+          font={earthLabelFont}
+          fontSize={0.18}
+          fontWeight={700}
+          outlineColor="#000000"
+          outlineWidth={0.012}
+          renderOrder={10}
+        >
+          {children}
+        </Text>
+      </group>
     </Billboard>
   );
 }
@@ -530,6 +594,9 @@ function Scene() {
       {!isMerged && (
         <>
           <GlobeLabel
+            onClick={() => {
+              window.location.href = earthViewUrl;
+            }}
             position={[physicalCenter.x, physicalCenter.y + 1.42, physicalCenter.z + 0.08]}
           >
             Physical Earth
