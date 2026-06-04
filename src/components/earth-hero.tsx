@@ -27,6 +27,11 @@ type DataCenterSite = {
   lon: number;
 };
 
+type ConceptNode = {
+  label: string;
+  level: number;
+};
+
 const dataCenterSites: DataCenterSite[] = [
   { name: "Northern Virginia", lat: 39.04, lon: -77.49 },
   { name: "Dallas", lat: 32.78, lon: -96.8 },
@@ -38,6 +43,60 @@ const dataCenterSites: DataCenterSite[] = [
   { name: "Singapore", lat: 1.35, lon: 103.82 },
   { name: "Tokyo", lat: 35.68, lon: 139.76 },
   { name: "Sydney", lat: -33.87, lon: 151.21 },
+];
+
+const earthSystemNodes: ConceptNode[] = [
+  { label: "Microsystems", level: 0 },
+  { label: "Nanosystems", level: 1 },
+  { label: "Elementary Particles", level: 2 },
+  { label: "Atoms", level: 2 },
+  { label: "Molecules", level: 2 },
+  { label: "Microsystems", level: 1 },
+  { label: "Cells", level: 2 },
+  { label: "Microbes", level: 2 },
+  { label: "Bacteria", level: 2 },
+  { label: "Viruses", level: 2 },
+  { label: "Mesosystems", level: 0 },
+  { label: "Tree of Life", level: 1 },
+  { label: "Multicellular Life Forms (Metazoans)", level: 1 },
+  { label: "Mammals", level: 2 },
+  { label: "Homo sapiens", level: 3 },
+  { label: "Macrosystems", level: 0 },
+  { label: "Nations", level: 1 },
+  { label: "Legal System", level: 1 },
+  { label: "Economic System", level: 1 },
+  { label: "Healthcare System", level: 1 },
+  { label: "People", level: 1 },
+  { label: "Technology", level: 1 },
+  { label: "Information / Knowledge Systems", level: 1 },
+  { label: "Buildings", level: 1 },
+  { label: "Transportation, Pipes, & Cables", level: 1 },
+  { label: "Business & Industrial System", level: 1 },
+  { label: "Financial System", level: 1 },
+  { label: "Agricultural Systems", level: 1 },
+  { label: "Energy Generation System", level: 1 },
+  { label: "Waste Management System", level: 1 },
+  { label: "Megasystems", level: 0 },
+  { label: "The Sun", level: 1 },
+  { label: "Atmosphere", level: 1 },
+  { label: "Climate System", level: 1 },
+  { label: "Freshwater", level: 1 },
+  { label: "Fossil Fuels", level: 1 },
+  { label: "Anthropogenic Waste", level: 1 },
+  { label: "Soil System", level: 1 },
+  { label: "Ecosystems", level: 1 },
+  { label: "Biosphere", level: 1 },
+  { label: "Hydrosphere", level: 1 },
+  { label: "Geosphere", level: 1 },
+];
+
+const humanPlatformNodes: ConceptNode[] = [
+  { label: "Human Health Platform (Person)", level: 0 },
+  { label: "Human Health Platform", level: 1 },
+  { label: "Human Society Platform (People)", level: 0 },
+  { label: "Human Society Platform", level: 1 },
+  { label: "Environmental Platform (Planet)", level: 0 },
+  { label: "Environmental Platform", level: 1 },
 ];
 
 function seededRandom(seed: number) {
@@ -581,7 +640,7 @@ function MetaEarthLabel({
 }
 
 function Scene() {
-  const [isMerged, setIsMerged] = useState(false);
+  const [isMerged, setIsMerged] = useState(true);
   const physicalTarget = isMerged ? metaCenter : physicalCenter;
   const digitalTarget = isMerged ? metaCenter : digitalCenter;
 
@@ -623,6 +682,68 @@ function Scene() {
   );
 }
 
+function ConceptColumn({
+  align,
+  nodes,
+  title,
+}: {
+  align: "left" | "right";
+  nodes: ConceptNode[];
+  title: string;
+}) {
+  return (
+    <aside
+      className={[
+        "scrollbar-hidden pointer-events-auto max-h-[72vh] w-[min(23rem,27vw)] overflow-y-auto px-5 py-4",
+        "border-white/15 bg-black/42 text-white shadow-[0_0_28px_rgba(91,181,255,0.13)] backdrop-blur-sm",
+        "max-lg:max-h-[34vh] max-lg:w-full max-lg:px-4 max-lg:py-3",
+        align === "left"
+          ? "border-l border-t text-left"
+          : "border-r border-t text-right max-lg:text-left",
+      ].join(" ")}
+      aria-label={title}
+    >
+      <h2 className="mb-3 text-2xl font-semibold leading-none text-white max-lg:text-xl">{title}</h2>
+      <ol className="space-y-1.5">
+        {nodes.map((node) => (
+          <li
+            key={`${node.level}-${node.label}`}
+            className={[
+              "flex items-baseline gap-2 text-sm leading-tight text-slate-100/88",
+              align === "right" ? "justify-end max-lg:justify-start" : "",
+            ].join(" ")}
+            style={{
+              paddingLeft: align === "left" ? `${node.level * 0.72}rem` : undefined,
+              paddingRight: align === "right" ? `${node.level * 0.72}rem` : undefined,
+            }}
+          >
+            <span className={node.level === 0 ? "font-semibold text-sky-100" : "font-normal"}>
+              {node.label}
+            </span>
+          </li>
+        ))}
+      </ol>
+    </aside>
+  );
+}
+
+function ConceptOverlay() {
+  return (
+    <div className="pointer-events-none absolute inset-x-0 top-1/2 z-10 flex -translate-y-1/2 items-center justify-between gap-6 px-8 max-lg:inset-x-4 max-lg:bottom-4 max-lg:top-auto max-lg:grid max-lg:translate-y-0 max-lg:grid-cols-2 max-lg:px-0 max-md:grid-cols-1">
+      <ConceptColumn
+        align="left"
+        title="Earth Systems"
+        nodes={earthSystemNodes}
+      />
+      <ConceptColumn
+        align="right"
+        title="Human Platforms"
+        nodes={humanPlatformNodes}
+      />
+    </div>
+  );
+}
+
 export function EarthHero() {
   return (
     <section className="relative min-h-screen bg-black">
@@ -639,6 +760,7 @@ export function EarthHero() {
           </Suspense>
         </Canvas>
       </div>
+      <ConceptOverlay />
     </section>
   );
 }
