@@ -93,9 +93,32 @@ const earthSystemNodes: ConceptNode[] = [
 ];
 
 const humanPlatformNodes: ConceptNode[] = [
-  { label: "Human Health Platform (Person)", level: 0 },
-  { label: "Human Society Platform (People)", level: 0 },
-  { label: "Environmental Platform (Planet)", level: 0 },
+  { label: "Human Health Platform", level: 0 },
+  { label: "Human Society Platform", level: 0 },
+  { label: "Environmental Platform", level: 0 },
+];
+
+const digitalSystemNodes: ConceptNode[] = [
+  { label: "Computational Systems", level: 0 },
+  { label: "Cloud Infrastructure", level: 1 },
+  { label: "Data Centers", level: 1 },
+  { label: "Edge Computing", level: 1 },
+  { label: "Device Networks", level: 1 },
+  { label: "Communication Systems", level: 0 },
+  { label: "Internet Backbone", level: 1 },
+  { label: "Wireless Networks", level: 1 },
+  { label: "Satellite Networks", level: 1 },
+  { label: "Sensor Networks", level: 1 },
+  { label: "Data Systems", level: 0 },
+  { label: "Knowledge Graphs", level: 1 },
+  { label: "Databases", level: 1 },
+  { label: "Data Pipelines", level: 1 },
+  { label: "Digital Twins", level: 1 },
+  { label: "Intelligence Systems", level: 0 },
+  { label: "Machine Learning", level: 1 },
+  { label: "Simulation Models", level: 1 },
+  { label: "Decision Support", level: 1 },
+  { label: "Autonomous Agents", level: 1 },
 ];
 
 function seededRandom(seed: number) {
@@ -726,21 +749,28 @@ function Scene() {
 function ConceptColumn({
   align,
   nodes,
+  size = "large",
   title,
 }: {
-  align: "left" | "right";
+  align: "left" | "center" | "right";
   nodes: ConceptNode[];
+  size?: "large" | "compact";
   title: string;
 }) {
+  const isRightAligned = align === "right";
+  const isCenterAligned = align === "center";
+
   return (
     <aside
       className={[
-        "scrollbar-hidden pointer-events-auto max-h-[72vh] w-72 overflow-y-auto py-4",
-        "border-white/15 bg-black/42 text-white shadow-[0_0_28px_rgba(91,181,255,0.13)] backdrop-blur-sm",
-        "max-lg:max-h-[34vh] max-lg:w-full max-lg:px-4 max-lg:py-3",
-        align === "left"
-          ? "border-l border-t pl-6 pr-4 text-left"
-          : "border-r border-t pl-4 pr-6 text-right max-lg:text-left",
+        "scrollbar-hidden pointer-events-auto overflow-y-auto py-4",
+        "border border-white/15 bg-black/42 text-white shadow-[0_0_28px_rgba(91,181,255,0.13)] backdrop-blur-sm",
+        size === "large" ? "w-64" : "w-56",
+        size === "large" ? "h-[72vh] max-lg:h-auto max-lg:max-h-[34vh]" : "max-h-[24vh]",
+        "max-lg:w-full max-lg:px-4 max-lg:py-3",
+        align === "left" ? "pl-6 pr-4 text-left" : "",
+        isRightAligned ? "pl-4 pr-6 text-right max-lg:text-left" : "",
+        isCenterAligned ? "px-6 text-center" : "",
       ].join(" ")}
       aria-label={title}
       onWheelCapture={(event) => event.stopPropagation()}
@@ -753,7 +783,8 @@ function ConceptColumn({
             key={`${node.level}-${node.label}`}
             className={[
               "flex items-baseline gap-2 text-sm leading-tight text-slate-100/88",
-              align === "right" ? "justify-end max-lg:justify-start" : "",
+              isRightAligned ? "justify-end max-lg:justify-start" : "",
+              isCenterAligned ? "justify-center" : "",
             ].join(" ")}
             style={{
               paddingLeft: align === "left" ? `${node.level * 0.72}rem` : undefined,
@@ -772,18 +803,28 @@ function ConceptColumn({
 
 function ConceptOverlay() {
   return (
-    <div className="pointer-events-none absolute inset-x-0 top-1/2 z-10 flex -translate-y-1/2 items-center justify-between gap-6 px-8 max-lg:inset-x-4 max-lg:bottom-4 max-lg:top-auto max-lg:grid max-lg:translate-y-0 max-lg:grid-cols-2 max-lg:px-0 max-md:grid-cols-1">
-      <ConceptColumn
-        align="left"
-        title="Earth Systems"
-        nodes={earthSystemNodes}
-      />
-      <ConceptColumn
-        align="right"
-        title="Human Platforms"
-        nodes={humanPlatformNodes}
-      />
-    </div>
+    <>
+      <div className="pointer-events-none absolute inset-x-0 top-1/2 z-10 flex -translate-y-1/2 items-center justify-between gap-6 px-8 max-lg:inset-x-4 max-lg:bottom-36 max-lg:top-auto max-lg:grid max-lg:translate-y-0 max-lg:grid-cols-2 max-lg:px-0 max-md:grid-cols-1">
+        <ConceptColumn
+          align="left"
+          title="Earth Systems"
+          nodes={earthSystemNodes}
+        />
+        <ConceptColumn
+          align="right"
+          title="Digital Systems"
+          nodes={digitalSystemNodes}
+        />
+      </div>
+      <div className="pointer-events-none absolute inset-x-0 bottom-16 z-10 flex justify-center px-8 max-lg:inset-x-4 max-lg:bottom-6 max-lg:px-0">
+        <ConceptColumn
+          align="center"
+          size="compact"
+          title="Human Platforms"
+          nodes={humanPlatformNodes}
+        />
+      </div>
+    </>
   );
 }
 
