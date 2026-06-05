@@ -13,8 +13,8 @@ const digitalCenter = new THREE.Vector3(1.9, -0.08, 0);
 const metaCenter = new THREE.Vector3(0, -0.08, 0);
 const digitalNetworkRadius = 1.16;
 const maxPanTargetRadius = 0.9;
-const labelFont = "/fonts/barlow-condensed-light.ttf";
-const earthLabelFont = "/fonts/barlow-condensed-bold.ttf";
+const labelFont = "/fonts/geist-regular.ttf";
+const earthLabelFont = "/fonts/geist-semibold.ttf";
 const earthViewUrl = "https://earthview3d.vercel.app/";
 
 type ArcPath = {
@@ -30,8 +30,20 @@ type DataCenterSite = {
 };
 
 type ConceptNode = {
+  color?: string;
   label: string;
   level: number;
+};
+
+type DataIndexEntry = {
+  name: string;
+  href: string;
+};
+
+type DataIndexCategory = {
+  color: string;
+  name: string;
+  entries: DataIndexEntry[];
 };
 
 const dataCenterSites: DataCenterSite[] = [
@@ -71,6 +83,7 @@ const earthSystemNodes: ConceptNode[] = [
   { label: "People", level: 1 },
   { label: "Technology", level: 1 },
   { label: "Information Systems", level: 1 },
+  { label: "Data Centers", level: 2, color: "#57a6ff" },
   { label: "Buildings", level: 1 },
   { label: "Transportation, Pipes, & Cables", level: 1 },
   { label: "Business & Industrial System", level: 1 },
@@ -101,7 +114,7 @@ const humanPlatformNodes: ConceptNode[] = [
 const digitalSystemNodes: ConceptNode[] = [
   { label: "Computational Systems", level: 0 },
   { label: "Cloud Infrastructure", level: 1 },
-  { label: "Data Centers", level: 1 },
+  { label: "Data Centers", level: 1, color: "#57a6ff" },
   { label: "Edge Computing", level: 1 },
   { label: "Device Networks", level: 1 },
   { label: "Communication Systems", level: 0 },
@@ -112,6 +125,15 @@ const digitalSystemNodes: ConceptNode[] = [
   { label: "Data Systems", level: 0 },
   { label: "Knowledge Graphs", level: 1 },
   { label: "Databases", level: 1 },
+  { label: "General Knowledge", level: 2, color: "#f8fafc" },
+  { label: "Scholarly Indexes", level: 2, color: "#7dd3fc" },
+  { label: "Life Sciences", level: 2, color: "#34d399" },
+  { label: "Physical Sciences", level: 2, color: "#a78bfa" },
+  { label: "Books & Archives", level: 2, color: "#fbbf24" },
+  { label: "Law & Patents", level: 2, color: "#fb7185" },
+  { label: "Public Data", level: 2, color: "#22d3ee" },
+  { label: "Platforms", level: 2, color: "#f472b6" },
+  { label: "Registries", level: 2, color: "#c4b5fd" },
   { label: "Data Pipelines", level: 1 },
   { label: "Digital Twins", level: 1 },
   { label: "Intelligence Systems", level: 0 },
@@ -120,6 +142,123 @@ const digitalSystemNodes: ConceptNode[] = [
   { label: "Decision Support", level: 1 },
   { label: "Autonomous Agents", level: 1 },
 ];
+
+const dataIndexCategories: DataIndexCategory[] = [
+  {
+    name: "General Knowledge",
+    color: "#f8fafc",
+    entries: [
+      { name: "Wikipedia", href: "https://www.wikipedia.org/" },
+      { name: "Wikidata", href: "https://www.wikidata.org/" },
+      { name: "Internet Archive", href: "https://archive.org/" },
+      { name: "Common Crawl", href: "https://commoncrawl.org/" },
+      { name: "Library of Congress", href: "https://www.loc.gov/" },
+    ],
+  },
+  {
+    name: "Scholarly Indexes",
+    color: "#7dd3fc",
+    entries: [
+      { name: "Google Scholar", href: "https://scholar.google.com/" },
+      { name: "OpenAlex", href: "https://openalex.org/" },
+      { name: "Semantic Scholar", href: "https://www.semanticscholar.org/" },
+      { name: "Crossref", href: "https://www.crossref.org/" },
+      { name: "Scopus", href: "https://www.scopus.com/" },
+      { name: "Web of Science", href: "https://www.webofscience.com/" },
+      { name: "Dimensions", href: "https://www.dimensions.ai/" },
+      { name: "The Lens", href: "https://www.lens.org/" },
+    ],
+  },
+  {
+    name: "Life Sciences",
+    color: "#34d399",
+    entries: [
+      { name: "PubMed", href: "https://pubmed.ncbi.nlm.nih.gov/" },
+      { name: "PubMed Central", href: "https://pmc.ncbi.nlm.nih.gov/" },
+      { name: "Europe PMC", href: "https://europepmc.org/" },
+      { name: "ClinicalTrials.gov", href: "https://clinicaltrials.gov/" },
+      { name: "GenBank", href: "https://www.ncbi.nlm.nih.gov/genbank/" },
+      { name: "UniProt", href: "https://www.uniprot.org/" },
+      { name: "RCSB PDB", href: "https://www.rcsb.org/" },
+      { name: "Ensembl", href: "https://www.ensembl.org/" },
+    ],
+  },
+  {
+    name: "Physical Sciences",
+    color: "#a78bfa",
+    entries: [
+      { name: "arXiv", href: "https://arxiv.org/" },
+      { name: "INSPIRE HEP", href: "https://inspirehep.net/" },
+      { name: "NASA ADS", href: "https://ui.adsabs.harvard.edu/" },
+    ],
+  },
+  {
+    name: "Books & Archives",
+    color: "#fbbf24",
+    entries: [
+      { name: "WorldCat", href: "https://www.worldcat.org/" },
+      { name: "Google Books", href: "https://books.google.com/" },
+      { name: "HathiTrust", href: "https://www.hathitrust.org/" },
+      { name: "JSTOR", href: "https://www.jstor.org/" },
+      { name: "ProQuest", href: "https://www.proquest.com/" },
+      { name: "EBSCOhost", href: "https://www.ebsco.com/products/ebscohost-platform" },
+    ],
+  },
+  {
+    name: "Law & Patents",
+    color: "#fb7185",
+    entries: [
+      { name: "LexisNexis", href: "https://www.lexisnexis.com/" },
+      { name: "Westlaw", href: "https://legal.thomsonreuters.com/en/products/westlaw" },
+      { name: "GovInfo", href: "https://www.govinfo.gov/" },
+      { name: "EUR-Lex", href: "https://eur-lex.europa.eu/" },
+      { name: "CourtListener", href: "https://www.courtlistener.com/" },
+      { name: "Espacenet", href: "https://worldwide.espacenet.com/" },
+      { name: "Google Patents", href: "https://patents.google.com/" },
+      { name: "Derwent Innovation", href: "https://clarivate.com/products/derwent/" },
+    ],
+  },
+  {
+    name: "Public Data",
+    color: "#22d3ee",
+    entries: [
+      { name: "World Bank Data", href: "https://data.worldbank.org/" },
+      { name: "OECD Data", href: "https://data.oecd.org/" },
+      { name: "FRED", href: "https://fred.stlouisfed.org/" },
+      { name: "Data.gov", href: "https://data.gov/" },
+      { name: "Kaggle Datasets", href: "https://www.kaggle.com/datasets" },
+      { name: "GDELT", href: "https://www.gdeltproject.org/" },
+    ],
+  },
+  {
+    name: "Platforms",
+    color: "#f472b6",
+    entries: [
+      { name: "YouTube", href: "https://www.youtube.com/" },
+      { name: "X", href: "https://x.com/" },
+      { name: "Reddit", href: "https://www.reddit.com/" },
+      { name: "Stack Exchange", href: "https://stackexchange.com/" },
+    ],
+  },
+  {
+    name: "Registries",
+    color: "#c4b5fd",
+    entries: [
+      { name: "re3data", href: "https://www.re3data.org/" },
+      { name: "OpenDOAR", href: "https://opendoar.ac.uk/" },
+      { name: "FAIRsharing", href: "https://fairsharing.org/" },
+      { name: "DataCite Repository Finder", href: "https://support.datacite.org/docs/repository-finder" },
+    ],
+  },
+];
+
+const dataIndexEntries = dataIndexCategories.flatMap((category) =>
+  category.entries.map((entry) => ({
+    ...entry,
+    category: category.name,
+    color: category.color,
+  })),
+);
 
 function seededRandom(seed: number) {
   let value = seed;
@@ -337,7 +476,7 @@ function DigitalEarth({ targetPosition }: { targetPosition: THREE.Vector3 }) {
           opacity={0.22}
           side={THREE.DoubleSide}
           depthTest
-          depthWrite={false}
+          depthWrite
         />
       </mesh>
       <mesh scale={1.045}>
@@ -365,8 +504,130 @@ function DigitalEarth({ targetPosition }: { targetPosition: THREE.Vector3 }) {
           </bufferGeometry>
           <lineBasicMaterial color="#2fe3ff" transparent opacity={0.38} depthTest depthWrite={false} />
         </lineSegments>
+        <DataIndexSurfaceNodes />
         <FeaturedDigitalNode />
       </group>
+    </group>
+  );
+}
+
+function DataIndexSurfaceNodes() {
+  const surfaceNodes = useMemo(
+    () => {
+      const random = seededRandom(8801);
+
+      return dataIndexEntries.map((entry) => {
+        const longitude = random() * Math.PI * 2;
+        const latitude = Math.acos(random() * 2 - 1);
+        const radius = 1.21 + (random() - 0.5) * 0.035;
+        const position = new THREE.Vector3(
+          Math.cos(longitude) * Math.sin(latitude) * radius,
+          Math.cos(latitude) * radius,
+          Math.sin(longitude) * Math.sin(latitude) * radius,
+        );
+
+        return {
+          ...entry,
+          position: [position.x, position.y, position.z] as [number, number, number],
+        };
+      });
+    },
+    [],
+  );
+
+  return (
+    <group>
+      {surfaceNodes.map((entry) => (
+        <DataIndexSurfaceNode
+          key={`${entry.category}-${entry.name}`}
+          color={entry.color}
+          href={entry.href}
+          name={entry.name}
+          position={entry.position}
+        />
+      ))}
+    </group>
+  );
+}
+
+function DataIndexSurfaceNode({
+  color,
+  href,
+  name,
+  position,
+}: {
+  color: string;
+  href: string;
+  name: string;
+  position: [number, number, number];
+}) {
+  const [isHovered, setIsHovered] = useState(false);
+  const nodeRef = useRef<THREE.Mesh>(null);
+  const labelRef = useRef<THREE.Mesh>(null);
+
+  useFrame(({ clock }) => {
+    if (nodeRef.current) {
+      const pulse = 1 + Math.sin(clock.getElapsedTime() * 2.8 + position[0] * 2.1) * 0.12;
+      nodeRef.current.scale.setScalar(isHovered ? pulse * 1.65 : pulse);
+    }
+
+    const material = labelRef.current?.material;
+
+    if (material && !Array.isArray(material)) {
+      material.depthTest = true;
+      material.depthWrite = false;
+      material.needsUpdate = true;
+    }
+  });
+
+  const openSource = (event: { stopPropagation: () => void }) => {
+    event.stopPropagation();
+    window.open(href, "_blank", "noopener,noreferrer");
+  };
+
+  return (
+    <group
+      position={position}
+      onClick={openSource}
+      onPointerDown={openSource}
+      onPointerOver={(event) => {
+        event.stopPropagation();
+        setIsHovered(true);
+        document.body.style.cursor = "pointer";
+      }}
+      onPointerOut={() => {
+        setIsHovered(false);
+        document.body.style.cursor = "";
+      }}
+    >
+      <mesh>
+        <sphereGeometry args={[0.075, 18, 18]} />
+        <meshBasicMaterial transparent opacity={0} depthTest depthWrite={false} />
+      </mesh>
+      <mesh ref={nodeRef} renderOrder={22}>
+        <sphereGeometry args={[0.034, 22, 22]} />
+        <meshBasicMaterial color={color} transparent opacity={0.96} depthTest depthWrite={false} />
+      </mesh>
+      <mesh renderOrder={21}>
+        <sphereGeometry args={[0.062, 22, 22]} />
+        <meshBasicMaterial color={color} transparent opacity={isHovered ? 0.3 : 0.13} depthTest depthWrite={false} />
+      </mesh>
+      <Billboard position={[0, 0.12, 0.05]} follow lockX={false} lockY={false} lockZ={false}>
+        <Text
+          ref={labelRef}
+          anchorX="center"
+          anchorY="middle"
+          color="#ffffff"
+          font={labelFont}
+          fontSize={isHovered ? 0.086 : 0.069}
+          fontWeight={300}
+          outlineColor="#000000"
+          outlineWidth={0.008}
+          renderOrder={55}
+        >
+          {name}
+        </Text>
+      </Billboard>
     </group>
   );
 }
@@ -765,7 +1026,7 @@ function ConceptColumn({
       className={[
         "scrollbar-hidden pointer-events-auto overflow-y-auto py-4",
         "border border-white/15 bg-black/42 text-white shadow-[0_0_28px_rgba(91,181,255,0.13)] backdrop-blur-sm",
-        size === "large" ? "w-64" : "w-56",
+        size === "large" ? "w-64" : "w-72",
         size === "large" ? "h-[72vh] max-lg:h-auto max-lg:max-h-[34vh]" : "max-h-[24vh]",
         "max-lg:w-full max-lg:px-4 max-lg:py-3",
         align === "left" ? "pl-6 pr-4 text-left" : "",
@@ -792,7 +1053,7 @@ function ConceptColumn({
             }}
           >
             <span className={node.level === 0 ? "font-semibold text-sky-100" : "font-normal"}>
-              {node.label}
+              <span style={{ color: node.color }}>{node.label}</span>
             </span>
           </li>
         ))}
@@ -804,6 +1065,11 @@ function ConceptColumn({
 function ConceptOverlay() {
   return (
     <>
+      <header className="pointer-events-none absolute inset-x-4 top-8 z-10 flex justify-center max-lg:top-4">
+        <p className="text-2xl font-semibold uppercase tracking-[0.18em] text-blue-200 sm:text-4xl">
+          Sapiens Scientia
+        </p>
+      </header>
       <div className="pointer-events-none absolute inset-x-0 top-1/2 z-10 flex -translate-y-1/2 items-center justify-between gap-6 px-8 max-lg:inset-x-4 max-lg:bottom-36 max-lg:top-auto max-lg:grid max-lg:translate-y-0 max-lg:grid-cols-2 max-lg:px-0 max-md:grid-cols-1">
         <ConceptColumn
           align="left"
@@ -811,7 +1077,7 @@ function ConceptOverlay() {
           nodes={earthSystemNodes}
         />
         <ConceptColumn
-          align="right"
+          align="left"
           title="Digital Systems"
           nodes={digitalSystemNodes}
         />

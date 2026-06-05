@@ -1,12 +1,7 @@
 import type { Metadata } from "next";
-import { Barlow_Condensed } from "next/font/google";
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
 import "./globals.css";
-
-const barlowCondensed = Barlow_Condensed({
-  variable: "--font-barlow-condensed",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-});
 
 export const metadata: Metadata = {
   title: "Sapiens Scientia",
@@ -22,7 +17,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${barlowCondensed.variable} h-full`}
+      className={`${GeistSans.variable} ${GeistMono.variable} h-full`}
     >
       <body className="min-h-full flex flex-col antialiased">{children}</body>
     </html>
