@@ -6,11 +6,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Suspense, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
+import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 
 const physicalCenter = new THREE.Vector3(-1.9, -0.08, 0);
 const digitalCenter = new THREE.Vector3(1.9, -0.08, 0);
 const metaCenter = new THREE.Vector3(0, -0.08, 0);
 const digitalNetworkRadius = 1.16;
+const maxPanTargetRadius = 0.9;
 const labelFont = "/fonts/barlow-condensed-light.ttf";
 const earthLabelFont = "/fonts/barlow-condensed-bold.ttf";
 const earthViewUrl = "https://earthview3d.vercel.app/";
@@ -58,7 +60,7 @@ const earthSystemNodes: ConceptNode[] = [
   { label: "Viruses", level: 2 },
   { label: "Mesosystems", level: 0 },
   { label: "Tree of Life", level: 1 },
-  { label: "Multicellular Life Forms (Metazoans)", level: 1 },
+  { label: "Multicellular Life Forms", level: 1 },
   { label: "Mammals", level: 2 },
   { label: "Homo sapiens", level: 3 },
   { label: "Macrosystems", level: 0 },
@@ -68,7 +70,7 @@ const earthSystemNodes: ConceptNode[] = [
   { label: "Healthcare System", level: 1 },
   { label: "People", level: 1 },
   { label: "Technology", level: 1 },
-  { label: "Information / Knowledge Systems", level: 1 },
+  { label: "Information Systems", level: 1 },
   { label: "Buildings", level: 1 },
   { label: "Transportation, Pipes, & Cables", level: 1 },
   { label: "Business & Industrial System", level: 1 },
@@ -92,11 +94,8 @@ const earthSystemNodes: ConceptNode[] = [
 
 const humanPlatformNodes: ConceptNode[] = [
   { label: "Human Health Platform (Person)", level: 0 },
-  { label: "Human Health Platform", level: 1 },
   { label: "Human Society Platform (People)", level: 0 },
-  { label: "Human Society Platform", level: 1 },
   { label: "Environmental Platform (Planet)", level: 0 },
-  { label: "Environmental Platform", level: 1 },
 ];
 
 function seededRandom(seed: number) {
@@ -182,7 +181,7 @@ function PhysicalEarth({ targetPosition }: { targetPosition: THREE.Vector3 }) {
   }, [loadedTexture]);
 
   const openEarthView = () => {
-    window.location.href = earthViewUrl;
+    window.open(earthViewUrl, "_blank", "noopener,noreferrer");
   };
 
   useFrame((_, delta) => {
@@ -221,8 +220,10 @@ function PhysicalEarth({ targetPosition }: { targetPosition: THREE.Vector3 }) {
       <Html position={[0, 0.2, 1.24]} center zIndexRange={[30, 0]}>
         <a
           href={earthViewUrl}
+          target="_blank"
+          rel="noopener noreferrer"
           aria-label="Open EarthView 3D"
-          className="block h-96 w-96 cursor-pointer bg-transparent"
+          className="block h-64 w-64 cursor-pointer rounded-full bg-transparent"
         />
       </Html>
       <group ref={earthRef}>
@@ -392,7 +393,7 @@ function FeaturedDigitalNode() {
       }}
     >
       <mesh>
-        <sphereGeometry args={[0.24, 24, 24]} />
+        <sphereGeometry args={[0.12, 24, 24]} />
         <meshBasicMaterial transparent opacity={0} depthTest depthWrite={false} />
       </mesh>
       <mesh ref={nodeRef} renderOrder={20}>
@@ -423,7 +424,7 @@ function FeaturedDigitalNode() {
         <Link
           href="/projects"
           aria-label="Open Sapiens Scientia projects"
-          className="block h-28 w-72 cursor-pointer"
+          className="block h-8 w-36 cursor-pointer bg-transparent"
           onPointerEnter={() => {
             document.body.style.cursor = "pointer";
           }}
@@ -545,7 +546,7 @@ function GlobeLabel({
         }}
       >
         <mesh>
-          <planeGeometry args={[1.3, 0.3]} />
+          <planeGeometry args={[0.9, 0.22]} />
           <meshBasicMaterial transparent opacity={0} depthWrite={false} />
         </mesh>
         {onClick && (
@@ -553,7 +554,7 @@ function GlobeLabel({
             <button
               type="button"
               aria-label={`Open ${children}`}
-              className="block h-14 w-56 cursor-pointer bg-transparent outline-none focus:outline-none"
+              className="block h-8 w-32 cursor-pointer bg-transparent outline-none focus:outline-none"
               onClick={(event) => {
                 event.stopPropagation();
                 onClick();
@@ -601,7 +602,7 @@ function MetaEarthLabel({
         }}
       >
         <mesh>
-          <planeGeometry args={[1.05, 0.32]} />
+          <planeGeometry args={[0.75, 0.22]} />
           <meshBasicMaterial transparent opacity={0} depthWrite={false} />
         </mesh>
         <Text
@@ -621,7 +622,7 @@ function MetaEarthLabel({
           <button
             type="button"
             aria-label={isMerged ? "Separate Meta Earth" : "Merge into Meta Earth"}
-            className="block h-16 w-64 cursor-pointer bg-transparent outline-none focus:outline-none"
+            className="block h-8 w-32 cursor-pointer bg-transparent outline-none focus:outline-none"
             onClick={(event) => {
               event.stopPropagation();
               onToggle();
@@ -639,8 +640,54 @@ function MetaEarthLabel({
   );
 }
 
+function ConstrainedOrbitControls() {
+  const controlsRef = useRef<OrbitControlsImpl>(null);
+  const panCenter = useMemo(() => metaCenter.clone(), []);
+  const panOffsetRef = useRef(new THREE.Vector3());
+  const clampedTargetRef = useRef(new THREE.Vector3());
+  const excessPanRef = useRef(new THREE.Vector3());
+
+  useFrame(() => {
+    const controls = controlsRef.current;
+
+    if (!controls) {
+      return;
+    }
+
+    const panOffset = panOffsetRef.current.copy(controls.target).sub(panCenter);
+
+    if (panOffset.length() <= maxPanTargetRadius) {
+      return;
+    }
+
+    const clampedTarget = clampedTargetRef.current
+      .copy(panOffset)
+      .setLength(maxPanTargetRadius)
+      .add(panCenter);
+    const excessPan = excessPanRef.current.copy(controls.target).sub(clampedTarget);
+
+    controls.target.copy(clampedTarget);
+    controls.object.position.sub(excessPan);
+    controls.update();
+  });
+
+  return (
+    <OrbitControls
+      ref={controlsRef}
+      enablePan
+      enableZoom
+      minDistance={3.4}
+      maxDistance={10}
+      minPolarAngle={Math.PI / 2.7}
+      maxPolarAngle={Math.PI / 1.75}
+      panSpeed={0.55}
+      rotateSpeed={0.22}
+    />
+  );
+}
+
 function Scene() {
-  const [isMerged, setIsMerged] = useState(true);
+  const [isMerged, setIsMerged] = useState(false);
   const physicalTarget = isMerged ? metaCenter : physicalCenter;
   const digitalTarget = isMerged ? metaCenter : digitalCenter;
 
@@ -659,7 +706,7 @@ function Scene() {
         <>
           <GlobeLabel
             onClick={() => {
-              window.location.href = earthViewUrl;
+              window.open(earthViewUrl, "_blank", "noopener,noreferrer");
             }}
             position={[physicalCenter.x, physicalCenter.y + 1.42, physicalCenter.z + 0.08]}
           >
@@ -671,13 +718,7 @@ function Scene() {
         </>
       )}
       <MetaEarthLabel isMerged={isMerged} onToggle={() => setIsMerged((value) => !value)} />
-      <OrbitControls
-        enablePan={false}
-        enableZoom={false}
-        minPolarAngle={Math.PI / 2.7}
-        maxPolarAngle={Math.PI / 1.75}
-        rotateSpeed={0.22}
-      />
+      <ConstrainedOrbitControls />
     </>
   );
 }
@@ -694,14 +735,16 @@ function ConceptColumn({
   return (
     <aside
       className={[
-        "scrollbar-hidden pointer-events-auto max-h-[72vh] w-[min(23rem,27vw)] overflow-y-auto px-5 py-4",
+        "scrollbar-hidden pointer-events-auto max-h-[72vh] w-72 overflow-y-auto py-4",
         "border-white/15 bg-black/42 text-white shadow-[0_0_28px_rgba(91,181,255,0.13)] backdrop-blur-sm",
         "max-lg:max-h-[34vh] max-lg:w-full max-lg:px-4 max-lg:py-3",
         align === "left"
-          ? "border-l border-t text-left"
-          : "border-r border-t text-right max-lg:text-left",
+          ? "border-l border-t pl-6 pr-4 text-left"
+          : "border-r border-t pl-4 pr-6 text-right max-lg:text-left",
       ].join(" ")}
       aria-label={title}
+      onWheelCapture={(event) => event.stopPropagation()}
+      onTouchMoveCapture={(event) => event.stopPropagation()}
     >
       <h2 className="mb-3 text-2xl font-semibold leading-none text-white max-lg:text-xl">{title}</h2>
       <ol className="space-y-1.5">
@@ -749,7 +792,7 @@ export function EarthHero() {
     <section className="relative min-h-screen bg-black">
       <div className="absolute inset-0">
         <Canvas
-          camera={{ position: [0, 0.28, 6.35], fov: 45 }}
+          camera={{ position: [0, 0.28, 9.99], fov: 45 }}
           dpr={[1, 1.8]}
           gl={{ antialias: true, alpha: false }}
           className="!h-full !w-full"
