@@ -42,6 +42,16 @@ type ConceptHighlight = {
   labels: string[];
 };
 
+type HumanPlatformBridge = {
+  color: string;
+  digitalHighlights: string[];
+  earthHighlights: string[];
+  href: string;
+  id: "salus" | "societas" | "terra";
+  subtitle: string;
+  title: string;
+};
+
 type PopoutSide = "left" | "right";
 
 type DataIndexEntry = {
@@ -344,13 +354,34 @@ const earthVitalSigns: EarthVitalSign[] = [
   },
 ];
 
-const humanPlatformNodes: ConceptNode[] = [
-  { label: "Sapiens Scientia Salus", level: 0, href: "/platforms/salus" },
-  { label: "Human Health Platform", level: 1 },
-  { label: "Sapiens Scientia Societas", level: 0, href: "/platforms/societas" },
-  { label: "Human Society Platform", level: 1 },
-  { label: "Sapiens Scientia Terra", level: 0, href: "/platforms/terra" },
-  { label: "Environmental Platform", level: 1 },
+const humanPlatformBridges: HumanPlatformBridge[] = [
+  {
+    id: "salus",
+    title: "Sapiens Scientia Salus",
+    subtitle: "Human Health Platform",
+    href: "/platforms/salus",
+    color: "#38bdf8",
+    earthHighlights: ["Cells", "Microbes", "Healthcare System", "People", "Homo sapiens"],
+    digitalHighlights: ["Life Sciences", "Databases", "Knowledge Graphs", "Decision Support"],
+  },
+  {
+    id: "societas",
+    title: "Sapiens Scientia Societas",
+    subtitle: "Human Society Platform",
+    href: "/platforms/societas",
+    color: "#818cf8",
+    earthHighlights: ["People", "Legal System", "Economic System", "Financial System", "Technology"],
+    digitalHighlights: ["Public Data", "Platforms", "Law & Patents", "General Knowledge"],
+  },
+  {
+    id: "terra",
+    title: "Sapiens Scientia Terra",
+    subtitle: "Environmental Platform",
+    href: "/platforms/terra",
+    color: "#34d399",
+    earthHighlights: ["Climate System", "Freshwater", "Ecosystems", "Biosphere", "Hydrosphere", "Soil System"],
+    digitalHighlights: ["Public Data", "Digital Twins", "Simulation Models", "Sensor Networks"],
+  },
 ];
 
 const digitalSystemNodes: ConceptNode[] = [
@@ -367,7 +398,7 @@ const digitalSystemNodes: ConceptNode[] = [
   { label: "Data Systems", level: 0 },
   { label: "Knowledge Graphs", level: 1 },
   { label: "Databases", level: 1, href: "https://www.sapiensscientia.com/projects/sapiens-scientia-data-index" },
-  { label: "General Knowledge", level: 2, color: "#f8fafc" },
+  { label: "General Knowledge", level: 2, color: "#2dd4bf" },
   { label: "Scholarly Indexes", level: 2, color: "#7dd3fc" },
   { label: "Life Sciences", level: 2, color: "#34d399" },
   { label: "Physical Sciences", level: 2, color: "#a78bfa" },
@@ -388,7 +419,7 @@ const digitalSystemNodes: ConceptNode[] = [
 const dataIndexCategories: DataIndexCategory[] = [
   {
     name: "General Knowledge",
-    color: "#f8fafc",
+    color: "#2dd4bf",
     entries: [
       { name: "Wikipedia", href: "https://www.wikipedia.org/" },
       { name: "Wikidata", href: "https://www.wikidata.org/" },
@@ -511,7 +542,7 @@ const earthVitalSignHighlights = earthVitalSigns.flatMap((sign) =>
 
 const digitalDataIndexHighlights: ConceptHighlight[] = [
   { color: "#22d3ee", labels: ["Databases", "Public Data"] },
-  { color: "#f8fafc", labels: ["General Knowledge"] },
+  { color: "#2dd4bf", labels: ["General Knowledge"] },
   { color: "#7dd3fc", labels: ["Scholarly Indexes"] },
   { color: "#34d399", labels: ["Life Sciences"] },
   { color: "#a78bfa", labels: ["Physical Sciences"] },
@@ -520,6 +551,22 @@ const digitalDataIndexHighlights: ConceptHighlight[] = [
   { color: "#f472b6", labels: ["Platforms"] },
   { color: "#c4b5fd", labels: ["Registries"] },
 ];
+
+function platformBridgeHighlights(
+  activeBridge: HumanPlatformBridge | null,
+  side: "earth" | "digital",
+): ConceptHighlight[] {
+  if (!activeBridge) {
+    return [];
+  }
+
+  return [
+    {
+      color: activeBridge.color,
+      labels: side === "earth" ? activeBridge.earthHighlights : activeBridge.digitalHighlights,
+    },
+  ];
+}
 
 function stopPanelScrollPropagation(event: React.WheelEvent<HTMLElement> | React.TouchEvent<HTMLElement>) {
   event.stopPropagation();
@@ -1634,9 +1681,11 @@ function DataIndexPanel({
 }
 
 function EarthSystemsColumn({
+  activeBridge,
   onPanelPointerEnter,
   onPanelPointerLeave,
 }: {
+  activeBridge: HumanPlatformBridge | null;
   onPanelPointerEnter: () => void;
   onPanelPointerLeave: () => void;
 }) {
@@ -1649,6 +1698,10 @@ function EarthSystemsColumn({
       })),
     [],
   );
+  const activeHighlights = [
+    ...(isVitalSignsOpen ? earthSystemHighlights : []),
+    ...platformBridgeHighlights(activeBridge, "earth"),
+  ];
 
   return (
     <div
@@ -1661,7 +1714,7 @@ function EarthSystemsColumn({
       <div className="relative">
         <ConceptColumn
           align="left"
-          highlights={isVitalSignsOpen ? earthSystemHighlights : undefined}
+          highlights={activeHighlights}
           onPanelPointerEnter={onPanelPointerEnter}
           onPanelPointerLeave={onPanelPointerLeave}
           headerAction={(
@@ -1688,13 +1741,19 @@ function EarthSystemsColumn({
 }
 
 function DigitalSystemsColumn({
+  activeBridge,
   onPanelPointerEnter,
   onPanelPointerLeave,
 }: {
+  activeBridge: HumanPlatformBridge | null;
   onPanelPointerEnter: () => void;
   onPanelPointerLeave: () => void;
 }) {
   const [isDataIndexOpen, setIsDataIndexOpen] = useState(false);
+  const activeHighlights = [
+    ...(isDataIndexOpen ? digitalDataIndexHighlights : []),
+    ...platformBridgeHighlights(activeBridge, "digital"),
+  ];
 
   return (
     <div
@@ -1707,7 +1766,7 @@ function DigitalSystemsColumn({
       <div className="relative">
         <ConceptColumn
           align="left"
-          highlights={isDataIndexOpen ? digitalDataIndexHighlights : undefined}
+          highlights={activeHighlights}
           onPanelPointerEnter={onPanelPointerEnter}
           onPanelPointerLeave={onPanelPointerLeave}
           headerActionPosition="before"
@@ -1733,6 +1792,124 @@ function DigitalSystemsColumn({
         />
       </div>
     </div>
+  );
+}
+
+function BridgeConnectorLayer({ activeBridgeId }: { activeBridgeId: HumanPlatformBridge["id"] | null }) {
+  return (
+    <svg
+      className="pointer-events-none absolute inset-0 z-[9] hidden h-full w-full overflow-visible lg:block"
+      aria-hidden="true"
+      viewBox="0 0 100 100"
+      preserveAspectRatio="none"
+    >
+      <defs>
+        <filter id="bridge-glow" x="-40%" y="-40%" width="180%" height="180%">
+          <feGaussianBlur stdDeviation="0.7" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+      {humanPlatformBridges.map((bridge, index) => {
+        const isActive = activeBridgeId === bridge.id;
+        const opacity = activeBridgeId ? (isActive ? 0.88 : 0.11) : 0.24;
+        const strokeWidth = isActive ? 0.34 : 0.18;
+        const platformY = 75.8 + index * 4.7;
+        const leftPath = `M 15 86 C 26 88, 34 ${platformY}, 41 ${platformY}`;
+        const rightPath = `M 85 86 C 74 88, 66 ${platformY}, 59 ${platformY}`;
+
+        return (
+          <g key={bridge.id} filter={isActive ? "url(#bridge-glow)" : undefined}>
+            <path
+              d={leftPath}
+              fill="none"
+              stroke={bridge.color}
+              strokeLinecap="round"
+              strokeWidth={strokeWidth}
+              opacity={opacity}
+            />
+            <path
+              d={rightPath}
+              fill="none"
+              stroke={bridge.color}
+              strokeLinecap="round"
+              strokeWidth={strokeWidth}
+              opacity={opacity}
+            />
+            <circle cx="41" cy={platformY} r={isActive ? 0.5 : 0.34} fill={bridge.color} opacity={opacity} />
+            <circle cx="59" cy={platformY} r={isActive ? 0.5 : 0.34} fill={bridge.color} opacity={opacity} />
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
+function HumanPlatformsBridgePanel({
+  activeBridgeId,
+  onBridgeEnter,
+  onBridgeLeave,
+  onPanelPointerEnter,
+  onPanelPointerLeave,
+}: {
+  activeBridgeId: HumanPlatformBridge["id"] | null;
+  onBridgeEnter: (bridge: HumanPlatformBridge) => void;
+  onBridgeLeave: () => void;
+  onPanelPointerEnter: () => void;
+  onPanelPointerLeave: () => void;
+}) {
+  return (
+    <aside
+      className="scrollbar-hidden pointer-events-auto max-h-[24vh] w-72 overflow-y-auto overscroll-contain border border-white/15 bg-black/42 px-6 py-4 text-center text-white shadow-[0_0_28px_rgba(59,130,246,0.16)] backdrop-blur-sm max-lg:w-full max-lg:px-4 max-lg:py-3"
+      aria-label="Human Platforms"
+      onPointerEnter={onPanelPointerEnter}
+      onPointerLeave={() => {
+        onBridgeLeave();
+        onPanelPointerLeave();
+      }}
+      onWheelCapture={stopPanelScrollPropagation}
+      onTouchMoveCapture={stopPanelScrollPropagation}
+    >
+      <h2 className="mb-3 text-2xl font-semibold leading-none text-white max-lg:text-xl">Human Platforms</h2>
+      <ol className="space-y-1.5">
+        {humanPlatformBridges.map((bridge) => {
+          const isActive = activeBridgeId === bridge.id;
+
+          return (
+            <li
+              key={bridge.id}
+              className={[
+                "grid justify-items-center gap-1 py-0.5 transition-all duration-300",
+                isActive ? "scale-[1.02]" : "",
+              ].join(" ")}
+              onPointerEnter={() => onBridgeEnter(bridge)}
+            >
+              <Link
+                href={bridge.href}
+                className="inline-flex items-center justify-center gap-2 text-base font-semibold text-sky-100 underline-offset-4 transition-colors hover:text-white hover:underline focus:outline-none focus-visible:text-white focus-visible:underline"
+                style={{
+                  color: isActive ? bridge.color : undefined,
+                  textShadow: isActive ? `0 0 14px ${bridge.color}` : undefined,
+                }}
+              >
+                <span
+                  aria-hidden="true"
+                  className={[
+                    "h-1.5 w-1.5 rounded-full transition-opacity duration-300",
+                    isActive ? "opacity-100" : "opacity-45",
+                  ].join(" ")}
+                  style={{ backgroundColor: bridge.color, boxShadow: `0 0 12px ${bridge.color}` }}
+                />
+                {bridge.title}
+              </Link>
+              <p className="text-sm leading-tight text-slate-100/88">{bridge.subtitle}</p>
+            </li>
+          );
+        })}
+      </ol>
+    </aside>
   );
 }
 
@@ -1815,8 +1992,11 @@ function ConceptOverlay({
   onPanelPointerEnter: () => void;
   onPanelPointerLeave: () => void;
 }) {
+  const [activeBridge, setActiveBridge] = useState<HumanPlatformBridge | null>(null);
+
   return (
     <>
+      <BridgeConnectorLayer activeBridgeId={activeBridge?.id ?? null} />
       <header className="pointer-events-none absolute inset-x-4 top-8 z-10 flex flex-col items-center gap-4 max-lg:top-4">
         <p className="text-2xl font-semibold uppercase tracking-[0.18em] text-blue-400 drop-shadow-[0_0_18px_rgba(59,130,246,0.65)] sm:text-4xl">
           Sapiens Scientia
@@ -1828,22 +2008,23 @@ function ConceptOverlay({
       </header>
       <div className="pointer-events-none absolute inset-x-0 top-1/2 z-10 flex -translate-y-1/2 items-center justify-between gap-6 px-8 max-lg:inset-x-4 max-lg:bottom-36 max-lg:top-auto max-lg:grid max-lg:translate-y-0 max-lg:grid-cols-2 max-lg:px-0 max-md:grid-cols-1">
         <EarthSystemsColumn
+          activeBridge={activeBridge}
           onPanelPointerEnter={onPanelPointerEnter}
           onPanelPointerLeave={onPanelPointerLeave}
         />
         <DigitalSystemsColumn
+          activeBridge={activeBridge}
           onPanelPointerEnter={onPanelPointerEnter}
           onPanelPointerLeave={onPanelPointerLeave}
         />
       </div>
       <div className="pointer-events-none absolute inset-x-0 bottom-16 z-10 flex justify-center px-8 max-lg:inset-x-4 max-lg:bottom-6 max-lg:px-0">
-        <ConceptColumn
-          align="center"
+        <HumanPlatformsBridgePanel
+          activeBridgeId={activeBridge?.id ?? null}
+          onBridgeEnter={setActiveBridge}
+          onBridgeLeave={() => setActiveBridge(null)}
           onPanelPointerEnter={onPanelPointerEnter}
           onPanelPointerLeave={onPanelPointerLeave}
-          size="compact"
-          title="Human Platforms"
-          nodes={humanPlatformNodes}
         />
       </div>
     </>
