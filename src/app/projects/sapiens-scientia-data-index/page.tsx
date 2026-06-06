@@ -351,7 +351,7 @@ export default function SapiensScientiaDataIndexPage() {
 
       <section className="mx-auto flex max-w-6xl flex-col gap-14">
         <header className="max-w-4xl">
-          <p className="mb-3 text-xl font-medium uppercase tracking-[0.24em] text-blue-300">
+          <p className="mb-3 text-xl font-medium uppercase tracking-[0.24em] text-blue-400">
             Sapiens Scientia
           </p>
           <h1 className="max-w-4xl text-5xl font-semibold tracking-normal sm:text-7xl">
@@ -391,7 +391,7 @@ export default function SapiensScientiaDataIndexPage() {
                     href={item.href}
                     target="_blank"
                     rel="noreferrer"
-                    className="grid gap-2 py-4 text-slate-100 transition-colors hover:text-blue-200 sm:grid-cols-[minmax(0,0.9fr)_minmax(0,1fr)] sm:items-center"
+                    className="grid gap-2 py-4 text-slate-100 transition-colors hover:text-blue-300 sm:grid-cols-[minmax(0,0.9fr)_minmax(0,1fr)] sm:items-center"
                   >
                     <span className="text-2xl font-medium leading-none">
                       {item.name}

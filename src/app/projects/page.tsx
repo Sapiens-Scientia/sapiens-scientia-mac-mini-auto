@@ -27,7 +27,7 @@ export default function ProjectsPage() {
 
       <section className="mx-auto flex max-w-3xl flex-col gap-10">
         <div>
-          <p className="mb-3 text-xl font-medium uppercase tracking-[0.24em] text-blue-300">
+          <p className="mb-3 text-xl font-medium uppercase tracking-[0.24em] text-blue-400">
             Sapiens Scientia
           </p>
           <h1 className="text-5xl font-semibold tracking-normal sm:text-7xl">Projects</h1>
@@ -40,10 +40,10 @@ export default function ProjectsPage() {
               href={project.href}
               target={project.external ? "_blank" : undefined}
               rel={project.external ? "noreferrer" : undefined}
-              className="flex items-center justify-between gap-6 py-6 text-xl font-medium text-slate-100 transition-colors hover:text-blue-200 sm:text-2xl"
+              className="flex items-center justify-between gap-6 py-6 text-xl font-medium text-slate-100 transition-colors hover:text-blue-300 sm:text-2xl"
             >
               <span>{project.label}</span>
-              <span className="text-sm uppercase tracking-[0.2em] text-blue-300">
+              <span className="text-sm uppercase tracking-[0.2em] text-blue-400">
                 {project.external ? "Open" : "View"}
               </span>
             </Link>

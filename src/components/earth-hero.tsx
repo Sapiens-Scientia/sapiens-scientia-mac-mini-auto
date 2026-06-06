@@ -1,10 +1,10 @@
 "use client";
 
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
-import { Billboard, Html, Line, OrbitControls, Stars, Text } from "@react-three/drei";
+import { Billboard, Line, OrbitControls, Stars, Text } from "@react-three/drei";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Suspense, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 
@@ -16,6 +16,7 @@ const maxPanTargetRadius = 0.9;
 const labelFont = "/fonts/geist-regular.ttf";
 const earthLabelFont = "/fonts/geist-semibold.ttf";
 const earthViewUrl = "https://earthview3d.vercel.app/";
+const dataIndexUrl = "/projects/sapiens-scientia-data-index";
 
 type ArcPath = {
   curve: THREE.CatmullRomCurve3;
@@ -36,6 +37,13 @@ type ConceptNode = {
   level: number;
 };
 
+type ConceptHighlight = {
+  color: string;
+  labels: string[];
+};
+
+type PopoutSide = "left" | "right";
+
 type DataIndexEntry = {
   name: string;
   href: string;
@@ -49,6 +57,23 @@ type DataIndexCategory = {
 
 type TimeZoneOption = {
   label: string;
+  value: string;
+};
+
+type EarthVitalSign = {
+  accent: string;
+  earthSystemLinks?: string[];
+  label: string;
+  note: string;
+  source: string;
+  sourceHref: string;
+  statusBar?: {
+    remainingLabel: string;
+    remainingPercent: number;
+    usedLabel: string;
+    usedPercent: number;
+  };
+  updated: string;
   value: string;
 };
 
@@ -89,20 +114,6 @@ function formatClockDate(date: Date | null, timeZone: string) {
     timeZone,
     weekday: "short",
   }).format(date);
-}
-
-function subscribeToClock(onStoreChange: () => void) {
-  const intervalId = window.setInterval(onStoreChange, 1000);
-
-  return () => window.clearInterval(intervalId);
-}
-
-function getClockSnapshot() {
-  return Date.now();
-}
-
-function getServerClockSnapshot() {
-  return 0;
 }
 
 const dataCenterSites: DataCenterSite[] = [
@@ -164,12 +175,181 @@ const earthSystemNodes: ConceptNode[] = [
   { label: "Geosphere", level: 1 },
 ];
 
+const earthVitalSigns: EarthVitalSign[] = [
+  {
+    accent: "#facc15",
+    earthSystemLinks: ["People", "Homo sapiens"],
+    label: "Human Population",
+    value: "8.19B est.",
+    note: "Modeled world population estimate from the U.S. Census population clock.",
+    updated: "Jun 2026",
+    source: "U.S. Census Bureau",
+    sourceHref: "https://www.census.gov/popclock/",
+  },
+  {
+    accent: "#fb923c",
+    earthSystemLinks: ["Fossil Fuels", "Energy Generation System", "Transportation, Pipes, & Cables"],
+    label: "Global Oil Stock",
+    value: "49% used",
+    note: "Approximate cumulative oil consumed vs. proved reserves remaining; excludes unproved resources.",
+    updated: "2025 est.",
+    source: "Worldometer / OilPrice",
+    sourceHref: "https://www.worldometers.info/oil/",
+    statusBar: {
+      usedLabel: "1.7T bbl used",
+      usedPercent: 49,
+      remainingLabel: "1.8T bbl proved remaining",
+      remainingPercent: 51,
+    },
+  },
+  {
+    accent: "#86efac",
+    earthSystemLinks: ["Economic System", "Financial System", "Business & Industrial System"],
+    label: "Global GDP",
+    value: "$118T",
+    note: "Nominal world GDP at current prices; not adjusted for purchasing power or inflation.",
+    updated: "2025 est.",
+    source: "IMF WEO",
+    sourceHref: "https://www.imf.org/external/datamapper/",
+  },
+  {
+    accent: "#fbbf24",
+    earthSystemLinks: ["Energy Generation System", "Fossil Fuels", "Economic System", "Technology"],
+    label: "Primary Energy Use",
+    value: "592 EJ",
+    note: "Global primary energy consumption; fossil fuels account for nearly 87% of the total.",
+    updated: "2024",
+    source: "Energy Institute",
+    sourceHref: "https://www.energyinst.org/statistical-review",
+  },
+  {
+    accent: "#06b6d4",
+    earthSystemLinks: ["Freshwater", "Agricultural Systems", "People", "Ecosystems"],
+    label: "Freshwater Withdrawals",
+    value: "72% ag.",
+    note: "Share of global freshwater withdrawals used by agriculture.",
+    updated: "2024 report",
+    source: "UN-Water",
+    sourceHref: "https://www.unwater.org/water-facts/water-food-and-energy/",
+  },
+  {
+    accent: "#c084fc",
+    earthSystemLinks: ["Anthropogenic Waste", "Waste Management System", "People", "Economic System"],
+    label: "Municipal Waste",
+    value: "2.1B t/yr",
+    note: "Global municipal solid waste generation, projected to rise to 3.8B tonnes by 2050.",
+    updated: "2023",
+    source: "UNEP",
+    sourceHref: "https://www.unep.org/resources/global-waste-management-outlook-2024",
+  },
+  {
+    accent: "#fb7185",
+    earthSystemLinks: ["Anthropogenic Waste", "Waste Management System", "Business & Industrial System"],
+    label: "Plastic Waste",
+    value: "353M t/yr",
+    note: "Global plastic waste generated in 2019; plastics production reached 460M tonnes.",
+    updated: "2019",
+    source: "OECD",
+    sourceHref: "https://www.oecd.org/en/publications/global-plastics-outlook_de747aef-en.html",
+  },
+  {
+    accent: "#a3e635",
+    earthSystemLinks: ["Soil System", "Agricultural Systems", "Ecosystems", "Biosphere"],
+    label: "Land Degradation",
+    value: "up to 40%",
+    note: "Estimated share of the world's land surface degraded by human activity.",
+    updated: "UN estimate",
+    source: "United Nations",
+    sourceHref: "https://www.un.org/en/climatechange/science/climate-issues/land",
+  },
+  {
+    accent: "#f97316",
+    earthSystemLinks: ["Atmosphere", "Climate System"],
+    label: "Global Temperature",
+    value: "+1.19 C",
+    note: "2025 annual anomaly vs. NASA's 1951-1980 baseline.",
+    updated: "2025 annual",
+    source: "NASA GISS",
+    sourceHref: "https://science.nasa.gov/earth/explore/earth-indicators/global-temperature/",
+  },
+  {
+    accent: "#38bdf8",
+    earthSystemLinks: ["Atmosphere", "Climate System", "Fossil Fuels"],
+    label: "Atmospheric CO2",
+    value: "431 ppm",
+    note: "Latest monthly Mauna Loa measurement shown by NASA.",
+    updated: "Apr 2026",
+    source: "NASA / NOAA",
+    sourceHref: "https://science.nasa.gov/earth/explore/earth-indicators/carbon-dioxide/",
+  },
+  {
+    accent: "#a78bfa",
+    earthSystemLinks: ["Atmosphere", "Climate System", "Agricultural Systems"],
+    label: "Atmospheric Methane",
+    value: "1,940 ppb",
+    note: "Heat-trapping gas measured from NOAA's global network.",
+    updated: "Jan 2026",
+    source: "NASA / NOAA",
+    sourceHref: "https://science.nasa.gov/earth/explore/earth-indicators/methane/",
+  },
+  {
+    accent: "#22d3ee",
+    earthSystemLinks: ["Hydrosphere", "Climate System"],
+    label: "Ocean Heat",
+    value: "372 +/- 2 ZJ",
+    note: "Upper-ocean heat content change since 1955.",
+    updated: "Dec 2024",
+    source: "NASA / NOAA",
+    sourceHref: "https://science.nasa.gov/earth/explore/earth-indicators/ocean-warming/",
+  },
+  {
+    accent: "#60a5fa",
+    earthSystemLinks: ["Hydrosphere", "Climate System"],
+    label: "Sea Level",
+    value: "+0.08 cm",
+    note: "Global mean sea level rise during 2025.",
+    updated: "2025",
+    source: "NASA JPL",
+    sourceHref: "https://www.nasa.gov/earth/nasa-analysis-shows-la-nina-limited-sea-level-rise-in-2025/",
+  },
+  {
+    accent: "#93c5fd",
+    earthSystemLinks: ["Hydrosphere", "Climate System"],
+    label: "Arctic Sea Ice",
+    value: "-12.2% / decade",
+    note: "September minimum extent trend vs. the 1981-2010 average.",
+    updated: "Annual series",
+    source: "NASA / NSIDC",
+    sourceHref: "https://science.nasa.gov/earth/explore/earth-indicators/arctic-sea-ice-minimum-extent/",
+  },
+  {
+    accent: "#34d399",
+    earthSystemLinks: ["Ecosystems", "Biosphere", "Agricultural Systems"],
+    label: "Tropical Primary Forest",
+    value: "6.7M ha lost",
+    note: "Record tropical primary rainforest loss in 2024.",
+    updated: "2024",
+    source: "Global Forest Watch / WRI",
+    sourceHref: "https://gfr.wri.org/global-tree-cover-loss-data-2024",
+  },
+  {
+    accent: "#bef264",
+    earthSystemLinks: ["Ecosystems", "Biosphere", "Tree of Life"],
+    label: "Wildlife Populations",
+    value: "-73%",
+    note: "Average change in monitored vertebrate populations, 1970-2020.",
+    updated: "2024 report",
+    source: "WWF / ZSL",
+    sourceHref: "https://www.worldwildlife.org/publications/2024-living-planet-report",
+  },
+];
+
 const humanPlatformNodes: ConceptNode[] = [
   { label: "Sapiens Scientia Salus", level: 0, href: "/platforms/salus" },
   { label: "Human Health Platform", level: 1 },
-  { label: "Sapiens Scientia Societas", level: 0 },
+  { label: "Sapiens Scientia Societas", level: 0, href: "/platforms/societas" },
   { label: "Human Society Platform", level: 1 },
-  { label: "Sapiens Scientia Terra", level: 0 },
+  { label: "Sapiens Scientia Terra", level: 0, href: "/platforms/terra" },
   { label: "Environmental Platform", level: 1 },
 ];
 
@@ -322,6 +502,49 @@ const dataIndexEntries = dataIndexCategories.flatMap((category) =>
   })),
 );
 
+const earthVitalSignHighlights = earthVitalSigns.flatMap((sign) =>
+  (sign.earthSystemLinks ?? []).map((label) => ({
+    color: sign.accent,
+    label,
+  })),
+);
+
+const digitalDataIndexHighlights: ConceptHighlight[] = [
+  { color: "#22d3ee", labels: ["Databases", "Public Data"] },
+  { color: "#f8fafc", labels: ["General Knowledge"] },
+  { color: "#7dd3fc", labels: ["Scholarly Indexes"] },
+  { color: "#34d399", labels: ["Life Sciences"] },
+  { color: "#a78bfa", labels: ["Physical Sciences"] },
+  { color: "#fbbf24", labels: ["Books & Archives"] },
+  { color: "#fb7185", labels: ["Law & Patents"] },
+  { color: "#f472b6", labels: ["Platforms"] },
+  { color: "#c4b5fd", labels: ["Registries"] },
+];
+
+function stopPanelScrollPropagation(event: React.WheelEvent<HTMLElement> | React.TouchEvent<HTMLElement>) {
+  event.stopPropagation();
+}
+
+function useManualPanelWheel<TElement extends HTMLElement>() {
+  const panelRef = useRef<TElement>(null);
+
+  const handlePanelWheel = (event: React.WheelEvent<TElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const panel = panelRef.current;
+
+    if (!panel) {
+      return;
+    }
+
+    const deltaScale = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? panel.clientHeight : 1;
+    panel.scrollTop += event.deltaY * deltaScale;
+  };
+
+  return { handlePanelWheel, panelRef };
+}
+
 function seededRandom(seed: number) {
   let value = seed;
 
@@ -441,15 +664,6 @@ function PhysicalEarth({ targetPosition }: { targetPosition: THREE.Vector3 }) {
         document.body.style.cursor = "";
       }}
     >
-      <Html position={[0, 0.2, 1.24]} center zIndexRange={[30, 0]}>
-        <a
-          href={earthViewUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Open EarthView 3D"
-          className="block h-64 w-64 cursor-pointer rounded-full bg-transparent"
-        />
-      </Html>
       <group ref={earthRef}>
         <mesh>
           <sphereGeometry args={[1.08, 96, 96]} />
@@ -470,6 +684,7 @@ function PhysicalEarth({ targetPosition }: { targetPosition: THREE.Vector3 }) {
 }
 
 function DigitalEarth({ targetPosition }: { targetPosition: THREE.Vector3 }) {
+  const router = useRouter();
   const groupRef = useRef<THREE.Group>(null);
   const shellRef = useRef<THREE.Mesh>(null);
   const networkRef = useRef<THREE.Group>(null);
@@ -524,8 +739,22 @@ function DigitalEarth({ targetPosition }: { targetPosition: THREE.Vector3 }) {
     }
   });
 
+  const openDataIndex = (event: { stopPropagation: () => void }) => {
+    event.stopPropagation();
+    router.push(dataIndexUrl);
+  };
+
   return (
-    <group ref={groupRef}>
+    <group
+      ref={groupRef}
+      onClick={openDataIndex}
+      onPointerOver={() => {
+        document.body.style.cursor = "pointer";
+      }}
+      onPointerOut={() => {
+        document.body.style.cursor = "";
+      }}
+    >
       <mesh ref={shellRef}>
         <sphereGeometry args={[1.12, 96, 96]} />
         <meshPhysicalMaterial
@@ -776,27 +1005,6 @@ function FeaturedDigitalNode() {
           Sapiens Scientia
         </Text>
       </Billboard>
-      <Html position={[0, 0.17, 0.1]} center zIndexRange={[40, 0]}>
-        <Link
-          href="/projects"
-          aria-label="Open Sapiens Scientia projects"
-          className="block h-8 w-36 cursor-pointer bg-transparent"
-          onPointerEnter={() => {
-            setIsHovered(true);
-            document.body.style.cursor = "pointer";
-          }}
-          onPointerLeave={() => {
-            setIsHovered(false);
-            document.body.style.cursor = "";
-          }}
-          onFocus={() => {
-            setIsHovered(true);
-          }}
-          onBlur={() => {
-            setIsHovered(false);
-          }}
-        />
-      </Html>
     </group>
   );
 }
@@ -913,19 +1121,6 @@ function GlobeLabel({
           <planeGeometry args={[0.9, 0.22]} />
           <meshBasicMaterial transparent opacity={0} depthWrite={false} />
         </mesh>
-        {onClick && (
-          <Html position={[0, 0, 0.04]} center zIndexRange={[35, 0]}>
-            <button
-              type="button"
-              aria-label={`Open ${children}`}
-              className="block h-8 w-32 cursor-pointer bg-transparent outline-none focus:outline-none"
-              onClick={(event) => {
-                event.stopPropagation();
-                onClick();
-              }}
-            />
-          </Html>
-        )}
         <Text
           anchorX="center"
           anchorY="middle"
@@ -982,29 +1177,12 @@ function MetaEarthLabel({
         >
           Meta Earth
         </Text>
-        <Html position={[0, 0, 0.04]} center zIndexRange={[35, 0]}>
-          <button
-            type="button"
-            aria-label={isMerged ? "Separate Meta Earth" : "Merge into Meta Earth"}
-            className="block h-8 w-32 cursor-pointer bg-transparent outline-none focus:outline-none"
-            onClick={(event) => {
-              event.stopPropagation();
-              onToggle();
-            }}
-            onPointerEnter={() => {
-              document.body.style.cursor = "pointer";
-            }}
-            onPointerLeave={() => {
-              document.body.style.cursor = "";
-            }}
-          />
-        </Html>
       </group>
     </Billboard>
   );
 }
 
-function ConstrainedOrbitControls() {
+function ConstrainedOrbitControls({ enableZoom }: { enableZoom: boolean }) {
   const controlsRef = useRef<OrbitControlsImpl>(null);
   const panCenter = useMemo(() => metaCenter.clone(), []);
   const panOffsetRef = useRef(new THREE.Vector3());
@@ -1039,7 +1217,7 @@ function ConstrainedOrbitControls() {
     <OrbitControls
       ref={controlsRef}
       enablePan
-      enableZoom
+      enableZoom={enableZoom}
       minDistance={3.4}
       maxDistance={10}
       minPolarAngle={Math.PI / 2.7}
@@ -1050,7 +1228,8 @@ function ConstrainedOrbitControls() {
   );
 }
 
-function Scene() {
+function Scene({ enableZoom }: { enableZoom: boolean }) {
+  const router = useRouter();
   const [isMerged, setIsMerged] = useState(false);
   const physicalTarget = isMerged ? metaCenter : physicalCenter;
   const digitalTarget = isMerged ? metaCenter : digitalCenter;
@@ -1076,36 +1255,66 @@ function Scene() {
           >
             Physical Earth
           </GlobeLabel>
-          <GlobeLabel position={[digitalCenter.x, digitalCenter.y + 1.42, digitalCenter.z + 0.08]}>
+          <GlobeLabel
+            onClick={() => {
+              router.push(dataIndexUrl);
+            }}
+            position={[digitalCenter.x, digitalCenter.y + 1.42, digitalCenter.z + 0.08]}
+          >
             Digital Earth
           </GlobeLabel>
         </>
       )}
       <MetaEarthLabel isMerged={isMerged} onToggle={() => setIsMerged((value) => !value)} />
-      <ConstrainedOrbitControls />
+      <ConstrainedOrbitControls enableZoom={enableZoom} />
     </>
   );
 }
 
 function ConceptColumn({
   align,
+  highlights,
   nodes,
+  headerAction,
+  headerActionPosition = "after",
+  noWrapTitle = false,
+  onPanelPointerEnter,
+  onPanelPointerLeave,
   size = "large",
   title,
 }: {
   align: "left" | "center" | "right";
+  headerAction?: React.ReactNode;
+  headerActionPosition?: "before" | "after";
+  highlights?: ConceptHighlight[];
+  noWrapTitle?: boolean;
   nodes: ConceptNode[];
+  onPanelPointerEnter?: () => void;
+  onPanelPointerLeave?: () => void;
   size?: "large" | "compact";
   title: string;
 }) {
   const isRightAligned = align === "right";
   const isCenterAligned = align === "center";
+  const highlightLookup = useMemo(() => {
+    const lookup = new Map<string, string>();
+
+    highlights?.forEach((highlight) => {
+      highlight.labels.forEach((label) => {
+        if (!lookup.has(label)) {
+          lookup.set(label, highlight.color);
+        }
+      });
+    });
+
+    return lookup;
+  }, [highlights]);
 
   return (
     <aside
       className={[
-        "scrollbar-hidden pointer-events-auto overflow-y-auto py-4",
-        "border border-white/15 bg-black/42 text-white shadow-[0_0_28px_rgba(91,181,255,0.13)] backdrop-blur-sm",
+        "scrollbar-hidden pointer-events-auto overflow-y-auto overscroll-contain py-4",
+        "border border-white/15 bg-black/42 text-white shadow-[0_0_28px_rgba(59,130,246,0.16)] backdrop-blur-sm",
         size === "large" ? "w-64" : "w-72",
         size === "large" ? "h-[72vh] max-lg:h-auto max-lg:max-h-[34vh]" : "max-h-[24vh]",
         "max-lg:w-full max-lg:px-4 max-lg:py-3",
@@ -1114,58 +1323,457 @@ function ConceptColumn({
         isCenterAligned ? "px-6 text-center" : "",
       ].join(" ")}
       aria-label={title}
-      onWheelCapture={(event) => event.stopPropagation()}
-      onTouchMoveCapture={(event) => event.stopPropagation()}
+      onPointerEnter={onPanelPointerEnter}
+      onPointerLeave={onPanelPointerLeave}
+      onWheelCapture={stopPanelScrollPropagation}
+      onTouchMoveCapture={stopPanelScrollPropagation}
     >
-      <h2 className="mb-3 text-2xl font-semibold leading-none text-white max-lg:text-xl">{title}</h2>
+      <div
+        className={[
+          "mb-3 flex items-center gap-2",
+          isRightAligned ? "justify-end max-lg:justify-start" : "",
+          isCenterAligned ? "justify-center" : "",
+        ].join(" ")}
+      >
+        {headerActionPosition === "before" ? headerAction : null}
+        <h2
+          className={[
+            "text-2xl font-semibold leading-none text-white max-lg:text-xl",
+            noWrapTitle ? "whitespace-nowrap" : "",
+          ].join(" ")}
+        >
+          {title}
+        </h2>
+        {headerActionPosition === "after" ? headerAction : null}
+      </div>
       <ol className="space-y-1.5">
         {nodes.map((node) => (
-          <li
+          <ConceptColumnNode
             key={`${node.level}-${node.label}`}
-            className={[
-              "flex items-baseline gap-2 leading-tight text-slate-100/88",
-              size === "compact" && node.level === 0 ? "text-base" : "text-sm",
-              isRightAligned ? "justify-end max-lg:justify-start" : "",
-              isCenterAligned ? "justify-center" : "",
-            ].join(" ")}
-            style={{
-              paddingLeft: align === "left" ? `${node.level * 0.72}rem` : undefined,
-              paddingRight: align === "right" ? `${node.level * 0.72}rem` : undefined,
-            }}
-          >
-            <span className={node.level === 0 ? "font-semibold text-sky-100" : "font-normal"}>
-              {node.href ? (
-                <Link
-                  href={node.href}
-                  className="text-current underline-offset-4 transition-colors hover:text-white hover:underline focus:outline-none focus-visible:text-white focus-visible:underline"
-                  style={{ color: node.color }}
-                >
-                  {node.label}
-                </Link>
-              ) : (
-                <span style={{ color: node.color }}>{node.label}</span>
-              )}
-            </span>
-          </li>
+            align={align}
+            highlightColor={highlightLookup.get(node.label)}
+            isCenterAligned={isCenterAligned}
+            isRightAligned={isRightAligned}
+            node={node}
+            size={size}
+          />
         ))}
       </ol>
     </aside>
   );
 }
 
-function TimeOverlay() {
+function ConceptColumnNode({
+  align,
+  highlightColor,
+  isCenterAligned,
+  isRightAligned,
+  node,
+  size,
+}: {
+  align: "left" | "center" | "right";
+  highlightColor?: string;
+  isCenterAligned: boolean;
+  isRightAligned: boolean;
+  node: ConceptNode;
+  size: "large" | "compact";
+}) {
+  const displayColor = highlightColor ?? node.color;
+
+  return (
+    <li
+      className={[
+        "flex items-baseline gap-2 leading-tight text-slate-100/88 transition-all duration-300",
+        size === "compact" && node.level === 0 ? "text-base" : "text-sm",
+        highlightColor ? "translate-x-1 text-white" : "",
+        isRightAligned ? "justify-end max-lg:justify-start" : "",
+        isCenterAligned ? "justify-center" : "",
+      ].join(" ")}
+      style={{
+        paddingLeft: align === "left" ? `${node.level * 0.72}rem` : undefined,
+        paddingRight: align === "right" ? `${node.level * 0.72}rem` : undefined,
+      }}
+    >
+      <span
+        aria-hidden={!highlightColor}
+        className={[
+          "mt-[0.42rem] h-1.5 w-1.5 shrink-0 rounded-full transition-opacity duration-300",
+          highlightColor ? "opacity-100" : "opacity-0",
+        ].join(" ")}
+        style={{ backgroundColor: highlightColor, boxShadow: highlightColor ? `0 0 12px ${highlightColor}` : undefined }}
+      />
+      <span
+        className={node.level === 0 ? "font-semibold text-sky-100" : "font-normal"}
+        style={{
+          color: displayColor,
+          textShadow: highlightColor ? `0 0 12px ${highlightColor}` : undefined,
+        }}
+      >
+        {node.href ? (
+          <Link
+            href={node.href}
+            className="text-current underline-offset-4 transition-colors hover:text-white hover:underline focus:outline-none focus-visible:text-white focus-visible:underline"
+          >
+            {node.label}
+          </Link>
+        ) : (
+          <span>{node.label}</span>
+        )}
+      </span>
+    </li>
+  );
+}
+
+function PopoutToggleButton({
+  controlsId,
+  isOpen,
+  label,
+  side = "right",
+  onClick,
+}: {
+  controlsId: string;
+  isOpen: boolean;
+  label: string;
+  side?: PopoutSide;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      aria-label={isOpen ? `Hide ${label}` : `Show ${label}`}
+      aria-expanded={isOpen}
+      aria-controls={controlsId}
+      className="grid h-7 w-7 shrink-0 place-items-center border border-blue-300/24 bg-black/54 text-blue-200 shadow-[0_0_18px_rgba(59,130,246,0.16)] transition hover:border-blue-300/50 hover:text-white focus:outline-none focus-visible:border-blue-300/75"
+      onClick={onClick}
+    >
+      <span
+        aria-hidden="true"
+        className={[
+          "text-base leading-none transition-transform duration-200",
+          side === "left" ? "rotate-180" : "",
+          isOpen ? (side === "left" ? "rotate-0" : "rotate-180") : "",
+        ].join(" ")}
+      >
+        ›
+      </span>
+    </button>
+  );
+}
+
+function EarthVitalSignsPanel({
+  isOpen,
+  onPanelPointerEnter,
+  onPanelPointerLeave,
+}: {
+  isOpen: boolean;
+  onPanelPointerEnter: () => void;
+  onPanelPointerLeave: () => void;
+}) {
+  const { handlePanelWheel, panelRef } = useManualPanelWheel<HTMLElement>();
+
+  return (
+    <aside
+      ref={panelRef}
+      className={[
+        "pointer-events-auto relative z-30 border border-blue-300/24 bg-black/58 text-white shadow-[0_0_34px_rgba(59,130,246,0.18)] backdrop-blur-md",
+        "w-full p-4 lg:absolute lg:left-[calc(100%+0.75rem)] lg:top-0 lg:w-80",
+        "max-h-[46vh] overflow-y-auto overscroll-contain lg:max-h-[72vh]",
+        isOpen ? "block" : "hidden",
+      ].join(" ")}
+      aria-label="Earth Vital Signs"
+      onPointerEnter={onPanelPointerEnter}
+      onPointerLeave={onPanelPointerLeave}
+      onWheel={handlePanelWheel}
+      onWheelCapture={handlePanelWheel}
+      onTouchMoveCapture={stopPanelScrollPropagation}
+    >
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-blue-300/80">
+            Open Sources
+          </p>
+          <h2 className="mt-1 text-2xl font-semibold leading-none text-white max-lg:text-xl">Earth Vital Signs</h2>
+        </div>
+        <p className="shrink-0 pt-1 text-right font-mono text-[0.62rem] uppercase leading-tight tracking-[0.14em] text-slate-400">
+          Latest
+          <br />
+          Reported
+        </p>
+      </div>
+      <dl className="mt-4 space-y-3">
+        {earthVitalSigns.map((sign) => (
+          <div key={sign.label} className="border-t border-white/10 pt-3 first:border-t-0 first:pt-0">
+            <dt className="flex items-center justify-between gap-3">
+              <span className="flex min-w-0 items-center gap-2 text-sm font-semibold text-slate-100">
+                <span
+                  className="h-2 w-2 shrink-0 rounded-full"
+                  style={{ backgroundColor: sign.accent, boxShadow: `0 0 12px ${sign.accent}` }}
+                />
+                <span className="truncate">{sign.label}</span>
+              </span>
+              <span className="shrink-0 font-mono text-[0.62rem] uppercase tracking-[0.12em] text-slate-400">
+                {sign.updated}
+              </span>
+            </dt>
+            <dd className="mt-1">
+              <p className="font-mono text-2xl leading-none text-sky-100">{sign.value}</p>
+              {sign.statusBar && (
+                <div className="mt-3">
+                  <div
+                    className="flex h-2 overflow-hidden border border-white/10 bg-white/8"
+                    aria-label={`${sign.label}: ${sign.statusBar.usedLabel}; ${sign.statusBar.remainingLabel}`}
+                  >
+                    <span
+                      className="h-full bg-orange-400"
+                      style={{ width: `${sign.statusBar.usedPercent}%` }}
+                    />
+                    <span
+                      className="h-full bg-sky-300/70"
+                      style={{ width: `${sign.statusBar.remainingPercent}%` }}
+                    />
+                  </div>
+                  <div className="mt-1 grid grid-cols-2 gap-2 font-mono text-[0.62rem] uppercase leading-tight tracking-[0.1em] text-slate-400">
+                    <span>{sign.statusBar.usedLabel}</span>
+                    <span className="text-right">{sign.statusBar.remainingLabel}</span>
+                  </div>
+                </div>
+              )}
+              <p className="mt-1 text-xs leading-snug text-slate-300/84">{sign.note}</p>
+              <a
+                href={sign.sourceHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 inline-flex text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-blue-300/85 underline-offset-4 transition-colors hover:text-white hover:underline focus:outline-none focus-visible:text-white focus-visible:underline"
+              >
+                {sign.source}
+              </a>
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </aside>
+  );
+}
+
+function DataIndexPanel({
+  isOpen,
+  onPanelPointerEnter,
+  onPanelPointerLeave,
+}: {
+  isOpen: boolean;
+  onPanelPointerEnter: () => void;
+  onPanelPointerLeave: () => void;
+}) {
+  const { handlePanelWheel, panelRef } = useManualPanelWheel<HTMLElement>();
+
+  return (
+    <aside
+      ref={panelRef}
+      className={[
+        "pointer-events-auto relative z-30 border border-blue-300/24 bg-black/58 text-white shadow-[0_0_34px_rgba(59,130,246,0.18)] backdrop-blur-md",
+        "w-full p-4 lg:absolute lg:right-[calc(100%+0.75rem)] lg:top-0 lg:w-80",
+        "max-h-[46vh] overflow-y-auto overscroll-contain lg:max-h-[72vh]",
+        isOpen ? "block" : "hidden",
+      ].join(" ")}
+      aria-label="Global Data Index"
+      onPointerEnter={onPanelPointerEnter}
+      onPointerLeave={onPanelPointerLeave}
+      onWheel={handlePanelWheel}
+      onWheelCapture={handlePanelWheel}
+      onTouchMoveCapture={stopPanelScrollPropagation}
+    >
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-blue-300/80">
+            Digital Sources
+          </p>
+          <h2 className="mt-1 text-2xl font-semibold leading-none text-white max-lg:text-xl">
+            Global Data Index
+          </h2>
+        </div>
+        <Link
+          href="/projects/sapiens-scientia-data-index"
+          className="shrink-0 pt-1 text-right font-mono text-[0.62rem] uppercase leading-tight tracking-[0.14em] text-slate-400 underline-offset-4 transition-colors hover:text-white hover:underline focus:outline-none focus-visible:text-white focus-visible:underline"
+        >
+          Full
+          <br />
+          Index
+        </Link>
+      </div>
+      <div className="mt-4 space-y-4">
+        {dataIndexCategories.map((category) => (
+          <section key={category.name} className="border-t border-white/10 pt-3 first:border-t-0 first:pt-0">
+            <div className="flex items-center gap-2">
+              <span
+                className="h-2 w-2 shrink-0 rounded-full"
+                style={{ backgroundColor: category.color, boxShadow: `0 0 12px ${category.color}` }}
+              />
+              <h3 className="text-sm font-semibold text-slate-100">{category.name}</h3>
+              <span className="ml-auto font-mono text-[0.62rem] uppercase tracking-[0.12em] text-slate-500">
+                {category.entries.length}
+              </span>
+            </div>
+            <div className="mt-2 grid grid-cols-1 gap-1.5 sm:grid-cols-2">
+              {category.entries.map((entry) => (
+                <a
+                  key={`${category.name}-${entry.name}`}
+                  href={entry.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="min-w-0 border border-white/8 bg-white/[0.035] px-2.5 py-2 text-xs leading-tight text-slate-200/88 transition-colors hover:border-sky-200/35 hover:bg-sky-200/10 hover:text-white focus:outline-none focus-visible:border-sky-200/70"
+                >
+                  {entry.name}
+                </a>
+              ))}
+            </div>
+          </section>
+        ))}
+      </div>
+    </aside>
+  );
+}
+
+function EarthSystemsColumn({
+  onPanelPointerEnter,
+  onPanelPointerLeave,
+}: {
+  onPanelPointerEnter: () => void;
+  onPanelPointerLeave: () => void;
+}) {
+  const [isVitalSignsOpen, setIsVitalSignsOpen] = useState(false);
+  const earthSystemHighlights = useMemo<ConceptHighlight[]>(
+    () =>
+      earthVitalSignHighlights.map((highlight) => ({
+        color: highlight.color,
+        labels: [highlight.label],
+      })),
+    [],
+  );
+
+  return (
+    <div
+      className="pointer-events-auto relative flex flex-col gap-3 lg:block"
+      onPointerEnter={onPanelPointerEnter}
+      onPointerLeave={onPanelPointerLeave}
+      onWheelCapture={stopPanelScrollPropagation}
+      onTouchMoveCapture={stopPanelScrollPropagation}
+    >
+      <div className="relative">
+        <ConceptColumn
+          align="left"
+          highlights={isVitalSignsOpen ? earthSystemHighlights : undefined}
+          onPanelPointerEnter={onPanelPointerEnter}
+          onPanelPointerLeave={onPanelPointerLeave}
+          headerAction={(
+            <PopoutToggleButton
+              controlsId="earth-vital-signs-panel"
+              isOpen={isVitalSignsOpen}
+              label="Earth Vital Signs"
+              onClick={() => setIsVitalSignsOpen((value) => !value)}
+            />
+          )}
+          title="Earth Systems"
+          nodes={earthSystemNodes}
+        />
+      </div>
+      <div id="earth-vital-signs-panel">
+        <EarthVitalSignsPanel
+          isOpen={isVitalSignsOpen}
+          onPanelPointerEnter={onPanelPointerEnter}
+          onPanelPointerLeave={onPanelPointerLeave}
+        />
+      </div>
+    </div>
+  );
+}
+
+function DigitalSystemsColumn({
+  onPanelPointerEnter,
+  onPanelPointerLeave,
+}: {
+  onPanelPointerEnter: () => void;
+  onPanelPointerLeave: () => void;
+}) {
+  const [isDataIndexOpen, setIsDataIndexOpen] = useState(false);
+
+  return (
+    <div
+      className="pointer-events-auto relative flex flex-col gap-3 lg:block"
+      onPointerEnter={onPanelPointerEnter}
+      onPointerLeave={onPanelPointerLeave}
+      onWheelCapture={stopPanelScrollPropagation}
+      onTouchMoveCapture={stopPanelScrollPropagation}
+    >
+      <div className="relative">
+        <ConceptColumn
+          align="left"
+          highlights={isDataIndexOpen ? digitalDataIndexHighlights : undefined}
+          onPanelPointerEnter={onPanelPointerEnter}
+          onPanelPointerLeave={onPanelPointerLeave}
+          headerActionPosition="before"
+          noWrapTitle
+          headerAction={(
+            <PopoutToggleButton
+              controlsId="digital-data-index-panel"
+              isOpen={isDataIndexOpen}
+              label="Global Data Index"
+              side="left"
+              onClick={() => setIsDataIndexOpen((value) => !value)}
+            />
+          )}
+          title="Digital Systems"
+          nodes={digitalSystemNodes}
+        />
+      </div>
+      <div id="digital-data-index-panel">
+        <DataIndexPanel
+          isOpen={isDataIndexOpen}
+          onPanelPointerEnter={onPanelPointerEnter}
+          onPanelPointerLeave={onPanelPointerLeave}
+        />
+      </div>
+    </div>
+  );
+}
+
+function TimeOverlay({
+  onPanelPointerEnter,
+  onPanelPointerLeave,
+}: {
+  onPanelPointerEnter: () => void;
+  onPanelPointerLeave: () => void;
+}) {
   const [selectedTimeZone, setSelectedTimeZone] = useState("America/New_York");
-  const clockSnapshot = useSyncExternalStore(subscribeToClock, getClockSnapshot, getServerClockSnapshot);
-  const now = clockSnapshot === 0 ? null : new Date(clockSnapshot);
+  const [now, setNow] = useState<Date | null>(null);
+
+  useEffect(() => {
+    const tick = () => {
+      setNow(new Date());
+    };
+
+    const timeoutId = window.setTimeout(tick, 0);
+    const intervalId = window.setInterval(tick, 1000);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+      window.clearInterval(intervalId);
+    };
+  }, []);
 
   const selectedOption = timeZoneOptions.find((option) => option.value === selectedTimeZone);
   const selectedLabel = selectedOption?.label ?? selectedTimeZone.replaceAll("_", " ");
 
   return (
-    <aside className="pointer-events-auto w-[min(34rem,calc(100vw-2rem))] border border-white/15 bg-black/48 px-4 py-3 text-center text-white shadow-[0_0_28px_rgba(91,181,255,0.13)] backdrop-blur-sm">
+    <aside
+      className="pointer-events-auto w-[min(34rem,calc(100vw-2rem))] border border-white/15 bg-black/48 px-4 py-3 text-center text-white shadow-[0_0_28px_rgba(59,130,246,0.16)] backdrop-blur-sm"
+      onPointerEnter={onPanelPointerEnter}
+      onPointerLeave={onPanelPointerLeave}
+      onWheelCapture={stopPanelScrollPropagation}
+      onTouchMoveCapture={stopPanelScrollPropagation}
+    >
       <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4 max-sm:grid-cols-1 max-sm:gap-3">
         <div className="min-w-0">
-          <p className="text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-blue-200/75">UTC Time</p>
+          <p className="text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-blue-300/80">UTC Time</p>
           <p className="mt-1 font-mono text-2xl leading-none text-sky-100">{formatClockTime(now, "UTC")}</p>
           <p className="mt-1 text-xs text-slate-300/80">{formatClockDate(now, "UTC")}</p>
         </div>
@@ -1173,7 +1781,7 @@ function TimeOverlay() {
         <div className="min-w-0">
           <div className="flex items-center justify-center gap-3">
             <label
-              className="text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-blue-200/75"
+              className="text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-blue-300/80"
               htmlFor="timezone-clock-select"
             >
               Timezone
@@ -1200,30 +1808,39 @@ function TimeOverlay() {
   );
 }
 
-function ConceptOverlay() {
+function ConceptOverlay({
+  onPanelPointerEnter,
+  onPanelPointerLeave,
+}: {
+  onPanelPointerEnter: () => void;
+  onPanelPointerLeave: () => void;
+}) {
   return (
     <>
       <header className="pointer-events-none absolute inset-x-4 top-8 z-10 flex flex-col items-center gap-4 max-lg:top-4">
-        <p className="text-2xl font-semibold uppercase tracking-[0.18em] text-blue-200 sm:text-4xl">
+        <p className="text-2xl font-semibold uppercase tracking-[0.18em] text-blue-400 drop-shadow-[0_0_18px_rgba(59,130,246,0.65)] sm:text-4xl">
           Sapiens Scientia
         </p>
-        <TimeOverlay />
+        <TimeOverlay
+          onPanelPointerEnter={onPanelPointerEnter}
+          onPanelPointerLeave={onPanelPointerLeave}
+        />
       </header>
       <div className="pointer-events-none absolute inset-x-0 top-1/2 z-10 flex -translate-y-1/2 items-center justify-between gap-6 px-8 max-lg:inset-x-4 max-lg:bottom-36 max-lg:top-auto max-lg:grid max-lg:translate-y-0 max-lg:grid-cols-2 max-lg:px-0 max-md:grid-cols-1">
-        <ConceptColumn
-          align="left"
-          title="Earth Systems"
-          nodes={earthSystemNodes}
+        <EarthSystemsColumn
+          onPanelPointerEnter={onPanelPointerEnter}
+          onPanelPointerLeave={onPanelPointerLeave}
         />
-        <ConceptColumn
-          align="left"
-          title="Digital Systems"
-          nodes={digitalSystemNodes}
+        <DigitalSystemsColumn
+          onPanelPointerEnter={onPanelPointerEnter}
+          onPanelPointerLeave={onPanelPointerLeave}
         />
       </div>
       <div className="pointer-events-none absolute inset-x-0 bottom-16 z-10 flex justify-center px-8 max-lg:inset-x-4 max-lg:bottom-6 max-lg:px-0">
         <ConceptColumn
           align="center"
+          onPanelPointerEnter={onPanelPointerEnter}
+          onPanelPointerLeave={onPanelPointerLeave}
           size="compact"
           title="Human Platforms"
           nodes={humanPlatformNodes}
@@ -1234,6 +1851,8 @@ function ConceptOverlay() {
 }
 
 export function EarthHero() {
+  const [isPanelPointerActive, setIsPanelPointerActive] = useState(false);
+
   return (
     <section className="relative min-h-screen bg-black">
       <div className="absolute inset-0">
@@ -1245,11 +1864,14 @@ export function EarthHero() {
           style={{ height: "100%", width: "100%" }}
         >
           <Suspense fallback={null}>
-            <Scene />
+            <Scene enableZoom={!isPanelPointerActive} />
           </Suspense>
         </Canvas>
       </div>
-      <ConceptOverlay />
+      <ConceptOverlay
+        onPanelPointerEnter={() => setIsPanelPointerActive(true)}
+        onPanelPointerLeave={() => setIsPanelPointerActive(false)}
+      />
     </section>
   );
 }

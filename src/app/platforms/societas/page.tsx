@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function SalusPage() {
+export default function SocietasPage() {
   return (
     <main className="min-h-screen bg-black px-6 py-8 text-white sm:px-10">
       <nav className="mb-16 flex gap-6">
@@ -15,16 +15,17 @@ export default function SalusPage() {
       <section className="mx-auto flex max-w-3xl flex-col gap-8">
         <div>
           <p className="mb-3 text-xl font-medium uppercase tracking-[0.24em] text-blue-400">
-            Human Health Platform
+            Human Society Platform
           </p>
           <h1 className="text-5xl font-semibold tracking-normal sm:text-7xl">
-            Sapiens Scientia Salus
+            Sapiens Scientia Societas
           </h1>
         </div>
 
         <p className="max-w-2xl text-lg leading-8 text-slate-300">
-          A future platform for human biology, medicine, physiology, disease,
-          care, and the lived experience of health.
+          A future platform for human culture, institutions, technology,
+          economics, governance, coordination, and the social systems that shape
+          human life.
         </p>
       </section>
     </main>
