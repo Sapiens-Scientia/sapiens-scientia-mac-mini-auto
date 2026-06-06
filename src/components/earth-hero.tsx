@@ -186,7 +186,7 @@ const digitalSystemNodes: ConceptNode[] = [
   { label: "Sensor Networks", level: 1 },
   { label: "Data Systems", level: 0 },
   { label: "Knowledge Graphs", level: 1 },
-  { label: "Databases", level: 1 },
+  { label: "Databases", level: 1, href: "https://www.sapiensscientia.com/projects/sapiens-scientia-data-index" },
   { label: "General Knowledge", level: 2, color: "#f8fafc" },
   { label: "Scholarly Indexes", level: 2, color: "#7dd3fc" },
   { label: "Life Sciences", level: 2, color: "#34d399" },
