@@ -566,10 +566,12 @@ const dataIndexCategories: DataIndexCategory[] = [
 ];
 
 const dataIndexEntries = dataIndexCategories.flatMap((category) =>
-  category.entries.map((entry) => ({
+  category.entries.map((entry, entryIndex) => ({
     ...entry,
     category: category.name,
     color: category.color,
+    entryIndex,
+    entryTotal: category.entries.length,
   })),
 );
 
@@ -652,6 +654,42 @@ function spherePoint(index: number, count: number, radius: number) {
   );
 }
 
+function clusteredSpherePoint({
+  categoryIndex,
+  categoryTotal,
+  entryIndex,
+  entryTotal,
+  radius,
+}: {
+  categoryIndex: number;
+  categoryTotal: number;
+  entryIndex: number;
+  entryTotal: number;
+  radius: number;
+}) {
+  const categoryAngle = (Math.PI * 2 * categoryIndex) / categoryTotal + 0.28;
+  const latitudeBand = [-0.42, 0.18, -0.18][categoryIndex % 3];
+  const clusterCenter = new THREE.Vector3(
+    Math.cos(categoryAngle) * Math.sqrt(1 - latitudeBand * latitudeBand),
+    latitudeBand,
+    Math.sin(categoryAngle) * Math.sqrt(1 - latitudeBand * latitudeBand),
+  ).normalize();
+  const up = Math.abs(clusterCenter.y) > 0.86 ? new THREE.Vector3(1, 0, 0) : new THREE.Vector3(0, 1, 0);
+  const tangentA = new THREE.Vector3().crossVectors(up, clusterCenter).normalize();
+  const tangentB = new THREE.Vector3().crossVectors(clusterCenter, tangentA).normalize();
+  const angle = (Math.PI * 2 * entryIndex) / entryTotal + categoryIndex * 0.42;
+  const ring = entryTotal > 5 && entryIndex % 2 === 0 ? 0.31 : 0.22;
+  const offset = tangentA
+    .clone()
+    .multiplyScalar(Math.cos(angle) * ring)
+    .add(tangentB.clone().multiplyScalar(Math.sin(angle) * ring));
+  const point = clusterCenter.add(offset).normalize();
+
+  point.y = THREE.MathUtils.clamp(point.y, -0.68, 0.68);
+
+  return point.normalize().multiplyScalar(radius);
+}
+
 function latLonToSpherePoint(lat: number, lon: number, radius: number) {
   const latRad = THREE.MathUtils.degToRad(lat);
   const lonRad = THREE.MathUtils.degToRad(lon + 90);
@@ -695,6 +733,200 @@ function DataCenterMarkers() {
       {dataCenterSites.map((site) => (
         <DataCenterMarker key={site.name} site={site} />
       ))}
+    </group>
+  );
+}
+
+const monthLabels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+const seasonLabels = [
+  { label: "Winter", monthIndex: 0 },
+  { label: "Spring", monthIndex: 3 },
+  { label: "Summer", monthIndex: 6 },
+  { label: "Autumn", monthIndex: 9 },
+];
+
+const solarEventMarkers = [
+  { label: "Mar Equinox", progress: (2 + 19 / 31) / 12 },
+  { label: "Jun Solstice", progress: (5 + 20 / 30) / 12 },
+  { label: "Sep Equinox", progress: (8 + 22 / 30) / 12 },
+  { label: "Dec Solstice", progress: (11 + 20 / 31) / 12 },
+];
+
+function orbitPosition(progress: number, radius: number, yScale: number, zScale: number, yOffset = 0) {
+  const angle = -progress * Math.PI * 2;
+
+  return new THREE.Vector3(
+    Math.sin(angle) * radius,
+    Math.cos(angle) * radius * yScale + yOffset,
+    -Math.cos(angle) * radius * zScale,
+  );
+}
+
+function yearProgress(date: Date) {
+  const year = date.getFullYear();
+  const start = new Date(year, 0, 1).getTime();
+  const end = new Date(year + 1, 0, 1).getTime();
+
+  return (date.getTime() - start) / (end - start);
+}
+
+function EarthSunOrbitModel({ position = [0, -1.2, 0.18] }: { position?: [number, number, number] }) {
+  const [now, setNow] = useState(() => new Date());
+  const orbitRadius = 0.64;
+  const orbitYScale = 0.42;
+  const orbitZScale = 0.42;
+  const orbitPoints = useMemo(
+    () =>
+      Array.from({ length: 97 }, (_, index) => {
+        const point = orbitPosition(index / 96, orbitRadius, orbitYScale, orbitZScale);
+
+        return [point.x, point.y, point.z] as [number, number, number];
+      }),
+    [],
+  );
+  const earthPosition = useMemo(
+    () => orbitPosition(yearProgress(now), orbitRadius, orbitYScale, orbitZScale, 0.006),
+    [now],
+  );
+
+  useEffect(() => {
+    const intervalId = window.setInterval(() => setNow(new Date()), 60 * 60 * 1000);
+
+    return () => window.clearInterval(intervalId);
+  }, []);
+
+  return (
+    <group position={position}>
+      <Line points={orbitPoints} color="#9cc8ff" lineWidth={1.1} transparent opacity={0.42} />
+      <mesh>
+        <sphereGeometry args={[0.035, 24, 24]} />
+        <meshBasicMaterial color="#facc15" transparent opacity={0.95} />
+      </mesh>
+      <Billboard position={[0, -0.105, 0.01]} follow lockX={false} lockY={false} lockZ={false}>
+        <Text
+          anchorX="center"
+          anchorY="middle"
+          color="#fde68a"
+          font={labelFont}
+          fontSize={0.045}
+          fontWeight={300}
+          outlineColor="#000000"
+          outlineWidth={0.006}
+          renderOrder={40}
+        >
+          Sun
+        </Text>
+      </Billboard>
+      {monthLabels.map((label, index) => {
+        const innerPoint = orbitPosition(index / 12, orbitRadius - 0.035, orbitYScale, orbitZScale, 0.012);
+        const outerPoint = orbitPosition(index / 12, orbitRadius + 0.035, orbitYScale, orbitZScale, 0.012);
+        const labelPoint = orbitPosition(index / 12, orbitRadius + 0.1, orbitYScale, orbitZScale, 0.018);
+
+        return (
+          <group key={label}>
+            <Line
+              points={[
+                [innerPoint.x, innerPoint.y, innerPoint.z],
+                [outerPoint.x, outerPoint.y, outerPoint.z],
+              ]}
+              color="#d8eeff"
+              lineWidth={0.75}
+              transparent
+              opacity={0.68}
+            />
+            <Billboard position={labelPoint} follow lockX={false} lockY={false} lockZ={false}>
+              <Text
+                anchorX="center"
+                anchorY="middle"
+                color="#d8eeff"
+                font={labelFont}
+                fontSize={0.038}
+                fontWeight={300}
+                outlineColor="#000000"
+                outlineWidth={0.005}
+                renderOrder={42}
+              >
+                {label}
+              </Text>
+            </Billboard>
+          </group>
+        );
+      })}
+      {seasonLabels.map((season) => {
+        const point = orbitPosition((season.monthIndex + 0.5) / 12, orbitRadius + 0.25, orbitYScale, orbitZScale, 0.02);
+
+        return (
+          <Billboard key={season.label} position={point} follow lockX={false} lockY={false} lockZ={false}>
+            <Text
+              anchorX="center"
+              anchorY="middle"
+              color="#93c5fd"
+              font={labelFont}
+              fontSize={0.042}
+              fontWeight={300}
+              outlineColor="#000000"
+              outlineWidth={0.006}
+              renderOrder={43}
+            >
+              {season.label}
+            </Text>
+          </Billboard>
+        );
+      })}
+      {solarEventMarkers.map((marker) => {
+        const point = orbitPosition(marker.progress, orbitRadius, orbitYScale, orbitZScale, 0.026);
+        const labelPoint = orbitPosition(marker.progress, orbitRadius + 0.16, orbitYScale, orbitZScale, 0.034);
+
+        return (
+          <group key={marker.label}>
+            <mesh position={point} renderOrder={44}>
+              <sphereGeometry args={[0.014, 14, 14]} />
+              <meshBasicMaterial color="#fef3c7" transparent opacity={0.92} depthWrite={false} />
+            </mesh>
+            <Billboard position={labelPoint} follow lockX={false} lockY={false} lockZ={false}>
+              <Text
+                anchorX="center"
+                anchorY="middle"
+                color="#fef3c7"
+                font={labelFont}
+                fontSize={0.038}
+                fontWeight={300}
+                outlineColor="#000000"
+                outlineWidth={0.006}
+                renderOrder={44}
+              >
+                {marker.label}
+              </Text>
+            </Billboard>
+          </group>
+        );
+      })}
+      <mesh position={earthPosition} renderOrder={44}>
+        <sphereGeometry args={[0.028, 22, 22]} />
+        <meshBasicMaterial color="#57a6ff" transparent opacity={0.98} depthWrite={false} />
+      </mesh>
+      <Billboard
+        position={[earthPosition.x, earthPosition.y + 0.08, earthPosition.z + 0.012]}
+        follow
+        lockX={false}
+        lockY={false}
+        lockZ={false}
+      >
+        <Text
+          anchorX="center"
+          anchorY="middle"
+          color="#ffffff"
+          font={labelFont}
+          fontSize={0.047}
+          fontWeight={300}
+          outlineColor="#000000"
+          outlineWidth={0.006}
+          renderOrder={45}
+        >
+          Earth now
+        </Text>
+      </Billboard>
     </group>
   );
 }
@@ -908,17 +1140,19 @@ function DigitalEarth({
 function DataIndexSurfaceNodes({ isInteractive }: { isInteractive: boolean }) {
   const surfaceNodes = useMemo(
     () => {
-      const random = seededRandom(8801);
+      const categoryIndexLookup = new Map(
+        dataIndexCategories.map((category, categoryIndex) => [category.name, categoryIndex]),
+      );
 
       return dataIndexEntries.map((entry) => {
-        const longitude = random() * Math.PI * 2;
-        const latitude = Math.acos(random() * 2 - 1);
-        const radius = 1.21 + (random() - 0.5) * 0.035;
-        const position = new THREE.Vector3(
-          Math.cos(longitude) * Math.sin(latitude) * radius,
-          Math.cos(latitude) * radius,
-          Math.sin(longitude) * Math.sin(latitude) * radius,
-        );
+        const categoryIndex = categoryIndexLookup.get(entry.category) ?? 0;
+        const position = clusteredSpherePoint({
+          categoryIndex,
+          categoryTotal: dataIndexCategories.length,
+          entryIndex: entry.entryIndex,
+          entryTotal: entry.entryTotal,
+          radius: 1.21,
+        });
 
         return {
           ...entry,
@@ -1042,7 +1276,7 @@ function FeaturedDigitalNode({ isInteractive }: { isInteractive: boolean }) {
   const [isHovered, setIsHovered] = useState(false);
   const nodeRef = useRef<THREE.Mesh>(null);
   const labelRef = useRef<THREE.Mesh>(null);
-  const position: [number, number, number] = [-0.18, 0.14, 1.18];
+  const position: [number, number, number] = [0, 1.21, 0];
 
   useFrame(({ clock }) => {
     if (!nodeRef.current) {
@@ -1269,7 +1503,7 @@ function MetaEarthLabel({
   onToggle: () => void;
 }) {
   return (
-    <Billboard position={[0, metaCenter.y + 1.56, 0.16]} follow lockX={false} lockY={false} lockZ={false}>
+    <Billboard position={[0, metaCenter.y + 1.72, 0.16]} follow lockX={false} lockY={false} lockZ={false}>
       <group
         onClick={(event) => {
           event.stopPropagation();
@@ -1374,13 +1608,14 @@ function Scene({
       <PhysicalEarth isInteractive={!isMerged} targetPosition={physicalTarget} />
       <DigitalEarth isInteractive={!isMerged} targetPosition={digitalTarget} />
       {!isMerged && <DataConnectors />}
+      {!isMerged && <EarthSunOrbitModel position={[0, physicalCenter.y - 1.38, physicalCenter.z + 0.18]} />}
       {!isMerged && (
         <>
           <GlobeLabel
             onClick={() => {
               window.open(earthViewUrl, "_blank", "noopener,noreferrer");
             }}
-            position={[physicalCenter.x, physicalCenter.y + 1.42, physicalCenter.z + 0.08]}
+            position={[physicalCenter.x, physicalCenter.y + 1.72, physicalCenter.z + 0.08]}
           >
             Physical Earth
           </GlobeLabel>
@@ -1388,7 +1623,7 @@ function Scene({
             onClick={() => {
               router.push(dataIndexUrl);
             }}
-            position={[digitalCenter.x, digitalCenter.y + 1.42, digitalCenter.z + 0.08]}
+            position={[digitalCenter.x, digitalCenter.y + 1.72, digitalCenter.z + 0.08]}
           >
             Digital Earth
           </GlobeLabel>
