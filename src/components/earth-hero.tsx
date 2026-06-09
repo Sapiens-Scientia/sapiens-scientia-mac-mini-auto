@@ -17,7 +17,6 @@ const maxPanTargetRadius = 0.9;
 const labelFont = "/fonts/geist-regular.ttf";
 const earthLabelFont = "/fonts/geist-semibold.ttf";
 const earthViewUrl = "https://earthview3d.vercel.app/";
-const dataIndexUrl = "/projects/sapiens-scientia-data-index";
 
 type ArcPath = {
   curve: THREE.CatmullRomCurve3;
@@ -753,13 +752,13 @@ const solarEventMarkers = [
   { label: "Dec Solstice", progress: (11 + 20 / 31) / 12 },
 ];
 
-function orbitPosition(progress: number, radius: number, yScale: number, zScale: number, yOffset = 0) {
+function orbitPosition(progress: number, radius: number, yOffset = 0) {
   const angle = -progress * Math.PI * 2;
 
   return new THREE.Vector3(
     Math.sin(angle) * radius,
-    Math.cos(angle) * radius * yScale + yOffset,
-    -Math.cos(angle) * radius * zScale,
+    yOffset,
+    -Math.cos(angle) * radius,
   );
 }
 
@@ -773,20 +772,19 @@ function yearProgress(date: Date) {
 
 function EarthSunOrbitModel({ position = [0, -1.2, 0.18] }: { position?: [number, number, number] }) {
   const [now, setNow] = useState(() => new Date());
-  const orbitRadius = 0.64;
-  const orbitYScale = 0.42;
-  const orbitZScale = 0.42;
+  const orbitRadius = 0.76;
+  const orbitTilt = 0.58;
   const orbitPoints = useMemo(
     () =>
       Array.from({ length: 97 }, (_, index) => {
-        const point = orbitPosition(index / 96, orbitRadius, orbitYScale, orbitZScale);
+        const point = orbitPosition(index / 96, orbitRadius);
 
         return [point.x, point.y, point.z] as [number, number, number];
       }),
     [],
   );
   const earthPosition = useMemo(
-    () => orbitPosition(yearProgress(now), orbitRadius, orbitYScale, orbitZScale, 0.006),
+    () => orbitPosition(yearProgress(now), orbitRadius, 0.006),
     [now],
   );
 
@@ -798,135 +796,137 @@ function EarthSunOrbitModel({ position = [0, -1.2, 0.18] }: { position?: [number
 
   return (
     <group position={position}>
-      <Line points={orbitPoints} color="#9cc8ff" lineWidth={1.1} transparent opacity={0.42} />
-      <mesh>
-        <sphereGeometry args={[0.035, 24, 24]} />
-        <meshBasicMaterial color="#facc15" transparent opacity={0.95} />
-      </mesh>
-      <Billboard position={[0, -0.105, 0.01]} follow lockX={false} lockY={false} lockZ={false}>
-        <Text
-          anchorX="center"
-          anchorY="middle"
-          color="#fde68a"
-          font={labelFont}
-          fontSize={0.045}
-          fontWeight={300}
-          outlineColor="#000000"
-          outlineWidth={0.006}
-          renderOrder={40}
-        >
-          Sun
-        </Text>
-      </Billboard>
-      {monthLabels.map((label, index) => {
-        const innerPoint = orbitPosition(index / 12, orbitRadius - 0.035, orbitYScale, orbitZScale, 0.012);
-        const outerPoint = orbitPosition(index / 12, orbitRadius + 0.035, orbitYScale, orbitZScale, 0.012);
-        const labelPoint = orbitPosition(index / 12, orbitRadius + 0.1, orbitYScale, orbitZScale, 0.018);
+      <group rotation={[orbitTilt, 0, 0]}>
+        <Line points={orbitPoints} color="#9cc8ff" lineWidth={1.85} transparent opacity={0.5} />
+        <mesh>
+          <sphereGeometry args={[0.045, 24, 24]} />
+          <meshBasicMaterial color="#facc15" transparent opacity={0.95} />
+        </mesh>
+        <Billboard position={[0, -0.13, 0.01]} follow lockX={false} lockY={false} lockZ={false}>
+          <Text
+            anchorX="center"
+            anchorY="middle"
+            color="#fde68a"
+            font={labelFont}
+            fontSize={0.06}
+            fontWeight={300}
+            outlineColor="#000000"
+            outlineWidth={0.008}
+            renderOrder={40}
+          >
+            Sun
+          </Text>
+        </Billboard>
+        {monthLabels.map((label, index) => {
+          const innerPoint = orbitPosition(index / 12, orbitRadius - 0.046, 0.012);
+          const outerPoint = orbitPosition(index / 12, orbitRadius + 0.046, 0.012);
+          const labelPoint = orbitPosition(index / 12, orbitRadius + 0.13, 0.018);
 
-        return (
-          <group key={label}>
-            <Line
-              points={[
-                [innerPoint.x, innerPoint.y, innerPoint.z],
-                [outerPoint.x, outerPoint.y, outerPoint.z],
-              ]}
-              color="#d8eeff"
-              lineWidth={0.75}
-              transparent
-              opacity={0.68}
-            />
-            <Billboard position={labelPoint} follow lockX={false} lockY={false} lockZ={false}>
-              <Text
-                anchorX="center"
-                anchorY="middle"
+          return (
+            <group key={label}>
+              <Line
+                points={[
+                  [innerPoint.x, innerPoint.y, innerPoint.z],
+                  [outerPoint.x, outerPoint.y, outerPoint.z],
+                ]}
                 color="#d8eeff"
-                font={labelFont}
-                fontSize={0.038}
-                fontWeight={300}
-                outlineColor="#000000"
-                outlineWidth={0.005}
-                renderOrder={42}
-              >
-                {label}
-              </Text>
-            </Billboard>
-          </group>
-        );
-      })}
-      {seasonLabels.map((season) => {
-        const point = orbitPosition((season.monthIndex + 0.5) / 12, orbitRadius + 0.25, orbitYScale, orbitZScale, 0.02);
+                lineWidth={1.25}
+                transparent
+                opacity={0.76}
+              />
+              <Billboard position={labelPoint} follow lockX={false} lockY={false} lockZ={false}>
+                <Text
+                  anchorX="center"
+                  anchorY="middle"
+                  color="#d8eeff"
+                  font={labelFont}
+                  fontSize={0.052}
+                  fontWeight={300}
+                  outlineColor="#000000"
+                  outlineWidth={0.007}
+                  renderOrder={42}
+                >
+                  {label}
+                </Text>
+              </Billboard>
+            </group>
+          );
+        })}
+        {seasonLabels.map((season) => {
+          const point = orbitPosition((season.monthIndex + 0.5) / 12, orbitRadius + 0.3, 0.02);
 
-        return (
-          <Billboard key={season.label} position={point} follow lockX={false} lockY={false} lockZ={false}>
-            <Text
-              anchorX="center"
-              anchorY="middle"
-              color="#93c5fd"
-              font={labelFont}
-              fontSize={0.042}
-              fontWeight={300}
-              outlineColor="#000000"
-              outlineWidth={0.006}
-              renderOrder={43}
-            >
-              {season.label}
-            </Text>
-          </Billboard>
-        );
-      })}
-      {solarEventMarkers.map((marker) => {
-        const point = orbitPosition(marker.progress, orbitRadius, orbitYScale, orbitZScale, 0.026);
-        const labelPoint = orbitPosition(marker.progress, orbitRadius + 0.16, orbitYScale, orbitZScale, 0.034);
-
-        return (
-          <group key={marker.label}>
-            <mesh position={point} renderOrder={44}>
-              <sphereGeometry args={[0.014, 14, 14]} />
-              <meshBasicMaterial color="#fef3c7" transparent opacity={0.92} depthWrite={false} />
-            </mesh>
-            <Billboard position={labelPoint} follow lockX={false} lockY={false} lockZ={false}>
+          return (
+            <Billboard key={season.label} position={point} follow lockX={false} lockY={false} lockZ={false}>
               <Text
                 anchorX="center"
                 anchorY="middle"
-                color="#fef3c7"
+                color="#93c5fd"
                 font={labelFont}
-                fontSize={0.038}
+                fontSize={0.058}
                 fontWeight={300}
                 outlineColor="#000000"
-                outlineWidth={0.006}
-                renderOrder={44}
+                outlineWidth={0.008}
+                renderOrder={43}
               >
-                {marker.label}
+                {season.label}
               </Text>
             </Billboard>
-          </group>
-        );
-      })}
-      <mesh position={earthPosition} renderOrder={44}>
-        <sphereGeometry args={[0.028, 22, 22]} />
-        <meshBasicMaterial color="#57a6ff" transparent opacity={0.98} depthWrite={false} />
-      </mesh>
-      <Billboard
-        position={[earthPosition.x, earthPosition.y + 0.08, earthPosition.z + 0.012]}
-        follow
-        lockX={false}
-        lockY={false}
-        lockZ={false}
-      >
-        <Text
-          anchorX="center"
-          anchorY="middle"
-          color="#ffffff"
-          font={labelFont}
-          fontSize={0.047}
-          fontWeight={300}
-          outlineColor="#000000"
-          outlineWidth={0.006}
-          renderOrder={45}
+          );
+        })}
+        {solarEventMarkers.map((marker) => {
+          const point = orbitPosition(marker.progress, orbitRadius, 0.026);
+          const labelPoint = orbitPosition(marker.progress, orbitRadius + 0.2, 0.034);
+
+          return (
+            <group key={marker.label}>
+              <mesh position={point} renderOrder={44}>
+                <sphereGeometry args={[0.019, 14, 14]} />
+                <meshBasicMaterial color="#fef3c7" transparent opacity={0.92} depthWrite={false} />
+              </mesh>
+              <Billboard position={labelPoint} follow lockX={false} lockY={false} lockZ={false}>
+                <Text
+                  anchorX="center"
+                  anchorY="middle"
+                  color="#fef3c7"
+                  font={labelFont}
+                  fontSize={0.052}
+                  fontWeight={300}
+                  outlineColor="#000000"
+                  outlineWidth={0.008}
+                  renderOrder={44}
+                >
+                  {marker.label}
+                </Text>
+              </Billboard>
+            </group>
+          );
+        })}
+        <mesh position={earthPosition} renderOrder={44}>
+          <sphereGeometry args={[0.038, 22, 22]} />
+          <meshBasicMaterial color="#57a6ff" transparent opacity={0.98} depthWrite={false} />
+        </mesh>
+        <Billboard
+          position={[earthPosition.x, earthPosition.y + 0.105, earthPosition.z + 0.012]}
+          follow
+          lockX={false}
+          lockY={false}
+          lockZ={false}
         >
-          Earth now
-        </Text>
-      </Billboard>
+          <Text
+            anchorX="center"
+            anchorY="middle"
+            color="#ffffff"
+            font={labelFont}
+            fontSize={0.062}
+            fontWeight={300}
+            outlineColor="#000000"
+            outlineWidth={0.008}
+            renderOrder={45}
+          >
+            Earth now
+          </Text>
+        </Billboard>
+      </group>
     </group>
   );
 }
@@ -1002,10 +1002,6 @@ function PhysicalEarth({
         <sphereGeometry args={[1.1, 64, 64]} />
         <meshBasicMaterial color="#77b9ff" transparent opacity={0.12} side={THREE.BackSide} />
       </mesh>
-      <mesh rotation={[Math.PI / 2.35, 0.35, 0]}>
-        <torusGeometry args={[1.18, 0.004, 8, 160]} />
-        <meshBasicMaterial color="#d8eeff" transparent opacity={0.24} />
-      </mesh>
     </group>
   );
 }
@@ -1017,7 +1013,6 @@ function DigitalEarth({
   isInteractive: boolean;
   targetPosition: THREE.Vector3;
 }) {
-  const router = useRouter();
   const groupRef = useRef<THREE.Group>(null);
   const shellRef = useRef<THREE.Mesh>(null);
   const networkRef = useRef<THREE.Group>(null);
@@ -1072,24 +1067,8 @@ function DigitalEarth({
     }
   });
 
-  const openDataIndex = (event: { stopPropagation: () => void }) => {
-    event.stopPropagation();
-    router.push(dataIndexUrl);
-  };
-
   return (
-    <group
-      ref={groupRef}
-      onClick={isInteractive ? openDataIndex : undefined}
-      onPointerOver={() => {
-        if (isInteractive) {
-          document.body.style.cursor = "pointer";
-        }
-      }}
-      onPointerOut={() => {
-        document.body.style.cursor = "";
-      }}
-    >
+    <group ref={groupRef}>
       <mesh ref={shellRef}>
         <sphereGeometry args={[1.12, 96, 96]} />
         <meshPhysicalMaterial
@@ -1130,7 +1109,7 @@ function DigitalEarth({
           </bufferGeometry>
           <lineBasicMaterial color="#2fe3ff" transparent opacity={0.38} depthTest depthWrite={false} />
         </lineSegments>
-        <DataIndexSurfaceNodes isInteractive />
+        <DataIndexSurfaceNodes isInteractive={isInteractive} />
         <FeaturedDigitalNode isInteractive={isInteractive} />
       </group>
     </group>
@@ -1195,6 +1174,28 @@ function DataIndexSurfaceNode({
   const [isHovered, setIsHovered] = useState(false);
   const nodeRef = useRef<THREE.Mesh>(null);
   const labelRef = useRef<THREE.Mesh>(null);
+  const labelFrame = useMemo(() => {
+    const normal = new THREE.Vector3(...position).normalize();
+    const worldUp = new THREE.Vector3(0, 1, 0);
+    const fallbackTangent = new THREE.Vector3(1, 0, 0);
+    const tangentX = new THREE.Vector3().crossVectors(worldUp, normal);
+
+    if (tangentX.lengthSq() < 0.0001) {
+      tangentX.copy(fallbackTangent);
+    } else {
+      tangentX.normalize();
+    }
+
+    const tangentY = new THREE.Vector3().crossVectors(normal, tangentX).normalize();
+    const matrix = new THREE.Matrix4().makeBasis(tangentX, tangentY, normal);
+    const quaternion = new THREE.Quaternion().setFromRotationMatrix(matrix);
+    const labelPosition = normal.multiplyScalar(0.17).add(tangentY.multiplyScalar(0.1));
+
+    return {
+      position: [labelPosition.x, labelPosition.y, labelPosition.z] as [number, number, number],
+      quaternion,
+    };
+  }, [position]);
 
   useFrame(({ clock }) => {
     if (nodeRef.current) {
@@ -1251,7 +1252,7 @@ function DataIndexSurfaceNode({
         <sphereGeometry args={[0.062, 22, 22]} />
         <meshBasicMaterial color={color} transparent opacity={isHovered ? 0.3 : 0.13} depthTest depthWrite={false} />
       </mesh>
-      <Billboard position={[0, 0.12, 0.05]} follow lockX={false} lockY={false} lockZ={false}>
+      <group position={labelFrame.position} quaternion={labelFrame.quaternion}>
         <Text
           ref={labelRef}
           anchorX="center"
@@ -1266,7 +1267,7 @@ function DataIndexSurfaceNode({
         >
           {name}
         </Text>
-      </Billboard>
+      </group>
     </group>
   );
 }
@@ -1593,7 +1594,6 @@ function Scene({
   isMerged: boolean;
   onToggleMerged: () => void;
 }) {
-  const router = useRouter();
   const physicalTarget = isMerged ? metaCenter : physicalCenter;
   const digitalTarget = isMerged ? metaCenter : digitalCenter;
 
@@ -1619,12 +1619,7 @@ function Scene({
           >
             Physical Earth
           </GlobeLabel>
-          <GlobeLabel
-            onClick={() => {
-              router.push(dataIndexUrl);
-            }}
-            position={[digitalCenter.x, digitalCenter.y + 1.72, digitalCenter.z + 0.08]}
-          >
+          <GlobeLabel position={[digitalCenter.x, digitalCenter.y + 1.72, digitalCenter.z + 0.08]}>
             Digital Earth
           </GlobeLabel>
         </>
