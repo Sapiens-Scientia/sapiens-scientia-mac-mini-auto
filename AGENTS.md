@@ -7,7 +7,7 @@ Agents working here should preserve the separation between implementation code a
 ## Companion docs repo
 
 - GitHub: `https://github.com/Sapiens-Scientia/sapiens-scientia-docs`
-- Local checkout: `/Users/benpundykair/Projects_macbookair/SapiensScientia_local/Sapiens Scientia Docs/sapiens-scientia-docs`
+- Local checkout: a sibling clone of the `sapiens-scientia-docs` repo kept alongside this one. The absolute path is machine-specific, so do not hardcode it here.
 
 ## Working rules
 
