@@ -216,6 +216,13 @@ export default function SalusPage() {
               whether disease is organized by a primary cause, emergent physiological
               dysregulation, or both.
             </p>
+            <Link
+              href="/platforms/salus/morbus"
+              className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-emerald-200 transition-colors hover:text-emerald-50"
+            >
+              Explore the Morbus ontology
+              <span aria-hidden>→</span>
+            </Link>
           </div>
 
           <div className="relative h-[min(68vw,40rem)] min-h-[24rem] overflow-hidden border border-white/10 bg-black">
