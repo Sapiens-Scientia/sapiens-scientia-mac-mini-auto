@@ -17,6 +17,10 @@ const maxPanTargetRadius = 0.9;
 const labelFont = "/fonts/geist-regular.ttf";
 const earthLabelFont = "/fonts/geist-semibold.ttf";
 const earthViewUrl = "https://earthview3d.vercel.app/";
+const defaultOrbitTuning = {
+  tilt: 0.2,
+  yOffset: -1.64,
+};
 
 type ArcPath = {
   curve: THREE.CatmullRomCurve3;
@@ -770,10 +774,15 @@ function yearProgress(date: Date) {
   return (date.getTime() - start) / (end - start);
 }
 
-function EarthSunOrbitModel({ position = [0, -1.2, 0.18] }: { position?: [number, number, number] }) {
+function EarthSunOrbitModel({
+  position = [0, -1.2, 0.18],
+  tilt = defaultOrbitTuning.tilt,
+}: {
+  position?: [number, number, number];
+  tilt?: number;
+}) {
   const [now, setNow] = useState(() => new Date());
   const orbitRadius = 0.76;
-  const orbitTilt = 0.58;
   const orbitPoints = useMemo(
     () =>
       Array.from({ length: 97 }, (_, index) => {
@@ -796,7 +805,7 @@ function EarthSunOrbitModel({ position = [0, -1.2, 0.18] }: { position?: [number
 
   return (
     <group position={position}>
-      <group rotation={[orbitTilt, 0, 0]}>
+      <group rotation={[tilt, 0, 0]}>
         <Line points={orbitPoints} color="#9cc8ff" lineWidth={1.85} transparent opacity={0.5} />
         <mesh>
           <sphereGeometry args={[0.045, 24, 24]} />
@@ -1608,7 +1617,10 @@ function Scene({
       <PhysicalEarth isInteractive={!isMerged} targetPosition={physicalTarget} />
       <DigitalEarth isInteractive={!isMerged} targetPosition={digitalTarget} />
       {!isMerged && <DataConnectors />}
-      {!isMerged && <EarthSunOrbitModel position={[0, physicalCenter.y - 1.38, physicalCenter.z + 0.18]} />}
+      <EarthSunOrbitModel
+        position={[0, metaCenter.y + defaultOrbitTuning.yOffset, metaCenter.z + 0.18]}
+        tilt={defaultOrbitTuning.tilt}
+      />
       {!isMerged && (
         <>
           <GlobeLabel
