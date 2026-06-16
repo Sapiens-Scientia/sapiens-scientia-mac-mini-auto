@@ -70,4 +70,3 @@ export function SiteNav({ links = primaryLinks }: SiteNavProps) {
     </nav>
   );
 }
-
