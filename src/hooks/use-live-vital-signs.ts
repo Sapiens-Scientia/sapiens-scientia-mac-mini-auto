@@ -32,6 +32,7 @@ export function mergeLiveVitalSigns(
       ...sign,
       value: update.value,
       updated: update.updated,
+      liveChartPoint: update.chartPoint,
     };
   });
 }

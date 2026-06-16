@@ -3,6 +3,7 @@ export type LiveVitalSignUpdate = {
   value: string;
   updated: string;
   live: true;
+  chartPoint?: { year: number; value: number };
 };
 
 const GISTEMP_URL = "https://data.giss.nasa.gov/gistemp/tabledata_v4/GLB.Ts+dSST.csv";
@@ -172,6 +173,7 @@ export async function fetchLiveVitalSignUpdates(): Promise<LiveVitalSignUpdate[]
         value: formatTemperature(parsed.value),
         updated: `${parsed.year} annual (live)`,
         live: true,
+        chartPoint: { year: parsed.year, value: parsed.value },
       });
     }
   }
@@ -185,6 +187,7 @@ export async function fetchLiveVitalSignUpdates(): Promise<LiveVitalSignUpdate[]
         value: formatCo2(parsed.value),
         updated: `${formatMonthYear(parsed.year, parsed.month)} (live)`,
         live: true,
+        chartPoint: { year: parsed.year + (parsed.month - 1) / 12, value: parsed.value },
       });
     }
   }
@@ -198,6 +201,7 @@ export async function fetchLiveVitalSignUpdates(): Promise<LiveVitalSignUpdate[]
         value: formatCh4(parsed.value),
         updated: `${formatMonthYear(parsed.year, parsed.month)} (live)`,
         live: true,
+        chartPoint: { year: parsed.year + (parsed.month - 1) / 12, value: parsed.value },
       });
     }
   }
@@ -211,6 +215,7 @@ export async function fetchLiveVitalSignUpdates(): Promise<LiveVitalSignUpdate[]
         value: formatPopulation(parsed.value),
         updated: `${parsed.year} (live)`,
         live: true,
+        chartPoint: { year: parsed.year, value: parsed.value / 1e9 },
       });
     }
   }
@@ -224,6 +229,7 @@ export async function fetchLiveVitalSignUpdates(): Promise<LiveVitalSignUpdate[]
         value: formatGdp(parsed.value),
         updated: `${parsed.year} (live)`,
         live: true,
+        chartPoint: { year: parsed.year, value: parsed.value / 1e12 },
       });
     }
   }

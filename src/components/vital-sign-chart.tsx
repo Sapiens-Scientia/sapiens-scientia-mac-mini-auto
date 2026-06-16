@@ -10,7 +10,12 @@ export function VitalSignChart({ sign }: { sign: EarthVitalSign }) {
 
   const points = data.points;
   const projection = data.projection || [];
-  const allPoints = [...points, ...projection];
+  const livePoint = sign.liveChartPoint;
+  const allPoints = [
+    ...points,
+    ...projection,
+    ...(livePoint ? [livePoint] : []),
+  ];
   if (allPoints.length === 0) return null;
 
   // Find mins and maxs
@@ -81,7 +86,11 @@ export function VitalSignChart({ sign }: { sign: EarthVitalSign }) {
       <div className="flex justify-between items-center text-[0.62rem] font-mono text-slate-400 mb-1">
         <span>Historical Trend & Projection</span>
         <span className="text-white font-semibold">
-          {hoveredPoint ? `${hoveredPoint.year}: ${hoveredPoint.value}${data.unit}` : `Hover for details`}
+          {hoveredPoint
+            ? `${hoveredPoint.year.toFixed(hoveredPoint.year % 1 === 0 ? 0 : 1)}: ${hoveredPoint.value}${data.unit}`
+            : livePoint
+              ? `Live: ${livePoint.value}${data.unit}`
+              : "Hover for details"}
         </span>
       </div>
 
@@ -235,6 +244,27 @@ export function VitalSignChart({ sign }: { sign: EarthVitalSign }) {
             className="transition-all duration-200"
           />
         ))}
+
+        {livePoint && (
+          <g>
+            <circle
+              cx={getX(livePoint.year)}
+              cy={getY(livePoint.value)}
+              r={7}
+              fill={sign.accent}
+              fillOpacity={0.2}
+              className="animate-pulse"
+            />
+            <circle
+              cx={getX(livePoint.year)}
+              cy={getY(livePoint.value)}
+              r={4}
+              fill={sign.accent}
+              stroke="#0f172a"
+              strokeWidth={1.5}
+            />
+          </g>
+        )}
 
         {/* Vertical hover marker line */}
         {hoveredPoint && (

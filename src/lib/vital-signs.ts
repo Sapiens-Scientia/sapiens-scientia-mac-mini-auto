@@ -14,6 +14,7 @@ export type EarthVitalSign = {
   };
   updated: string;
   value: string;
+  liveChartPoint?: { year: number; value: number };
   historicalData?: {
     points: { year: number; value: number }[];
     projection?: { year: number; value: number }[];

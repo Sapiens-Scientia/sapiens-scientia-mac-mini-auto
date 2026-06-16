@@ -61,6 +61,19 @@ export function MorbusExplorer() {
     }
   };
 
+  const copyDiseaseLink = async () => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const url = `${window.location.origin}${window.location.pathname}#${selectedId}`;
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch {
+      // Clipboard may be unavailable; hash URL still works manually.
+    }
+  };
+
   return (
     <div className="flex flex-col gap-8 border border-white/10 bg-white/[0.015] p-6 sm:p-8">
       <div className="flex flex-col gap-4 border-b border-white/10 pb-5">
@@ -135,6 +148,13 @@ export function MorbusExplorer() {
             </span>
           </div>
           <h3 className="text-2xl font-bold text-slate-100">{activeDisease.name}</h3>
+          <button
+            type="button"
+            onClick={copyDiseaseLink}
+            className="mt-2 w-fit cursor-pointer border border-white/10 bg-white/[0.03] px-2.5 py-1 text-[0.65rem] font-semibold uppercase tracking-wider text-slate-400 transition-colors hover:border-emerald-400/35 hover:text-emerald-200"
+          >
+            Copy share link
+          </button>
           <p className="text-base leading-7 text-slate-300">{activeDisease.description}</p>
         </div>
 
