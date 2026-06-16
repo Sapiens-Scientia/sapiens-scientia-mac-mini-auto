@@ -9,6 +9,7 @@ import type { RefObject } from "react";
 import * as THREE from "three";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { earthVitalSigns, type EarthVitalSign } from "@/lib/vital-signs";
+import { useTheme } from "@/lib/use-theme";
 
 const physicalCenter = new THREE.Vector3(-1.9, -0.08, 0);
 const digitalCenter = new THREE.Vector3(1.9, -0.08, 0);
@@ -1688,6 +1689,10 @@ function PopoutToggleButton({
 }
 
 function VitalSignChart({ sign }: { sign: EarthVitalSign }) {
+  // Interactive tooltip tracking state — declared before any early return so
+  // hooks are always called in the same order (rules-of-hooks).
+  const [hoveredPoint, setHoveredPoint] = useState<{ year: number; value: number } | null>(null);
+
   const data = sign.historicalData;
   if (!data) return null;
 
@@ -1733,9 +1738,6 @@ function VitalSignChart({ sign }: { sign: EarthVitalSign }) {
     const projPoints = [lastHist, ...projection].map((p) => `${getX(p.year)},${getY(p.value)}`);
     projPath = `M ${projPoints.join(" L ")}`;
   }
-
-  // Interactive tooltip tracking state
-  const [hoveredPoint, setHoveredPoint] = useState<{ year: number; value: number } | null>(null);
 
   const handlePointerMove = (e: React.PointerEvent<SVGSVGElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -2670,32 +2672,8 @@ function ConceptOverlay({
 export function EarthHero() {
   const [isPanelPointerActive, setIsPanelPointerActive] = useState(false);
   const [isMetaEarthMerged, setIsMetaEarthMerged] = useState(false);
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const { theme, toggleTheme } = useTheme();
   const toggleMetaEarth = () => setIsMetaEarthMerged((value) => !value);
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("sapiens-theme");
-    const isLight = savedTheme === "light" || document.documentElement.classList.contains("light-theme");
-    if (isLight) {
-      document.documentElement.classList.add("light-theme");
-      setTheme("light");
-    } else {
-      document.documentElement.classList.remove("light-theme");
-      setTheme("dark");
-    }
-  }, []);
-
-  const toggleTheme = () => {
-    const nextTheme = theme === "dark" ? "light" : "dark";
-    setTheme(nextTheme);
-    if (nextTheme === "light") {
-      document.documentElement.classList.add("light-theme");
-      localStorage.setItem("sapiens-theme", "light");
-    } else {
-      document.documentElement.classList.remove("light-theme");
-      localStorage.setItem("sapiens-theme", "dark");
-    }
-  };
 
   return (
     <section className="relative min-h-screen bg-black">

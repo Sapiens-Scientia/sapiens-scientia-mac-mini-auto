@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useTheme } from "@/lib/use-theme";
 
 type SiteNavLink = {
   href: string;
@@ -22,32 +22,7 @@ const primaryLinks: SiteNavLink[] = [
 ];
 
 export function SiteNav({ links = primaryLinks }: SiteNavProps) {
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
-
-  useEffect(() => {
-    // Check local storage or document class on mount
-    const savedTheme = localStorage.getItem("sapiens-theme");
-    const isLight = savedTheme === "light" || document.documentElement.classList.contains("light-theme");
-    if (isLight) {
-      document.documentElement.classList.add("light-theme");
-      setTheme("light");
-    } else {
-      document.documentElement.classList.remove("light-theme");
-      setTheme("dark");
-    }
-  }, []);
-
-  const toggleTheme = () => {
-    const nextTheme = theme === "dark" ? "light" : "dark";
-    setTheme(nextTheme);
-    if (nextTheme === "light") {
-      document.documentElement.classList.add("light-theme");
-      localStorage.setItem("sapiens-theme", "light");
-    } else {
-      document.documentElement.classList.remove("light-theme");
-      localStorage.setItem("sapiens-theme", "dark");
-    }
-  };
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <nav

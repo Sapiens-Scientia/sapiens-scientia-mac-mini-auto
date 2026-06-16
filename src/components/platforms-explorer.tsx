@@ -113,13 +113,6 @@ function SystemsMap({
   };
   const hub = { cx: 410, cy: 300 };
 
-  const isCouplingActive = (links: PlatformId[]) => {
-    if (!selectedCoupling) return true;
-    const activeData = couplings.find((c) => c.name === selectedCoupling);
-    if (!activeData) return true;
-    return links.every((link) => activeData.links.includes(link)) && links.length === activeData.links.length;
-  };
-
   const isHubActive = selectedCoupling === "Food systems" || selectedCoupling === "Urbanization" || selectedCoupling === "Disease ecology";
 
   return (
