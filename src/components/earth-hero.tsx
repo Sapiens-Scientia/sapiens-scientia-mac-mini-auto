@@ -147,6 +147,86 @@ function formatClockDate(date: Date | null, timeZone: string) {
   }).format(date);
 }
 
+function formatValue(value: number, label: string, unit: string): string {
+  if (label === "Human Population") {
+    return `${value.toFixed(2)}B est.`;
+  }
+  if (label === "Global Oil Stock") {
+    return `${Math.round(value)}% used`;
+  }
+  if (label === "Global GDP") {
+    return `$${Math.round(value)}T`;
+  }
+  if (label === "Primary Energy Use") {
+    return `${Math.round(value)} EJ`;
+  }
+  if (label === "Freshwater Withdrawals") {
+    return `${Math.round(value)}% ag.`;
+  }
+  if (label === "Municipal Waste") {
+    return `${value.toFixed(2)}B t/yr`;
+  }
+  if (label === "Plastic Waste") {
+    return `${Math.round(value)}M t/yr`;
+  }
+  if (label === "Land Degradation") {
+    return `up to ${Math.round(value)}%`;
+  }
+  if (label === "Global Temperature") {
+    return `${value > 0 ? "+" : ""}${value.toFixed(2)} C`;
+  }
+  if (label === "Atmospheric CO2") {
+    return `${Math.round(value)} ppm`;
+  }
+  if (label === "Atmospheric Methane") {
+    return `${Math.round(value).toLocaleString()} ppb`;
+  }
+  if (label === "Ocean Heat") {
+    return `${Math.round(value)} +/- 2 ZJ`;
+  }
+  if (label === "Sea Level") {
+    return `${value > 0 ? "+" : ""}${value.toFixed(2)} cm`;
+  }
+  if (label === "Arctic Sea Ice") {
+    return `${value.toFixed(1)} M km²`;
+  }
+  if (label === "Tropical Primary Forest") {
+    return `${value.toFixed(1)}M ha lost`;
+  }
+  if (label === "Wildlife Populations") {
+    return `${Math.round(value)}%`;
+  }
+  return `${value.toFixed(1)} ${unit}`;
+}
+
+function getInterpolatedValue(sign: EarthVitalSign, year: number): string {
+  if (!sign.historicalData) return sign.value;
+  
+  const { points, projection, unit } = sign.historicalData;
+  const allPoints = [...points, ...(projection || [])].sort((a, b) => a.year - b.year);
+  
+  if (allPoints.length === 0) return sign.value;
+  
+  if (year <= allPoints[0].year) {
+    return formatValue(allPoints[0].value, sign.label, unit);
+  }
+  if (year >= allPoints[allPoints.length - 1].year) {
+    return formatValue(allPoints[allPoints.length - 1].value, sign.label, unit);
+  }
+  
+  for (let i = 0; i < allPoints.length - 1; i++) {
+    const p1 = allPoints[i];
+    const p2 = allPoints[i + 1];
+    if (year >= p1.year && year <= p2.year) {
+      const fraction = (year - p1.year) / (p2.year - p1.year);
+      const val = p1.value + (p2.value - p1.value) * fraction;
+      return formatValue(val, sign.label, unit);
+    }
+  }
+  
+  return sign.value;
+}
+
 const dataCenterSites: DataCenterSite[] = [
   { name: "Northern Virginia", lat: 39.04, lon: -77.49 },
   { name: "Dallas", lat: 32.78, lon: -96.8 },
@@ -1214,9 +1294,11 @@ function EarthSunOrbitModel({
 function PhysicalEarth({
   isInteractive,
   targetPosition,
+  timelineYear,
 }: {
   isInteractive: boolean;
   targetPosition: THREE.Vector3;
+  timelineYear: number;
 }) {
   const groupRef = useRef<THREE.Group>(null);
   const earthRef = useRef<THREE.Group>(null);
@@ -1252,6 +1334,16 @@ function PhysicalEarth({
 
     if (atmosphereRef.current) {
       atmosphereRef.current.rotation.y -= delta * 0.04;
+
+      const mat = atmosphereRef.current.material as THREE.MeshBasicMaterial;
+      if (mat) {
+        const opacityFraction = (timelineYear - 1970) / (2050 - 1970);
+        mat.opacity = 0.06 + opacityFraction * 0.14;
+
+        const c1 = new THREE.Color("#77b9ff");
+        const c2 = new THREE.Color("#ff9e66");
+        mat.color.copy(c1).lerp(c2, opacityFraction * 0.5);
+      }
     }
   });
 
@@ -1290,14 +1382,18 @@ function DigitalEarth({
   isInteractive,
   targetPosition,
   theme = "dark",
+  timelineYear,
 }: {
   isInteractive: boolean;
   targetPosition: THREE.Vector3;
   theme?: "dark" | "light";
+  timelineYear: number;
 }) {
   const groupRef = useRef<THREE.Group>(null);
   const shellRef = useRef<THREE.Mesh>(null);
   const networkRef = useRef<THREE.Group>(null);
+  const pointsRef = useRef<THREE.Points>(null);
+  const linesRef = useRef<THREE.LineSegments>(null);
   const hasPositionedRef = useRef(false);
 
   const { nodePositions, linkPositions } = useMemo(() => {
@@ -1344,8 +1440,29 @@ function DigitalEarth({
       shellRef.current.rotation.x = Math.sin(clock.getElapsedTime() * 0.35) * 0.04;
     }
 
+    const activeFraction = (timelineYear - 1970) / (2050 - 1970);
+    const activeCount = Math.floor(10 + activeFraction * 180);
+
+    if (pointsRef.current) {
+      pointsRef.current.geometry.setDrawRange(0, activeCount);
+      const mat = pointsRef.current.material as THREE.PointsMaterial;
+      if (mat) {
+        mat.size = 0.04 + activeFraction * 0.05;
+        mat.opacity = 0.3 + activeFraction * 0.7;
+      }
+    }
+
+    if (linesRef.current) {
+      linesRef.current.geometry.setDrawRange(0, activeCount * 4);
+      const mat = linesRef.current.material as THREE.LineBasicMaterial;
+      if (mat) {
+        mat.opacity = 0.15 + activeFraction * 0.23;
+      }
+    }
+
     if (networkRef.current) {
-      networkRef.current.rotation.y -= delta * 0.1;
+      const rotationSpeed = 0.02 + activeFraction * 0.14;
+      networkRef.current.rotation.y -= delta * rotationSpeed;
     }
   });
 
@@ -1371,7 +1488,7 @@ function DigitalEarth({
         <meshBasicMaterial color={theme === "light" ? "#38bdf8" : "#62c7ff"} wireframe transparent opacity={0.16} depthTest depthWrite={false} />
       </mesh>
       <group ref={networkRef}>
-        <points>
+        <points ref={pointsRef}>
           <bufferGeometry>
             <bufferAttribute attach="attributes-position" args={[nodePositions, 3]} />
           </bufferGeometry>
@@ -1385,7 +1502,7 @@ function DigitalEarth({
             depthWrite={false}
           />
         </points>
-        <lineSegments>
+        <lineSegments ref={linesRef}>
           <bufferGeometry>
             <bufferAttribute attach="attributes-position" args={[linkPositions, 3]} />
           </bufferGeometry>
@@ -1885,11 +2002,13 @@ function Scene({
   isMerged,
   onToggleMerged,
   theme = "dark",
+  timelineYear,
 }: {
   enableZoom: boolean;
   isMerged: boolean;
   onToggleMerged: () => void;
   theme?: "dark" | "light";
+  timelineYear: number;
 }) {
   const physicalTarget = isMerged ? metaCenter : physicalCenter;
   const digitalTarget = isMerged ? metaCenter : digitalCenter;
@@ -1916,8 +2035,8 @@ function Scene({
       {theme === "dark" && (
         <Stars radius={16} depth={24} count={900} factor={2.4} saturation={0} fade speed={0.18} />
       )}
-      <PhysicalEarth isInteractive={!isMerged} targetPosition={physicalTarget} />
-      <DigitalEarth isInteractive={!isMerged} targetPosition={digitalTarget} theme={theme} />
+      <PhysicalEarth isInteractive={!isMerged} targetPosition={physicalTarget} timelineYear={timelineYear} />
+      <DigitalEarth isInteractive={!isMerged} targetPosition={digitalTarget} theme={theme} timelineYear={timelineYear} />
       {!isMerged && <DataConnectors />}
       <EarthSunOrbitModel
         position={[0, metaCenter.y + defaultOrbitTuning.yOffset, metaCenter.z + 0.18]}
@@ -2396,10 +2515,12 @@ function EarthVitalSignsPanel({
   isOpen,
   onPanelPointerEnter,
   onPanelPointerLeave,
+  timelineYear,
 }: {
   isOpen: boolean;
   onPanelPointerEnter: () => void;
   onPanelPointerLeave: () => void;
+  timelineYear: number;
 }) {
   const { handlePanelWheel, panelRef } = useManualPanelWheel<HTMLElement>();
   const [expandedLabel, setExpandedLabel] = useState<string | null>(null);
@@ -2434,6 +2555,36 @@ function EarthVitalSignsPanel({
       <dl className="mt-4 space-y-2">
         {earthVitalSigns.map((sign) => {
           const isExpanded = expandedLabel === sign.label;
+          const displayValue = getInterpolatedValue(sign, timelineYear);
+
+          let dynamicStatusBar = sign.statusBar;
+          if (sign.label === "Global Oil Stock" && sign.historicalData) {
+            const allPoints = [...sign.historicalData.points, ...(sign.historicalData.projection || [])].sort((a, b) => a.year - b.year);
+            let percentage = 49;
+            if (timelineYear <= allPoints[0].year) percentage = allPoints[0].value;
+            else if (timelineYear >= allPoints[allPoints.length - 1].year) percentage = allPoints[allPoints.length - 1].value;
+            else {
+              for (let i = 0; i < allPoints.length - 1; i++) {
+                const p1 = allPoints[i];
+                const p2 = allPoints[i + 1];
+                if (timelineYear >= p1.year && timelineYear <= p2.year) {
+                  const frac = (timelineYear - p1.year) / (p2.year - p1.year);
+                  percentage = p1.value + (p2.value - p1.value) * frac;
+                  break;
+                }
+              }
+            }
+            const totalReserves = 3.5;
+            const usedBillion = (totalReserves * percentage / 100).toFixed(2);
+            const remainingBillion = (totalReserves * (100 - percentage) / 100).toFixed(2);
+            dynamicStatusBar = {
+              usedPercent: percentage,
+              remainingPercent: 100 - percentage,
+              usedLabel: `${usedBillion}T bbl used`,
+              remainingLabel: `${remainingBillion}T bbl remaining`,
+            };
+          }
+
           return (
             <div
               key={sign.label}
@@ -2451,8 +2602,8 @@ function EarthVitalSignsPanel({
                   />
                   <span className="truncate">{sign.label}</span>
                 </span>
-                <span className="shrink-0 font-mono text-xs text-sky-200">
-                  {sign.value}
+                <span className="shrink-0 font-mono text-xs text-sky-200 font-bold">
+                  {displayValue}
                 </span>
               </dt>
               <dd
@@ -2464,24 +2615,24 @@ function EarthVitalSignsPanel({
                 <p className="font-mono text-[0.62rem] uppercase tracking-[0.12em] text-slate-400">
                   Last updated: {sign.updated}
                 </p>
-                {sign.statusBar && (
+                {dynamicStatusBar && (
                   <div className="mt-2.5" onClick={(e) => e.stopPropagation()}>
                     <div
                       className="flex h-2 overflow-hidden border border-white/10 bg-white/8"
-                      aria-label={`${sign.label}: ${sign.statusBar.usedLabel}; ${sign.statusBar.remainingLabel}`}
+                      aria-label={`${sign.label}: ${dynamicStatusBar.usedLabel}; ${dynamicStatusBar.remainingLabel}`}
                     >
                       <span
                         className="h-full bg-orange-400"
-                        style={{ width: `${sign.statusBar.usedPercent}%` }}
+                        style={{ width: `${dynamicStatusBar.usedPercent}%` }}
                       />
                       <span
                         className="h-full bg-sky-300/70"
-                        style={{ width: `${sign.statusBar.remainingPercent}%` }}
+                        style={{ width: `${dynamicStatusBar.remainingPercent}%` }}
                       />
                     </div>
                     <div className="mt-1 grid grid-cols-2 gap-2 font-mono text-[0.62rem] uppercase leading-tight tracking-[0.1em] text-slate-400">
-                      <span>{sign.statusBar.usedLabel}</span>
-                      <span className="text-right">{sign.statusBar.remainingLabel}</span>
+                      <span>{dynamicStatusBar.usedLabel}</span>
+                      <span className="text-right">{dynamicStatusBar.remainingLabel}</span>
                     </div>
                   </div>
                 )}
@@ -2592,11 +2743,13 @@ function EarthSystemsColumn({
   panelRef,
   onPanelPointerEnter,
   onPanelPointerLeave,
+  timelineYear,
 }: {
   activeBridge: HumanPlatformBridge | null;
   panelRef: RefObject<HTMLElement | null>;
   onPanelPointerEnter: () => void;
   onPanelPointerLeave: () => void;
+  timelineYear: number;
 }) {
   const [isVitalSignsOpen, setIsVitalSignsOpen] = useState(false);
   const earthSystemHighlights = useMemo<ConceptHighlight[]>(
@@ -2644,6 +2797,7 @@ function EarthSystemsColumn({
           isOpen={isVitalSignsOpen}
           onPanelPointerEnter={onPanelPointerEnter}
           onPanelPointerLeave={onPanelPointerLeave}
+          timelineYear={timelineYear}
         />
       </div>
     </div>
@@ -3038,16 +3192,108 @@ function TimeOverlay({
   );
 }
 
+function TimelineControlPanel({
+  timelineYear,
+  setTimelineYear,
+  isPlayMode,
+  setIsPlayMode,
+  onPanelPointerEnter,
+  onPanelPointerLeave,
+}: {
+  timelineYear: number;
+  setTimelineYear: (year: number) => void;
+  isPlayMode: boolean;
+  setIsPlayMode: (play: boolean) => void;
+  onPanelPointerEnter: () => void;
+  onPanelPointerLeave: () => void;
+}) {
+  const getMilestoneLabel = (year: number) => {
+    if (year < 1980) return "1970s: Birth of Internet / Holocene Baseline";
+    if (year < 1990) return "1980s: Growth of ARPANET & Early Warming";
+    if (year < 2000) return "1990s: World Wide Web & Climate Acceleration";
+    if (year < 2010) return "2000s: Web 2.0 & Breaching Ecosystem Boundaries";
+    if (year < 2020) return "2010s: Hyper-connectivity & Global Anomalies";
+    if (year <= 2026) return "2020s: Planetary Boundaries Breached / Present Day";
+    return "Projections: Future Paths & Decarbonization Limits";
+  };
+
+  return (
+    <aside
+      className="pointer-events-auto w-[min(34rem,calc(100vw-2rem))] border border-white/15 bg-black/54 px-5 py-3.5 text-white shadow-[0_0_28px_rgba(59,130,246,0.16)] backdrop-blur-sm rounded-lg flex flex-col gap-3"
+      onPointerEnter={onPanelPointerEnter}
+      onPointerLeave={onPanelPointerLeave}
+      onWheelCapture={stopPanelScrollPropagation}
+      onTouchMoveCapture={stopPanelScrollPropagation}
+    >
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setIsPlayMode(!isPlayMode)}
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-blue-400/30 bg-blue-500/10 text-blue-300 hover:bg-blue-500/25 hover:border-blue-400/60 hover:text-white transition-all cursor-pointer shadow-[0_0_12px_rgba(56,189,248,0.2)]"
+            aria-label={isPlayMode ? "Pause Simulation" : "Play Simulation"}
+          >
+            <span className="text-xs font-bold leading-none">
+              {isPlayMode ? "⏸" : "▶"}
+            </span>
+          </button>
+          <span className="font-mono text-lg font-extrabold text-blue-300 tracking-wider">
+            YEAR: {Math.round(timelineYear)}
+          </span>
+        </div>
+        <span className="font-mono text-[9px] text-slate-400 uppercase tracking-widest text-right max-sm:hidden">
+          {getMilestoneLabel(timelineYear)}
+        </span>
+      </div>
+      
+      <div className="relative mt-1 flex flex-col gap-1 select-none">
+        <input
+          type="range"
+          min="1970"
+          max="2050"
+          step="0.1"
+          value={timelineYear}
+          onChange={(e) => {
+            setTimelineYear(Number(e.target.value));
+            setIsPlayMode(false);
+          }}
+          className="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-400"
+        />
+        <div className="flex justify-between font-mono text-[8px] text-slate-500 px-1 mt-1">
+          <span>1970</span>
+          <span>1980</span>
+          <span>1990</span>
+          <span>2000</span>
+          <span>2010</span>
+          <span>2020</span>
+          <span className="text-blue-300 font-bold">2026</span>
+          <span>2030</span>
+          <span>2040</span>
+          <span>2050</span>
+        </div>
+      </div>
+    </aside>
+  );
+}
+
 function ConceptOverlay({
   isMetaEarthMerged,
   onMetaEarthToggle,
   onPanelPointerEnter,
   onPanelPointerLeave,
+  timelineYear,
+  setTimelineYear,
+  isPlayMode,
+  setIsPlayMode,
 }: {
   isMetaEarthMerged: boolean;
   onMetaEarthToggle: () => void;
   onPanelPointerEnter: () => void;
   onPanelPointerLeave: () => void;
+  timelineYear: number;
+  setTimelineYear: (year: number) => void;
+  isPlayMode: boolean;
+  setIsPlayMode: (play: boolean) => void;
 }) {
   const [activeBridge, setActiveBridge] = useState<HumanPlatformBridge | null>(null);
   const bridgeItemRefs = useRef(new Map<HumanPlatformBridge["id"], HTMLLIElement>());
@@ -3098,6 +3344,7 @@ function ConceptOverlay({
           panelRef={earthSystemsPanelRef}
           onPanelPointerEnter={onPanelPointerEnter}
           onPanelPointerLeave={onPanelPointerLeave}
+          timelineYear={timelineYear}
         />
         <DigitalSystemsColumn
           activeBridge={activeBridge}
@@ -3106,7 +3353,15 @@ function ConceptOverlay({
           onPanelPointerLeave={onPanelPointerLeave}
         />
       </div>
-      <div className="pointer-events-none absolute inset-x-0 bottom-16 z-10 flex justify-center px-8 max-lg:inset-x-4 max-lg:bottom-6 max-lg:px-0">
+      <div className="pointer-events-none absolute inset-x-0 bottom-16 z-10 flex flex-col items-center gap-4 px-8 max-lg:inset-x-4 max-lg:bottom-6 max-lg:px-0">
+        <TimelineControlPanel
+          timelineYear={timelineYear}
+          setTimelineYear={setTimelineYear}
+          isPlayMode={isPlayMode}
+          setIsPlayMode={setIsPlayMode}
+          onPanelPointerEnter={onPanelPointerEnter}
+          onPanelPointerLeave={onPanelPointerLeave}
+        />
         <HumanPlatformsBridgePanel
           activeBridgeId={activeBridge?.id ?? null}
           onBridgeEnter={setActiveBridge}
@@ -3125,6 +3380,9 @@ export function EarthHero() {
   const [isPanelPointerActive, setIsPanelPointerActive] = useState(false);
   const [isMetaEarthMerged, setIsMetaEarthMerged] = useState(false);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const [timelineYear, setTimelineYear] = useState(2026);
+  const [isPlayMode, setIsPlayMode] = useState(false);
+
   const toggleMetaEarth = () => setIsMetaEarthMerged((value) => !value);
 
   useEffect(() => {
@@ -3138,6 +3396,31 @@ export function EarthHero() {
       setTimeout(() => setTheme("dark"), 0);
     }
   }, []);
+
+  useEffect(() => {
+    if (!isPlayMode) return;
+
+    let lastTime = performance.now();
+    let frameId: number;
+
+    const update = (time: number) => {
+      const delta = (time - lastTime) / 1000;
+      lastTime = time;
+
+      setTimelineYear((prev) => {
+        let next = prev + delta * 2.0; // Advance 2 years per second
+        if (next > 2050) {
+          next = 1970;
+        }
+        return next;
+      });
+
+      frameId = requestAnimationFrame(update);
+    };
+
+    frameId = requestAnimationFrame(update);
+    return () => cancelAnimationFrame(frameId);
+  }, [isPlayMode]);
 
   const toggleTheme = () => {
     const nextTheme = theme === "dark" ? "light" : "dark";
@@ -3167,6 +3450,7 @@ export function EarthHero() {
               isMerged={isMetaEarthMerged}
               onToggleMerged={toggleMetaEarth}
               theme={theme}
+              timelineYear={timelineYear}
             />
           </Suspense>
         </Canvas>
@@ -3188,6 +3472,10 @@ export function EarthHero() {
         onMetaEarthToggle={toggleMetaEarth}
         onPanelPointerEnter={() => setIsPanelPointerActive(true)}
         onPanelPointerLeave={() => setIsPanelPointerActive(false)}
+        timelineYear={timelineYear}
+        setTimelineYear={setTimelineYear}
+        isPlayMode={isPlayMode}
+        setIsPlayMode={setIsPlayMode}
       />
     </section>
   );
