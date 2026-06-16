@@ -6,6 +6,7 @@ import { platformCouplingBySlug } from "@/lib/platform-couplings";
 import {
   computeCrossPlatformScenario,
   scenarioBaselines,
+  scenarioPresets,
   type ScenarioInputs,
 } from "@/lib/cross-platform-simulator";
 
@@ -162,6 +163,19 @@ export function CrossPlatformSimulator() {
         >
           Reset to baseline
         </button>
+
+        <div className="flex flex-wrap gap-2">
+          {scenarioPresets.map((preset) => (
+            <button
+              key={preset.id}
+              type="button"
+              onClick={() => setInputs(preset.inputs)}
+              className="cursor-pointer border border-white/10 bg-white/[0.02] px-2.5 py-1 text-[0.65rem] font-semibold uppercase tracking-wider text-slate-400 transition-colors hover:border-emerald-400/35 hover:text-emerald-200"
+            >
+              {preset.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="flex flex-col gap-5">

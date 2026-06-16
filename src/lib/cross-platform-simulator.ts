@@ -23,6 +23,25 @@ export const scenarioBaselines: ScenarioInputs = {
   healthcareAccess: 65,
 };
 
+export const scenarioPresets: { id: string; label: string; inputs: ScenarioInputs }[] = [
+  { id: "baseline", label: "Current baseline", inputs: scenarioBaselines },
+  {
+    id: "freshwater-crisis",
+    label: "Freshwater crisis",
+    inputs: { freshwaterStress: 92, civicSpace: 38, healthcareAccess: 58 },
+  },
+  {
+    id: "open-society",
+    label: "Open society",
+    inputs: { freshwaterStress: 55, civicSpace: 78, healthcareAccess: 82 },
+  },
+  {
+    id: "compound-shock",
+    label: "Compound shock",
+    inputs: { freshwaterStress: 88, civicSpace: 22, healthcareAccess: 45 },
+  },
+];
+
 export function computeCrossPlatformScenario(inputs: ScenarioInputs): ScenarioOutputs {
   const { freshwaterStress, civicSpace, healthcareAccess } = inputs;
 

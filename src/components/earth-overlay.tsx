@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { RefObject } from "react";
-import { dataIndexCategories } from "@/lib/data-index";
+import { dataIndexCategories, dataIndexCategoryHref } from "@/lib/data-index";
 import {
   digitalDataIndexHighlights,
   digitalSystemNodes,
@@ -489,7 +489,12 @@ function DataIndexPanel({
                 className="h-2 w-2 shrink-0 rounded-full"
                 style={{ backgroundColor: category.color, boxShadow: `0 0 12px ${category.color}` }}
               />
-              <h3 className="text-sm font-semibold text-slate-100">{category.name}</h3>
+              <Link
+                href={dataIndexCategoryHref(category.name)}
+                className="text-sm font-semibold text-slate-100 transition-colors hover:text-sky-200"
+              >
+                {category.name}
+              </Link>
               <span className="ml-auto font-mono text-[0.62rem] uppercase tracking-[0.12em] text-slate-500">
                 {category.entries.length}
               </span>
