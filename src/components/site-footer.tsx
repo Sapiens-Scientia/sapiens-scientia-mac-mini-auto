@@ -20,6 +20,7 @@ const columns: { title: string; links: FooterLink[] }[] = [
     title: "Explore",
     links: [
       { href: "/scales", label: "The Ladder of Scale" },
+      { href: "/vitals", label: "Planetary Vital Signs" },
       { href: "/platforms", label: "Cross-Platform Map" },
       { href: "/projects", label: "Projects" },
       { href: "/projects/sapiens-scientia-data-index", label: "Data Index" },
