@@ -8,6 +8,7 @@ import * as THREE from "three";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { dataIndexCategories, dataIndexEntries } from "@/lib/data-index";
 import { dataCenterSites, type DataCenterSite } from "@/lib/earth-systems";
+import { EARTHVIEW_PAGE_PATH } from "@/lib/projects";
 
 const physicalCenter = new THREE.Vector3(-1.9, -0.08, 0);
 const digitalCenter = new THREE.Vector3(1.9, -0.08, 0);
@@ -16,7 +17,6 @@ const digitalNetworkRadius = 1.16;
 const maxPanTargetRadius = 0.9;
 const labelFont = "/fonts/geist-regular.ttf";
 const earthLabelFont = "/fonts/geist-semibold.ttf";
-const earthViewUrl = "https://earthview3d.vercel.app/";
 const defaultOrbitTuning = {
   tilt: 0.2,
   yOffset: -1.64,
@@ -354,8 +354,10 @@ function PhysicalEarth({
     return clonedTexture;
   }, [loadedTexture]);
 
+  const router = useRouter();
+
   const openEarthView = () => {
-    window.open(earthViewUrl, "_blank", "noopener,noreferrer");
+    router.push(EARTHVIEW_PAGE_PATH);
   };
 
   useFrame((_, delta) => {
@@ -1013,6 +1015,7 @@ export function EarthScene({
   onToggleMerged: () => void;
   theme?: "dark" | "light";
 }) {
+  const router = useRouter();
   const physicalTarget = isMerged ? metaCenter : physicalCenter;
   const digitalTarget = isMerged ? metaCenter : digitalCenter;
 
@@ -1050,7 +1053,7 @@ export function EarthScene({
         <>
           <GlobeLabel
             onClick={() => {
-              window.open(earthViewUrl, "_blank", "noopener,noreferrer");
+              router.push(EARTHVIEW_PAGE_PATH);
             }}
             position={[physicalCenter.x, physicalCenter.y + 1.72, physicalCenter.z + 0.08]}
             theme={theme}

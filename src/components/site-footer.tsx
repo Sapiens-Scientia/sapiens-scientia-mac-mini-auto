@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { EARTHVIEW_PAGE_PATH } from "@/lib/projects";
 
 // Sitewide footer for content pages. The cinematic homepage keeps its own
 // full-screen navigation model, so this is rendered on the content pages via
@@ -29,7 +30,7 @@ const columns: { title: string; links: FooterLink[] }[] = [
     title: "Project",
     links: [
       { href: "https://github.com/Sapiens-Scientia/sapiens-scientia-docs", label: "Documentation", external: true },
-      { href: "https://earthview3d.vercel.app/", label: "EarthView 3D", external: true },
+      { href: EARTHVIEW_PAGE_PATH, label: "EarthView 3D" },
     ],
   },
 ];

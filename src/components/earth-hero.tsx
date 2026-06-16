@@ -4,6 +4,7 @@ import { Canvas } from "@react-three/fiber";
 import { Suspense, useEffect, useState } from "react";
 import { EarthOverlay } from "@/components/earth-overlay";
 import { EarthScene } from "@/components/earth-scene";
+import { HomeNav } from "@/components/home-nav";
 
 export function EarthHero() {
   const [isPanelPointerActive, setIsPanelPointerActive] = useState(false);
@@ -60,6 +61,8 @@ export function EarthHero() {
           </Suspense>
         </Canvas>
       </div>
+
+      <HomeNav />
 
       <div className="pointer-events-auto absolute right-6 top-8 z-50 max-lg:top-4">
         <button

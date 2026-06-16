@@ -2,8 +2,14 @@
 
 import { useState } from "react";
 import Link from "next/link";
-
-type PlatformId = "salus" | "societas" | "terra";
+import {
+  platformColorOf,
+  platformCouplings,
+  platformCouplingBySlug,
+  platformHrefOf,
+  platformShortOf,
+  type PlatformId,
+} from "@/lib/platform-couplings";
 
 type PlatformData = {
   id: PlatformId;
@@ -41,69 +47,11 @@ const platforms: PlatformData[] = [
   },
 ];
 
-type CouplingData = {
-  name: string;
-  links: PlatformId[];
-  detail: string;
-  feedbackLoop: string;
-};
+const couplings = platformCouplings;
 
-const couplings: CouplingData[] = [
-  {
-    name: "Public health",
-    links: ["salus", "societas"],
-    detail: "Disease spread, care access, and population health sit between bodies and institutions.",
-    feedbackLoop: "A bidirectional loop where social structures (income, sanitation, urban density, housing conditions) determine exposure to pathogens and access to medical care (Societas). Concurrently, population-scale disease outbreaks (Salus) stress economic activity, destabilize governance, and force institutional adaptations (e.g., quarantine laws, public vaccine policies).",
-  },
-  {
-    name: "Climate medicine",
-    links: ["salus", "terra"],
-    detail: "Heat, air quality, and shifting disease ranges tie human health to Earth systems.",
-    feedbackLoop: "Planetary-scale energy imbalance and atmospheric warming (Terra) directly affect human cellular biology. Heat stress damages cardiovascular systems, shifting temperature ranges alter vector-borne pathogen habitats, and wildfire smoke/pollutants exacerbate lung/immune dysregulation (Salus). Downstream, human disease increases vulnerabilities to climate disasters.",
-  },
-  {
-    name: "Energy systems",
-    links: ["terra", "societas"],
-    detail: "How societies power themselves drives both economies and planetary boundaries.",
-    feedbackLoop: "Societal metabolism requires power (Societas). Harnessing fossil fuels or transitioning to renewable infrastructure drives carbon cycle changes, habitat fragmentation, and thermodynamic flows (Terra). Conversely, resource scarcity, climate feedback damage, and geographical energy distributions dictate national geopolitics, macroeconomic stability, and technical innovation (Societas).",
-  },
-  {
-    name: "Food systems",
-    links: ["salus", "societas", "terra"],
-    detail: "Nutrition, agriculture, and land use couple health, society, and environment at once.",
-    feedbackLoop: "A central three-way coupling. Agricultural practices and land conversion (Terra) drive global supply chains, economic subsidies, and cultural dietary patterns (Societas). In turn, these processed or natural foods determine metabolic disease incidence, microbiome health, and human physiological capacity (Salus). Finally, population metabolic demands feed back to demand more intensive land and water use, accelerating ecological degradation (Terra).",
-  },
-  {
-    name: "Urbanization",
-    links: ["salus", "societas", "terra"],
-    detail: "Cities concentrate people, reshape institutions, and transform local ecosystems.",
-    feedbackLoop: "Cities concentrate populations (Societas), generating dense micro-climates, urban heat islands, and massive waste streams that alter local ecological and hydrological cycles (Terra). These modified environments shape human health (Salus) through concentrated air pollution, mechanical noise stress, sedentary layouts, and rapid disease transmission networks. Yet, cities also concentrate the financial, healthcare, and educational capital (Societas) needed to develop systemic solutions.",
-  },
-  {
-    name: "Disease ecology",
-    links: ["salus", "societas", "terra"],
-    detail: "Pathogens move through human, social, and environmental systems together.",
-    feedbackLoop: "Pathogens cross species barriers at the interfaces of ecological degradation, deforestation, and climate shifts (Terra). These spillover events are accelerated or suppressed by global trade networks, food production systems, and institutional preparedness (Societas). Once in the human population, the pathogen's molecular biology interacts with host physiology to determine clinical disease courses (Salus), leading back to social shutdowns, regulatory responses, and altered environmental practices.",
-  },
-];
-
-const colorOf: Record<PlatformId, string> = {
-  salus: "#38bdf8",
-  societas: "#818cf8",
-  terra: "#34d399",
-};
-
-const shortOf: Record<PlatformId, string> = {
-  salus: "Salus",
-  societas: "Societas",
-  terra: "Terra",
-};
-
-const hrefOf: Record<PlatformId, string> = {
-  salus: "/platforms/salus",
-  societas: "/platforms/societas",
-  terra: "/platforms/terra",
-};
+const colorOf = platformColorOf;
+const shortOf = platformShortOf;
+const hrefOf = platformHrefOf;
 
 function PlatformLink({ id }: { id: PlatformId }) {
   return (
@@ -361,7 +309,31 @@ function SystemsMap({
 }
 
 export function PlatformsExplorer() {
-  const [selectedCoupling, setSelectedCoupling] = useState<string | null>(null);
+  const [selectedCoupling, setSelectedCoupling] = useState<string | null>(() => {
+    if (typeof window === "undefined") {
+      return null;
+    }
+
+    const slug = window.location.hash.replace(/^#/, "");
+    return platformCouplingBySlug[slug]?.name ?? null;
+  });
+
+  const selectCoupling = (name: string | null) => {
+    setSelectedCoupling(name);
+
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    if (name) {
+      const coupling = couplings.find((entry) => entry.name === name);
+      if (coupling) {
+        window.history.replaceState(null, "", `#${coupling.slug}`);
+      }
+    } else {
+      window.history.replaceState(null, "", window.location.pathname);
+    }
+  };
 
   const activeCoupling = couplings.find((c) => c.name === selectedCoupling) || null;
 
@@ -414,7 +386,7 @@ export function PlatformsExplorer() {
 
         {/* SVG Systems Map */}
         <div className="border border-white/10 bg-white/[0.02] p-4 sm:p-6 rounded">
-          <SystemsMap selectedCoupling={selectedCoupling} onSelectCoupling={setSelectedCoupling} />
+          <SystemsMap selectedCoupling={selectedCoupling} onSelectCoupling={selectCoupling} />
         </div>
 
         {/* Detailed Feedback Loop Card (Targeted Expanded view) */}
@@ -428,7 +400,7 @@ export function PlatformsExplorer() {
                 <h3 className="text-2xl font-bold text-slate-50 mt-1">{activeCoupling.name}</h3>
               </div>
               <button
-                onClick={() => setSelectedCoupling(null)}
+                onClick={() => selectCoupling(null)}
                 className="cursor-pointer border border-white/10 bg-white/[0.02] text-slate-300 hover:bg-white/[0.08] hover:text-white text-xs px-2.5 py-1 transition-all"
               >
                 ✕ CLOSE
@@ -450,7 +422,7 @@ export function PlatformsExplorer() {
             return (
               <article
                 key={coupling.name}
-                onClick={() => setSelectedCoupling(isSelected ? null : coupling.name)}
+                onClick={() => selectCoupling(isSelected ? null : coupling.name)}
                 className={`flex flex-col gap-3 border p-4 transition-all cursor-pointer select-none ${
                   isSelected
                     ? "border-emerald-300 bg-emerald-300/[0.04]"
