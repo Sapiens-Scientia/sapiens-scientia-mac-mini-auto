@@ -99,6 +99,25 @@ const shortOf: Record<PlatformId, string> = {
   terra: "Terra",
 };
 
+const hrefOf: Record<PlatformId, string> = {
+  salus: "/platforms/salus",
+  societas: "/platforms/societas",
+  terra: "/platforms/terra",
+};
+
+function PlatformLink({ id }: { id: PlatformId }) {
+  return (
+    <Link
+      href={hrefOf[id]}
+      className="border px-2.5 py-1 text-xs leading-5 text-slate-200 transition-colors hover:bg-white/[0.06] hover:text-white"
+      style={{ borderColor: `${colorOf[id]}55`, color: colorOf[id] }}
+      onClick={(event) => event.stopPropagation()}
+    >
+      {shortOf[id]}
+    </Link>
+  );
+}
+
 function SystemsMap({
   selectedCoupling,
   onSelectCoupling,
@@ -112,13 +131,6 @@ function SystemsMap({
     terra: { cx: 660, cy: 440 },
   };
   const hub = { cx: 410, cy: 300 };
-
-  const isCouplingActive = (links: PlatformId[]) => {
-    if (!selectedCoupling) return true;
-    const activeData = couplings.find((c) => c.name === selectedCoupling);
-    if (!activeData) return true;
-    return links.every((link) => activeData.links.includes(link)) && links.length === activeData.links.length;
-  };
 
   const isHubActive = selectedCoupling === "Food systems" || selectedCoupling === "Urbanization" || selectedCoupling === "Disease ecology";
 
@@ -425,13 +437,7 @@ export function PlatformsExplorer() {
             <p className="text-base leading-7 text-slate-200">{activeCoupling.feedbackLoop}</p>
             <div className="flex gap-2 pt-2">
               {activeCoupling.links.map((id) => (
-                <span
-                  key={id}
-                  className="border px-2.5 py-1 text-xs leading-5 text-slate-200"
-                  style={{ borderColor: `${colorOf[id]}55`, color: colorOf[id] }}
-                >
-                  {shortOf[id]}
-                </span>
+                <PlatformLink key={id} id={id} />
               ))}
             </div>
           </article>
@@ -462,13 +468,7 @@ export function PlatformsExplorer() {
                 <p className="text-sm leading-6 text-slate-400">{coupling.detail}</p>
                 <div className="mt-auto flex flex-wrap gap-2 pt-1">
                   {coupling.links.map((id) => (
-                    <span
-                      key={id}
-                      className="border px-2.5 py-1 text-xs leading-5 text-slate-200"
-                      style={{ borderColor: `${colorOf[id]}55`, color: colorOf[id] }}
-                    >
-                      {shortOf[id]}
-                    </span>
+                    <PlatformLink key={id} id={id} />
                   ))}
                 </div>
               </article>

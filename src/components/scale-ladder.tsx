@@ -1,10 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import {
   LADDER_LOG_MAX,
   LADDER_LOG_MIN,
   ORDERS_OF_MAGNITUDE,
+  platforms,
   scaleRungs,
   scaleTiers,
   type ScaleTierId,
@@ -48,6 +50,14 @@ const tierWeight: Record<ScaleTierId, number> = {
 };
 
 const span = LADDER_LOG_MAX - LADDER_LOG_MIN;
+
+const tierPlatforms = Object.fromEntries(
+  scaleTiers.map((tier) => [tier.id, tier.platforms]),
+) as Record<ScaleTierId, (keyof typeof platforms)[]>;
+
+function rungPlatforms(rung: (typeof scaleRungs)[number]) {
+  return rung.platforms ?? tierPlatforms[rung.tier];
+}
 
 export function ScaleLadder() {
   const defaultRung = useMemo(
@@ -116,6 +126,7 @@ export function ScaleLadder() {
           const color = tierColor[rung.tier];
           const isActive = index === activeRung;
           const dimmed = focusedTier !== null && rung.tier !== focusedTier;
+          const rungPlatformIds = rungPlatforms(rung);
 
           return (
             <li key={rung.name}>
@@ -166,14 +177,26 @@ export function ScaleLadder() {
                   </span>
                   <span className="relative z-10 ml-3 flex flex-1 items-baseline justify-between gap-3 pr-3">
                     <span
-                      className={`text-sm font-medium sm:text-base ${
+                      className={`flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-1 text-sm font-medium sm:text-base ${
                         isActive ? "text-white" : "text-slate-200"
                       }`}
                     >
-                      {rung.name}
+                      <span>{rung.name}</span>
+                      {rungPlatformIds.map((platformId) => {
+                        const platform = platforms[platformId];
+                        return (
+                          <span
+                            key={platformId}
+                            className="align-middle text-[0.55rem] font-semibold uppercase tracking-[0.12em]"
+                            style={{ color: platform.color }}
+                          >
+                            {platform.name}
+                          </span>
+                        );
+                      })}
                       {rung.here ? (
                         <span
-                          className="ml-2 align-middle text-[0.6rem] font-semibold uppercase tracking-[0.14em]"
+                          className="align-middle text-[0.6rem] font-semibold uppercase tracking-[0.14em]"
                           style={{ color }}
                         >
                           You are here
@@ -208,6 +231,29 @@ export function ScaleLadder() {
             </span>
           </p>
           <p className="mt-1 text-sm leading-6 text-slate-400">{active.note}</p>
+          {rungPlatforms(active).length > 0 ? (
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <span className="text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-slate-500">
+                Platforms
+              </span>
+              {rungPlatforms(active).map((platformId) => {
+                const platform = platforms[platformId];
+                return (
+                  <Link
+                    key={platformId}
+                    href={platform.href}
+                    className="border px-2.5 py-1 text-xs font-medium transition-colors hover:text-white"
+                    style={{
+                      borderColor: `${platform.color}55`,
+                      color: platform.color,
+                    }}
+                  >
+                    {platform.name}
+                  </Link>
+                );
+              })}
+            </div>
+          ) : null}
         </div>
       </div>
     </div>

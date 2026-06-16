@@ -1,0 +1,220 @@
+export type DiseaseAxis = {
+  axis: string;
+  value: string;
+  explanation: string;
+};
+
+export type DiseaseCrosswalk = {
+  name: string;
+  value: string;
+};
+
+export type DiseaseData = {
+  id: string;
+  name: string;
+  group: "Primary Etiologic Diseases" | "Secondary Physiological Diseases" | "Hybrid / Multiaxial Diseases";
+  description: string;
+  axes: DiseaseAxis[];
+  crosswalks: DiseaseCrosswalk[];
+};
+
+export const morbusDiseases: DiseaseData[] = [
+  {
+    id: "ibd",
+    name: "Inflammatory Bowel Disease (IBD)",
+    group: "Hybrid / Multiaxial Diseases",
+    description: "A relapsing-remitting inflammatory condition of the gastrointestinal tract, emerging from polygenic risk, barrier disruption, and dysregulated host immune response to gut microbiota.",
+    axes: [
+      { axis: "Anatomical", value: "Gastrointestinal tract, ileum and colon", explanation: "Primarily affects the mucosal lining of the intestines, causing localized lesions and ulcers." },
+      { axis: "Etiologic", value: "Polygenic risk plus environmental triggers", explanation: "Dozens of susceptibility loci interacting with diet, smoking, and stress." },
+      { axis: "Molecular", value: "NOD2 mutation, IL-23 / Th17 signalling pathways", explanation: "Intracellular pattern recognition receptor failure and cytokine pathway upregulation." },
+      { axis: "Immunological", value: "Dysregulated mucosal immune response", explanation: "Excessive leukocyte recruitment and macrophage activation in the lamina propria." },
+      { axis: "Barrier", value: "Compromised intestinal epithelial barrier", explanation: "Leaky tight junctions allow bacterial translocation into deeper tissue layers." },
+      { axis: "Ecological", value: "Altered gut microbiome (dysbiosis)", explanation: "Loss of diversity, specifically reduced Firmicutes and increased Proteobacteria." },
+      { axis: "Developmental", value: "Onset often in adolescence / young adulthood", explanation: "Typically diagnosed between ages 15 and 30, with lifelong relapsing courses." },
+      { axis: "Social", value: "Western diet, urbanization, antibiotic exposure", explanation: "Heavily associated with industrialization and changes in early-life microbial exposure." },
+      { axis: "Experiential", value: "Relapsing-remitting pain, fatigue, social stigma", explanation: "Lived burden includes unpredictable flares, dietary anxiety, and chronic fatigue." },
+    ],
+    crosswalks: [
+      { name: "ICD-11", value: "DD70 Crohn disease / DD71 Ulcerative colitis" },
+      { name: "SNOMED CT", value: "34000006 Crohn's disease / 64766004 Ulcerative colitis" },
+      { name: "MONDO", value: "MONDO:0005101 inflammatory bowel disease" },
+    ],
+  },
+  {
+    id: "t2d",
+    name: "Type 2 Diabetes (T2D)",
+    group: "Secondary Physiological Diseases",
+    description: "A metabolic disorder characterized by chronic hyperglycemia, peripheral insulin resistance, and progressive pancreatic beta-cell dysfunction.",
+    axes: [
+      { axis: "Anatomical", value: "Pancreas, skeletal muscle, liver, adipose tissue", explanation: "Key metabolic organs fail to clear glucose or produce adequate regulatory signals." },
+      { axis: "Etiologic", value: "Genetic susceptibility + chronic positive energy balance", explanation: "Heritable risk combined with sustained caloric surplus and physical inactivity." },
+      { axis: "Molecular", value: "IRS-1 serine phosphorylation, GLUT4 downregulation", explanation: "Impaired intracellular insulin signaling prevents glucose transporter migration." },
+      { axis: "Immunological", value: "Chronic low-grade macrophage-driven tissue inflammation", explanation: "Adipose tissue hypertrophy recruits pro-inflammatory macrophages, secreting TNF-alpha." },
+      { axis: "Barrier", value: "Intestinal permeability leading to endotoxemia", explanation: "Leaky gut allows bacterial lipopolysaccharides (LPS) to enter circulation, driving systemic resistance." },
+      { axis: "Ecological", value: "Altered gut microbiota diversity", explanation: "Reduced abundance of butyrate-producing taxa impairing metabolic homeostasis." },
+      { axis: "Developmental", value: "Progressive accumulation of metabolic strain with age", explanation: "Slow development over decades, often preceded by years of silent pre-diabetes." },
+      { axis: "Social", value: "Ultra-processed food environments, sedentary labor", explanation: "Driven by systemic food architecture, transit design, and socioeconomic disparities." },
+      { axis: "Experiential", value: "Dietary anxiety, neuropathic pain, fear of failure", explanation: "Constant management burden, blood sugar checking, and fear of diabetic complications." },
+    ],
+    crosswalks: [
+      { name: "ICD-11", value: "5A11 Type 2 diabetes mellitus" },
+      { name: "SNOMED CT", value: "44054006 Type 2 diabetes mellitus" },
+      { name: "MONDO", value: "MONDO:0005148 type 2 diabetes mellitus" },
+    ],
+  },
+  {
+    id: "tb",
+    name: "Tuberculosis (TB)",
+    group: "Primary Etiologic Diseases",
+    description: "An infectious disease caused by Mycobacterium tuberculosis, where clinical path is dictated by cellular immunity containment.",
+    axes: [
+      { axis: "Anatomical", value: "Pulmonary parenchyma, alveolar macrophages", explanation: "Infection centers in the lungs but can disseminate hematogenously to bones, brain, or kidneys." },
+      { axis: "Etiologic", value: "Infection with Mycobacterium tuberculosis", explanation: "Inhalation of airborne droplet nuclei containing the intracellular pathogen." },
+      { axis: "Molecular", value: "Mycolic acid wall, ESX-1 secretion system", explanation: "Bacterial cell wall lipids block phagosome-lysosome fusion inside host macrophages." },
+      { axis: "Immunological", value: "Th1 cell-mediated immunity & granuloma formation", explanation: "T-cell IFN-gamma recruits macrophages to wall off bacteria in a caseous granuloma." },
+      { axis: "Barrier", value: "Alveolar epithelial barrier disruption", explanation: "Bacterial invasion compromises gas exchange barrier during active disease." },
+      { axis: "Ecological", value: "Host nutritional status and pulmonary microbiome", explanation: "Co-morbidities like malnutrition or HIV severely compromise host-defense ecology." },
+      { axis: "Developmental", value: "Latency phase vs. active reactivation", explanation: "Pathogen can remain dormant for decades, reactivating under immunosuppression." },
+      { axis: "Social", value: "Overcrowded housing, poverty, poor ventilation", explanation: "Classic disease of poverty, historical slums, and underfunded public health systems." },
+      { axis: "Experiential", value: "Chronic cough, isolation, treatment fatigue", explanation: "Six-month multi-drug regimens, severe medication side effects, and social stigma." },
+    ],
+    crosswalks: [
+      { name: "ICD-11", value: "1B10 Tuberculosis" },
+      { name: "SNOMED CT", value: "56717001 Tuberculosis" },
+      { name: "MONDO", value: "MONDO:0019383 tuberculosis" },
+    ],
+  },
+  {
+    id: "ad",
+    name: "Alzheimer's Disease (AD)",
+    group: "Secondary Physiological Diseases",
+    description: "A neurodegenerative disease characterized by progressive cognitive decline, synaptic loss, and pathological accumulation of amyloid-beta and tau proteins.",
+    axes: [
+      { axis: "Anatomical", value: "Hippocampus, neocortex, cerebral vasculature", explanation: "Progressive atrophy starting in memory centers and spreading through association cortices." },
+      { axis: "Etiologic", value: "APOE4 allele, aging, cardiovascular disease", explanation: "Multifactorial risk combining genetic variants, vascular health, and systemic aging." },
+      { axis: "Molecular", value: "Abeta42 aggregation, hyperphosphorylated tau", explanation: "Extracellular plaques block synaptic transmission; intracellular tangles collapse axonal transport." },
+      { axis: "Immunological", value: "TREM2 microglial activation, astrogliosis", explanation: "Microglia fail to clear plaques and transition into a chronic neurotoxic inflammatory state." },
+      { axis: "Barrier", value: "Blood-brain barrier breakdown, glymphatic failure", explanation: "Microvascular leakiness and impaired waste clearance during slow-wave sleep." },
+      { axis: "Ecological", value: "Gut-brain metabolic axis, systemic lipid state", explanation: "Systemic inflammatory and metabolic profiles influence neuroinflammatory signaling." },
+      { axis: "Developmental", value: "Long prodromal plaque accumulation (20+ years)", explanation: "Plaques begin depositing decades before memory complaints or clinical dementia appear." },
+      { axis: "Social", value: "Cognitive reserve, air pollution, social isolation", explanation: "Higher education builds cognitive resilience; environmental toxins accelerate damage." },
+      { axis: "Experiential", value: "Identity erosion, caregiver burden, memory loss", explanation: "Lived reality of losing memory of loved ones, losing spatial orientation, and loss of self." },
+    ],
+    crosswalks: [
+      { name: "ICD-11", value: "8A20 Dementia due to Alzheimer disease" },
+      { name: "SNOMED CT", value: "26929004 Alzheimer's disease" },
+      { name: "MONDO", value: "MONDO:0004975 Alzheimer's disease" },
+    ],
+  },
+  {
+    id: "tbi",
+    name: "Traumatic Brain Injury (TBI)",
+    group: "Primary Etiologic Diseases",
+    description: "An alteration in brain function or structure caused by an external physical force, triggering chronic secondary cascades.",
+    axes: [
+      { axis: "Anatomical", value: "Cerebral cortex, diffuse axonal pathways, meninges", explanation: "Mechanical focal contusions combined with shearing of white matter axonal tracts." },
+      { axis: "Etiologic", value: "Mechanical impact, deceleration forces", explanation: "Direct trauma from falls, motor vehicle collisions, sports impacts, or military blasts." },
+      { axis: "Molecular", value: "Excitotoxicity, mitochondrial calcium overload", explanation: "Massive glutamate dump triggers toxic calcium influx and free radical generation." },
+      { axis: "Immunological", value: "Microglial priming, peripheral cell infiltration", explanation: "Acute inflammatory response can evolve into chronic, progressive neurodegeneration." },
+      { axis: "Barrier", value: "Traumatic blood-brain barrier (BBB) disruption", explanation: "Endothelial shear stresses break tight junctions, causing vasogenic edema and swelling." },
+      { axis: "Ecological", value: "Systemic autonomic dysfunction, gut dysbiosis", explanation: "Trauma alters vagal tone, triggering physical gastrointestinal permeability changes." },
+      { axis: "Developmental", value: "Acute mechanical shock to chronic dementia risk", explanation: "Single or repeated injuries increase long-term risk of Chronic Traumatic Encephalopathy." },
+      { axis: "Social", value: "Sports regulations, infrastructure safety, military exposure", explanation: "Reshaped by athletic safety protocols, traffic laws, and combat zone armor." },
+      { axis: "Experiential", value: "Cognitive fatigue, mood shifts, isolation", explanation: "Chronic headaches, light sensitivity, memory gaps, depression, and loss of vocational role." },
+    ],
+    crosswalks: [
+      { name: "ICD-11", value: "NA07.0 Concussion / NA07.1 Traumatic cerebral injury" },
+      { name: "SNOMED CT", value: "127294003 Traumatic brain injury" },
+      { name: "MONDO", value: "MONDO:0005086 traumatic brain injury" },
+    ],
+  },
+  {
+    id: "ptsd",
+    name: "Post-Traumatic Stress Disorder (PTSD)",
+    group: "Hybrid / Multiaxial Diseases",
+    description: "A trauma- and stressor-related disorder where threat-circuit hyperarousal, intrusive memory, and avoidance reshape cognition, physiology, and social life long after the original event.",
+    axes: [
+      { axis: "Anatomical", value: "Amygdala, hippocampus, medial prefrontal cortex", explanation: "Fear-conditioning circuits show altered volume and connectivity after repeated or severe trauma." },
+      { axis: "Etiologic", value: "Exposure to actual or threatened death, injury, or sexual violence", explanation: "Not every exposed person develops PTSD — risk depends on dose, timing, and prior adversity." },
+      { axis: "Molecular", value: "FKBP5, glucocorticoid receptor sensitivity, BDNF", explanation: "Stress-hormone signalling and neurotrophic pathways modulate whether memory becomes pathologically fixed." },
+      { axis: "Immunological", value: "Low-grade systemic inflammation, HPA-axis dysregulation", explanation: "Chronic cortisol swings and inflammatory markers often accompany long-standing PTSD." },
+      { axis: "Barrier", value: "Blood-brain barrier stress vulnerability", explanation: "Repeated neuroendocrine strain may worsen BBB integrity and neuroinflammatory tone." },
+      { axis: "Ecological", value: "Gut-brain axis, sleep ecology, substance co-use", explanation: "Disrupted sleep, alcohol use, and microbiome shifts feed back into threat processing." },
+      { axis: "Developmental", value: "Childhood trauma increases lifetime risk", explanation: "Early adversity can prime stress systems before the brain's regulatory architecture is mature." },
+      { axis: "Social", value: "War, displacement, intimate partner violence, occupational trauma", explanation: "PTSD clusters where violence, instability, and institutional failure concentrate." },
+      { axis: "Experiential", value: "Hypervigilance, flashbacks, emotional numbing, moral injury", explanation: "Lived reality of feeling unsafe in ordinary spaces and reliving danger without warning." },
+    ],
+    crosswalks: [
+      { name: "ICD-11", value: "6B40 Post traumatic stress disorder" },
+      { name: "SNOMED CT", value: "47505003 Post-traumatic stress disorder" },
+      { name: "MONDO", value: "MONDO:0005401 post-traumatic stress disorder" },
+    ],
+  },
+  {
+    id: "malaria",
+    name: "Malaria",
+    group: "Primary Etiologic Diseases",
+    description: "A mosquito-borne infectious disease caused by Plasmodium parasites, where clinical severity reflects parasite species, host immunity, and ecological exposure.",
+    axes: [
+      { axis: "Anatomical", value: "Liver, erythrocytes, cerebral microvasculature", explanation: "Hepatic schizonts release meroozoites that invade red cells; severe cases can occlude brain capillaries." },
+      { axis: "Etiologic", value: "Plasmodium falciparum, P. vivax, and related species", explanation: "Transmission requires Anopheles mosquitoes and human reservoirs in overlapping habitats." },
+      { axis: "Molecular", value: "PfEMP1 variant surface antigens, hemozoin crystals", explanation: "Parasite proteins remodel infected cells and trigger immune recognition / evasion cycles." },
+      { axis: "Immunological", value: "Partial acquired immunity after repeated exposure", explanation: "Endemic populations develop age-structured immunity; travelers lack this buffer." },
+      { axis: "Barrier", value: "Blood-brain barrier sequestration in cerebral malaria", explanation: "Infected erythrocytes adhere to cerebral endothelium, causing coma and mortality in children." },
+      { axis: "Ecological", value: "Rainfall, temperature, vector habitat, land use", explanation: "Climate and water bodies set mosquito breeding ranges; deforestation and irrigation reshape risk maps." },
+      { axis: "Developmental", value: "Highest mortality in young children and pregnant people", explanation: "Immature immune systems and placental vulnerability create distinct clinical windows." },
+      { axis: "Social", value: "Bed-net access, health-system reach, poverty, migration", explanation: "Prevention and treatment depend on supply chains, financing, and stable primary care." },
+      { axis: "Experiential", value: "Cyclical fever, anemia, treatment delays, recurrence fear", explanation: "Lived burden of unpredictable fevers, lost workdays, and household financial shock." },
+    ],
+    crosswalks: [
+      { name: "ICD-11", value: "1F40 Malaria" },
+      { name: "SNOMED CT", value: "61462000 Malaria" },
+      { name: "MONDO", value: "MONDO:0005136 malaria" },
+    ],
+  },
+  {
+    id: "hf",
+    name: "Heart Failure (HF)",
+    group: "Secondary Physiological Diseases",
+    description: "A syndrome of ventricular dysfunction where the heart cannot pump enough blood to meet metabolic demand, often after years of hypertension, ischemia, or cardiomyopathy.",
+    axes: [
+      { axis: "Anatomical", value: "Left ventricle, atria, coronary arteries, kidneys", explanation: "Pump failure and fluid retention reshape cardiac chambers and renal salt handling." },
+      { axis: "Etiologic", value: "Ischemic heart disease, hypertension, valve disease, toxins", explanation: "Multiple upstream insults converge on weakened contractility or stiff ventricles." },
+      { axis: "Molecular", value: "BNP/NT-proBNP release, beta-adrenergic desensitization", explanation: "Stretch hormones rise as compensation fails; chronic catecholamine drive becomes maladaptive." },
+      { axis: "Immunological", value: "Cardiac fibrosis, macrophage-mediated remodeling", explanation: "Post-injury inflammation converts to collagen deposition and stiff myocardium." },
+      { axis: "Barrier", value: "Capillary leak, pulmonary and gut barrier congestion", explanation: "Elevated filling pressures back up into lungs and splanchnic circulation." },
+      { axis: "Ecological", value: "Sodium intake, air pollution, sleep-disordered breathing", explanation: "Dietary salt, particulate exposure, and apnea worsen hemodynamic load." },
+      { axis: "Developmental", value: "Adult-onset progression with acute decompensation episodes", explanation: "Often silent for years, then punctuated by hospitalizations and functional decline." },
+      { axis: "Social", value: "Access to diagnostics, medications, cardiac rehabilitation", explanation: "Outcomes diverge sharply by healthcare coverage, transport, and medication adherence support." },
+      { axis: "Experiential", value: "Breathlessness, fluid limits, hospitalization anxiety", explanation: "Daily life reorganizes around fatigue, weight checks, and fear of sudden worsening." },
+    ],
+    crosswalks: [
+      { name: "ICD-11", value: "BD10 Heart failure" },
+      { name: "SNOMED CT", value: "84114007 Heart failure" },
+      { name: "MONDO", value: "MONDO:0005383 heart failure" },
+    ],
+  },
+  {
+    id: "ra",
+    name: "Rheumatoid Arthritis (RA)",
+    group: "Hybrid / Multiaxial Diseases",
+    description: "A chronic autoimmune inflammatory arthritis where synovial hyperplasia, autoantibodies, and systemic inflammation erode joints and affect cardiovascular risk.",
+    axes: [
+      { axis: "Anatomical", value: "Synovium, small joints of hands and feet, cardiovascular system", explanation: "Pannus formation destroys cartilage and bone; systemic inflammation raises vascular risk." },
+      { axis: "Etiologic", value: "Autoimmune dysregulation with genetic and environmental triggers", explanation: "HLA-DRB1 alleles and smoking interact to break tolerance to citrullinated proteins." },
+      { axis: "Molecular", value: "Anti-CCP antibodies, TNF-alpha, IL-6 pathway activation", explanation: "Cytokine networks sustain synovitis and recruit destructive leukocytes." },
+      { axis: "Immunological", value: "Adaptive autoimmunity plus innate inflammatory amplification", explanation: "B cells, T cells, and macrophages maintain a self-sustaining inflammatory niche." },
+      { axis: "Barrier", value: "Synovial barrier breakdown, endothelial activation", explanation: "Inflamed synovium leaks inflammatory mediators into circulation." },
+      { axis: "Ecological", value: "Oral microbiome, gut dysbiosis hypotheses", explanation: "Mucosal immune triggers from periodontitis or gut bacteria are active research fronts." },
+      { axis: "Developmental", value: "Peak onset in middle adulthood with chronic course", explanation: "Often begins between ages 30 and 50 and persists for decades without treatment." },
+      { axis: "Social", value: "Work disability, gendered burden, treatment access", explanation: "Joint damage limits manual labor; biologic therapies remain unevenly available globally." },
+      { axis: "Experiential", value: "Morning stiffness, pain unpredictability, treatment trade-offs", explanation: "Lived experience of planning life around flares and immunosuppressive side effects." },
+    ],
+    crosswalks: [
+      { name: "ICD-11", value: "FA20 Rheumatoid arthritis" },
+      { name: "SNOMED CT", value: "69896004 Rheumatoid arthritis" },
+      { name: "MONDO", value: "MONDO:0005180 rheumatoid arthritis" },
+    ],
+  },
+];

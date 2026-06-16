@@ -20,20 +20,24 @@ const primaryLinks: SiteNavLink[] = [
 ];
 
 export function SiteNav({ links = primaryLinks }: SiteNavProps) {
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const [theme, setTheme] = useState<"dark" | "light">(() => {
+    if (typeof window === "undefined") {
+      return "dark";
+    }
+
+    const savedTheme = localStorage.getItem("sapiens-theme");
+    return savedTheme === "light" || document.documentElement.classList.contains("light-theme")
+      ? "light"
+      : "dark";
+  });
 
   useEffect(() => {
-    // Check local storage or document class on mount
-    const savedTheme = localStorage.getItem("sapiens-theme");
-    const isLight = savedTheme === "light" || document.documentElement.classList.contains("light-theme");
-    if (isLight) {
+    if (theme === "light") {
       document.documentElement.classList.add("light-theme");
-      setTheme("light");
     } else {
       document.documentElement.classList.remove("light-theme");
-      setTheme("dark");
     }
-  }, []);
+  }, [theme]);
 
   const toggleTheme = () => {
     const nextTheme = theme === "dark" ? "light" : "dark";
