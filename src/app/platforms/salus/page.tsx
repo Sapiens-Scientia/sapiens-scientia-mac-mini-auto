@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { SalusPopulationGlobe } from "@/components/salus-population-globe";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
+import { PlatformCouplingLinks } from "@/components/platform-coupling-links";
 
 export const metadata: Metadata = {
   title: "Salus | Sapiens Scientia",
@@ -311,6 +312,8 @@ export default function SalusPage() {
             ))}
           </div>
         </section>
+
+        <PlatformCouplingLinks platform="salus" />
       </section>
       <SiteFooter />
     </main>

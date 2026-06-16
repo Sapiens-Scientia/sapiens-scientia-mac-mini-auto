@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { MorbusExplorer } from "@/components/morbus-explorer";
+import { morbusDiseases } from "@/lib/morbus";
 
 export const metadata: Metadata = {
   title: "Morbus | Sapiens Scientia",
@@ -116,6 +117,9 @@ export default function MorbusPage() {
             inherited clinical category is a clean natural kind — working from
             the hypothesis that many diseases are better understood as
             intersecting processes than as single objects.
+          </p>
+          <p className="mt-4 font-mono text-xs uppercase tracking-[0.16em] text-slate-500">
+            {morbusDiseases.length} interactive exemplars below · shareable via URL hash
           </p>
         </header>
 

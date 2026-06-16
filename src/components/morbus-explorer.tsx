@@ -1,33 +1,134 @@
 "use client";
 
-import { useState } from "react";
-import { morbusDiseases } from "@/lib/morbus";
+import { useMemo, useState } from "react";
+import { morbusDiseases, type DiseaseData } from "@/lib/morbus";
+
+const diseaseGroups = [
+  "Primary Etiologic Diseases",
+  "Secondary Physiological Diseases",
+  "Hybrid / Multiaxial Diseases",
+] as const;
+
+function diseaseMatchesQuery(disease: DiseaseData, query: string) {
+  const normalized = query.trim().toLowerCase();
+  if (!normalized) {
+    return true;
+  }
+
+  return (
+    disease.name.toLowerCase().includes(normalized) ||
+    disease.group.toLowerCase().includes(normalized) ||
+    disease.axes.some(
+      (axis) =>
+        axis.axis.toLowerCase().includes(normalized) ||
+        axis.value.toLowerCase().includes(normalized),
+    )
+  );
+}
 
 export function MorbusExplorer() {
-  const [selectedId, setSelectedId] = useState("ibd");
-  const [selectedAxisIndex, setSelectedAxisIndex] = useState<number | null>(null);
+  const [selectedId, setSelectedId] = useState(() => {
+    if (typeof window === "undefined") {
+      return morbusDiseases[0]?.id ?? "ibd";
+    }
 
-  const activeDisease = morbusDiseases.find((d) => d.id === selectedId) || morbusDiseases[0];
+    const hashId = window.location.hash.replace(/^#/, "");
+    return morbusDiseases.some((disease) => disease.id === hashId)
+      ? hashId
+      : morbusDiseases[0]?.id ?? "ibd";
+  });
+  const [selectedAxisIndex, setSelectedAxisIndex] = useState<number | null>(null);
+  const [query, setQuery] = useState("");
+  const [groupFilter, setGroupFilter] = useState<string | null>(null);
+
+  const filteredDiseases = useMemo(
+    () =>
+      morbusDiseases.filter((disease) => {
+        if (groupFilter && disease.group !== groupFilter) {
+          return false;
+        }
+
+        return diseaseMatchesQuery(disease, query);
+      }),
+    [groupFilter, query],
+  );
+
+  const activeDisease =
+    morbusDiseases.find((disease) => disease.id === selectedId) || morbusDiseases[0];
+
+  const selectDisease = (id: string) => {
+    setSelectedId(id);
+    setSelectedAxisIndex(null);
+
+    if (typeof window !== "undefined") {
+      window.history.replaceState(null, "", `#${id}`);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-8 border border-white/10 bg-white/[0.015] p-6 sm:p-8">
-      <div className="flex flex-wrap gap-2 border-b border-white/10 pb-5">
-        {morbusDiseases.map((d) => (
+      <div className="flex flex-col gap-4 border-b border-white/10 pb-5">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <p className="font-mono text-xs uppercase tracking-[0.16em] text-slate-500">
+            {morbusDiseases.length} exemplar diseases · 9 axes each
+          </p>
+          <input
+            type="search"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Search diseases or axes…"
+            aria-label="Search Morbus diseases"
+            className="w-full max-w-sm border border-white/10 bg-black/40 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:border-emerald-300/40 focus:outline-none"
+          />
+        </div>
+
+        <div className="flex flex-wrap gap-2">
           <button
-            key={d.id}
-            onClick={() => {
-              setSelectedId(d.id);
-              setSelectedAxisIndex(null);
-            }}
-            className={`cursor-pointer px-4 py-2 text-sm font-medium transition-all ${
-              selectedId === d.id
-                ? "border-b-2 border-emerald-300 text-emerald-100 bg-white/[0.04]"
-                : "text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]"
+            type="button"
+            onClick={() => setGroupFilter(null)}
+            className={`cursor-pointer px-3 py-1.5 text-xs font-semibold uppercase tracking-wider transition-all ${
+              groupFilter === null
+                ? "bg-emerald-300/15 text-emerald-200"
+                : "text-slate-500 hover:text-slate-300"
             }`}
           >
-            {d.name}
+            All groups
           </button>
-        ))}
+          {diseaseGroups.map((group) => (
+            <button
+              key={group}
+              type="button"
+              onClick={() => setGroupFilter(groupFilter === group ? null : group)}
+              className={`cursor-pointer px-3 py-1.5 text-xs font-semibold uppercase tracking-wider transition-all ${
+                groupFilter === group
+                  ? "bg-emerald-300/15 text-emerald-200"
+                  : "text-slate-500 hover:text-slate-300"
+              }`}
+            >
+              {group.replace(" Diseases", "")}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex flex-wrap gap-2">
+          {filteredDiseases.map((disease) => (
+            <button
+              key={disease.id}
+              type="button"
+              onClick={() => selectDisease(disease.id)}
+              className={`cursor-pointer px-4 py-2 text-sm font-medium transition-all ${
+                selectedId === disease.id
+                  ? "border-b-2 border-emerald-300 text-emerald-100 bg-white/[0.04]"
+                  : "text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]"
+              }`}
+            >
+              {disease.name}
+            </button>
+          ))}
+          {filteredDiseases.length === 0 && (
+            <p className="text-sm text-slate-500">No diseases match this filter.</p>
+          )}
+        </div>
       </div>
 
       <div className="grid gap-6 md:grid-cols-[1.2fr_0.8fr]">
@@ -65,6 +166,7 @@ export function MorbusExplorer() {
             return (
               <button
                 key={axis.axis}
+                type="button"
                 onClick={() => setSelectedAxisIndex(isSelected ? null : index)}
                 className={`text-left p-4 border transition-all cursor-pointer flex flex-col gap-2 ${
                   isSelected
@@ -80,9 +182,9 @@ export function MorbusExplorer() {
                     {isSelected ? "▲ CLOSE" : "▼ INSPECT"}
                   </span>
                 </div>
-                <p className="text-sm font-medium text-slate-200">{axis.value}</p>
+                <p className="text-sm font-medium text-slate-100">{axis.value}</p>
                 {isSelected && (
-                  <p className="mt-2 text-xs leading-relaxed text-slate-300 border-t border-emerald-300/20 pt-2">
+                  <p className="text-sm leading-6 text-slate-400 border-t border-white/10 pt-2 mt-1">
                     {axis.explanation}
                   </p>
                 )}

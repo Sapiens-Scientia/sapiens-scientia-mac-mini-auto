@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { SocietasExplorer } from "@/components/societas-explorer";
+import { PlatformCouplingLinks } from "@/components/platform-coupling-links";
 
 export const metadata: Metadata = {
   title: "Societas | Sapiens Scientia",
@@ -51,6 +52,8 @@ export default function SocietasPage() {
         </header>
 
         <SocietasExplorer />
+
+        <PlatformCouplingLinks platform="societas" />
 
         <section className="flex flex-col gap-6 border-t border-amber-200/15 pt-10">
           <div className="max-w-3xl">
