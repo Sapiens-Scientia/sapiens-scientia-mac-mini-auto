@@ -1,11 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { platformCouplingBySlug } from "@/lib/platform-couplings";
 import {
+  buildScenarioHash,
   computeCrossPlatformScenario,
+  parseScenarioHash,
   scenarioBaselines,
+  scenarioInputsFromLocation,
   scenarioPresets,
   type ScenarioInputs,
 } from "@/lib/cross-platform-simulator";
@@ -84,18 +87,65 @@ function MetricCard({
 }
 
 export function CrossPlatformSimulator() {
-  const [inputs, setInputs] = useState<ScenarioInputs>(scenarioBaselines);
+  const [inputs, setInputs] = useState<ScenarioInputs>(scenarioInputsFromLocation);
+  const userAdjusted = useRef(false);
 
   const outputs = useMemo(() => computeCrossPlatformScenario(inputs), [inputs]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const raw = window.location.hash.replace(/^#/, "");
+    const slug = raw.split("?")[0];
+    if (slug && platformCouplingBySlug[slug]) {
+      return;
+    }
+
+    if (parseScenarioHash(window.location.hash) || userAdjusted.current) {
+      window.history.replaceState(null, "", `#${buildScenarioHash(inputs)}`);
+    }
+  }, [inputs]);
 
   const couplingSlug = Object.values(platformCouplingBySlug).find(
     (coupling) => coupling.name === outputs.dominantCoupling,
   )?.slug;
 
-  const reset = () => setInputs(scenarioBaselines);
+  const reset = () => {
+    userAdjusted.current = false;
+    setInputs(scenarioBaselines);
+
+    if (typeof window !== "undefined") {
+      const raw = window.location.hash.replace(/^#/, "");
+      const slug = raw.split("?")[0];
+      if (!slug || !platformCouplingBySlug[slug]) {
+        window.history.replaceState(null, "", window.location.pathname);
+      }
+    }
+  };
 
   const patch = (key: keyof ScenarioInputs, value: number) => {
+    userAdjusted.current = true;
     setInputs((current) => ({ ...current, [key]: value }));
+  };
+
+  const applyPreset = (presetInputs: ScenarioInputs) => {
+    userAdjusted.current = true;
+    setInputs(presetInputs);
+  };
+
+  const copyScenarioLink = async () => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const url = `${window.location.origin}${window.location.pathname}#${buildScenarioHash(inputs)}`;
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch {
+      // Clipboard may be unavailable; hash URL still works manually.
+    }
   };
 
   const baselineOutputs = useMemo(() => computeCrossPlatformScenario(scenarioBaselines), []);
@@ -164,12 +214,20 @@ export function CrossPlatformSimulator() {
           Reset to baseline
         </button>
 
+        <button
+          type="button"
+          onClick={copyScenarioLink}
+          className="w-fit cursor-pointer border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400 transition-colors hover:border-emerald-400/35 hover:text-emerald-200"
+        >
+          Copy share link
+        </button>
+
         <div className="flex flex-wrap gap-2">
           {scenarioPresets.map((preset) => (
             <button
               key={preset.id}
               type="button"
-              onClick={() => setInputs(preset.inputs)}
+              onClick={() => applyPreset(preset.inputs)}
               className="cursor-pointer border border-white/10 bg-white/[0.02] px-2.5 py-1 text-[0.65rem] font-semibold uppercase tracking-wider text-slate-400 transition-colors hover:border-emerald-400/35 hover:text-emerald-200"
             >
               {preset.label}

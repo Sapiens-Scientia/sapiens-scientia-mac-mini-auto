@@ -6,7 +6,7 @@ import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { PlatformCouplingLinks } from "@/components/platform-coupling-links";
 import { ScaleRungLinks } from "@/components/scale-rung-links";
-import { morbusDiseases } from "@/lib/morbus";
+import { morbusDiseaseGroups, morbusDiseases } from "@/lib/morbus";
 
 export const metadata: Metadata = {
   title: "Salus | Sapiens Scientia",
@@ -65,43 +65,6 @@ const burdenSources = [
   {
     label: "WHO / World Bank Tracking Universal Health Coverage 2025",
     href: "https://cdn.who.int/media/docs/default-source/gho-documents/tracking-universal-health-coverage-global-report-2025.pdf?download=true&sfvrsn=f8cf10f6_11",
-  },
-];
-
-const morbusDiseaseGroups = [
-  {
-    kind: "Primary Etiologic Diseases",
-    principle: "Pathology is chiefly organized around a relatively identifiable initiating cause.",
-    subtypes: [
-      { name: "Physical injury", examples: ["trauma", "burns", "frostbite"] },
-      { name: "Deficiency", examples: ["scurvy", "iron-deficiency anaemia", "iodine deficiency"] },
-      { name: "Chemical exposure", examples: ["asbestosis", "silicosis", "alcohol-related liver disease"] },
-      { name: "Infectious disease", examples: ["influenza", "tuberculosis", "HIV disease"] },
-      { name: "Hereditary disease", examples: ["cystic fibrosis", "sickle cell disease", "Huntington disease"] },
-    ],
-  },
-  {
-    kind: "Secondary Physiological Diseases",
-    principle: "Pathology emerges from complex dysregulation of physiological systems over time.",
-    subtypes: [
-      { name: "Cardiovascular", examples: ["hypertension", "atherosclerosis", "heart failure"] },
-      { name: "Metabolic / endocrine", examples: ["type 2 diabetes", "obesity", "PCOS"] },
-      { name: "Neurological", examples: ["Alzheimer disease", "Parkinson disease", "epilepsy"] },
-      { name: "Degenerative", examples: ["osteoarthritis", "sarcopenia", "macular degeneration"] },
-      { name: "Neoplastic", examples: ["cancer", "leukaemia", "lymphoma"] },
-      { name: "Immunological / inflammatory", examples: ["Crohn disease", "lupus", "asthma", "allergy"] },
-    ],
-  },
-  {
-    kind: "Hybrid / Multiaxial Diseases",
-    principle: "Cause and physiology are both essential; one disease may belong to multiple explanatory layers.",
-    subtypes: [
-      { name: "Infection plus host response", examples: ["sepsis", "long COVID", "post-infectious syndromes"] },
-      { name: "Gene plus physiology", examples: ["familial hypercholesterolaemia", "haemochromatosis", "BRCA-associated cancer risk"] },
-      { name: "Environment plus regulation", examples: ["COPD", "occupational asthma", "non-alcoholic fatty liver disease"] },
-      { name: "Immune plus tissue ecology", examples: ["inflammatory bowel disease", "rheumatoid arthritis", "psoriasis"] },
-      { name: "Treatment effect", examples: ["iatrogenic harm", "adverse drug reaction", "post-surgical adhesions"] },
-    ],
   },
 ];
 

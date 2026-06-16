@@ -42,6 +42,51 @@ export const scenarioPresets: { id: string; label: string; inputs: ScenarioInput
   },
 ];
 
+export const scenarioHashId = "coupled-scenario";
+
+function clampScenarioValue(value: number): number {
+  return Math.min(100, Math.max(0, Math.round(value)));
+}
+
+export function parseScenarioHash(hash: string): ScenarioInputs | null {
+  const raw = hash.replace(/^#/, "");
+  if (!raw.startsWith(scenarioHashId)) {
+    return null;
+  }
+
+  const queryStart = raw.indexOf("?");
+  if (queryStart === -1) {
+    return null;
+  }
+
+  const params = new URLSearchParams(raw.slice(queryStart + 1));
+  const freshwaterStress = Number(params.get("fw"));
+  const civicSpace = Number(params.get("cv"));
+  const healthcareAccess = Number(params.get("hc"));
+
+  if ([freshwaterStress, civicSpace, healthcareAccess].some((value) => Number.isNaN(value))) {
+    return null;
+  }
+
+  return {
+    freshwaterStress: clampScenarioValue(freshwaterStress),
+    civicSpace: clampScenarioValue(civicSpace),
+    healthcareAccess: clampScenarioValue(healthcareAccess),
+  };
+}
+
+export function buildScenarioHash(inputs: ScenarioInputs): string {
+  return `${scenarioHashId}?fw=${inputs.freshwaterStress}&cv=${inputs.civicSpace}&hc=${inputs.healthcareAccess}`;
+}
+
+export function scenarioInputsFromLocation(): ScenarioInputs {
+  if (typeof window === "undefined") {
+    return scenarioBaselines;
+  }
+
+  return parseScenarioHash(window.location.hash) ?? scenarioBaselines;
+}
+
 export function computeCrossPlatformScenario(inputs: ScenarioInputs): ScenarioOutputs {
   const { freshwaterStress, civicSpace, healthcareAccess } = inputs;
 
