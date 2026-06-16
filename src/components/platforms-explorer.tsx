@@ -398,6 +398,9 @@ export function PlatformsExplorer() {
                   Detailed Feedback Loop Analysis
                 </span>
                 <h3 className="text-2xl font-bold text-slate-50 mt-1">{activeCoupling.name}</h3>
+                <p className="mt-1 font-mono text-[0.65rem] text-slate-500">
+                  /platforms#{activeCoupling.slug}
+                </p>
               </div>
               <button
                 onClick={() => selectCoupling(null)}

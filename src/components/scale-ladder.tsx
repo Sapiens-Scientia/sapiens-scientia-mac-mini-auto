@@ -6,7 +6,9 @@ import {
   LADDER_LOG_MAX,
   LADDER_LOG_MIN,
   ORDERS_OF_MAGNITUDE,
+  findRungIndexBySlug,
   platforms,
+  rungSlug,
   scaleRungs,
   scaleTiers,
   type ScaleTierId,
@@ -64,10 +66,25 @@ export function ScaleLadder() {
     () => scaleRungs.findIndex((rung) => rung.here),
     [],
   );
-  const [activeRung, setActiveRung] = useState(defaultRung);
+  const [activeRung, setActiveRung] = useState(() => {
+    if (typeof window === "undefined") {
+      return defaultRung;
+    }
+
+    const fromHash = findRungIndexBySlug(window.location.hash.replace(/^#/, ""));
+    return fromHash >= 0 ? fromHash : defaultRung;
+  });
   const [focusedTier, setFocusedTier] = useState<ScaleTierId | null>(null);
 
   const active = scaleRungs[activeRung];
+
+  const selectRung = (index: number) => {
+    setActiveRung(index);
+
+    if (typeof window !== "undefined") {
+      window.history.replaceState(null, "", `#${rungSlug(scaleRungs[index].name)}`);
+    }
+  };
 
   return (
     <div className="border border-white/10 bg-white/[0.02] p-4 sm:p-6">
@@ -134,7 +151,7 @@ export function ScaleLadder() {
                 type="button"
                 onMouseEnter={() => setActiveRung(index)}
                 onFocus={() => setActiveRung(index)}
-                onClick={() => setActiveRung(index)}
+                onClick={() => selectRung(index)}
                 className={`grid w-full grid-cols-[3.1rem_1fr] items-center gap-3 rounded-sm py-1.5 text-left transition-opacity sm:grid-cols-[4rem_1fr] ${
                   dimmed ? "opacity-25" : "opacity-100"
                 }`}

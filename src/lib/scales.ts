@@ -167,6 +167,17 @@ export const LADDER_LOG_MAX = 11.2;
 /** Orders of magnitude spanned from the smallest to the largest rung. */
 export const ORDERS_OF_MAGNITUDE = Math.round(LADDER_LOG_MAX - LADDER_LOG_MIN);
 
+export function rungSlug(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+export function findRungIndexBySlug(slug: string): number {
+  return scaleRungs.findIndex((rung) => rungSlug(rung.name) === slug);
+}
+
 export const scaleSources = [
   { label: "NIST — CODATA Fundamental Physical Constants", href: "https://physics.nist.gov/cuu/Constants/" },
   { label: "NASA — Earth Fact Sheet", href: "https://nssdc.gsfc.nasa.gov/planetary/factsheet/earthfact.html" },

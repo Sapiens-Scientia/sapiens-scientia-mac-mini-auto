@@ -10,6 +10,8 @@ const CO2_URL = "https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_mm_mlo.txt";
 const CH4_URL = "https://gml.noaa.gov/webdata/ccgg/trends/ch4/ch4_mm_gl.txt";
 const WORLD_POPULATION_URL =
   "https://api.worldbank.org/v2/country/WLD/indicator/SP.POP.TOTL?format=json&date=2024:2026&per_page=5";
+const WORLD_GDP_URL =
+  "https://api.worldbank.org/v2/country/WLD/indicator/NY.GDP.MKTP.CD?format=json&date=2023:2025&per_page=5";
 
 const monthNames = [
   "Jan",
@@ -115,7 +117,11 @@ function formatPopulation(value: number): string {
   return value.toLocaleString("en-US");
 }
 
-function parseWorldBankPopulation(json: unknown): { value: number; year: number } | null {
+function formatGdp(value: number): string {
+  return `$${Math.round(value / 1e12)}T`;
+}
+
+function parseWorldBankIndicator(json: unknown): { value: number; year: number } | null {
   if (!Array.isArray(json) || json.length < 2) {
     return null;
   }
@@ -149,11 +155,12 @@ function formatMonthYear(year: number, month: number): string {
 export async function fetchLiveVitalSignUpdates(): Promise<LiveVitalSignUpdate[]> {
   const updates: LiveVitalSignUpdate[] = [];
 
-  const [gistempResult, co2Result, ch4Result, populationResult] = await Promise.allSettled([
+  const [gistempResult, co2Result, ch4Result, populationResult, gdpResult] = await Promise.allSettled([
     fetch(GISTEMP_URL, { next: { revalidate: 86_400 } }),
     fetch(CO2_URL, { next: { revalidate: 86_400 } }),
     fetch(CH4_URL, { next: { revalidate: 86_400 } }),
     fetch(WORLD_POPULATION_URL, { next: { revalidate: 86_400 } }),
+    fetch(WORLD_GDP_URL, { next: { revalidate: 86_400 } }),
   ]);
 
   if (gistempResult.status === "fulfilled" && gistempResult.value.ok) {
@@ -197,11 +204,24 @@ export async function fetchLiveVitalSignUpdates(): Promise<LiveVitalSignUpdate[]
 
   if (populationResult.status === "fulfilled" && populationResult.value.ok) {
     const json = (await populationResult.value.json()) as unknown;
-    const parsed = parseWorldBankPopulation(json);
+    const parsed = parseWorldBankIndicator(json);
     if (parsed) {
       updates.push({
         id: "human-population",
         value: formatPopulation(parsed.value),
+        updated: `${parsed.year} (live)`,
+        live: true,
+      });
+    }
+  }
+
+  if (gdpResult.status === "fulfilled" && gdpResult.value.ok) {
+    const json = (await gdpResult.value.json()) as unknown;
+    const parsed = parseWorldBankIndicator(json);
+    if (parsed) {
+      updates.push({
+        id: "global-gdp",
+        value: formatGdp(parsed.value),
         updated: `${parsed.year} (live)`,
         live: true,
       });
