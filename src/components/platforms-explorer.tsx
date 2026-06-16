@@ -125,7 +125,6 @@ function SystemsMap({
   };
   const hub = { cx: 410, cy: 300 };
 
-
   const isHubActive = selectedCoupling === "Food systems" || selectedCoupling === "Urbanization" || selectedCoupling === "Disease ecology";
 
   return (

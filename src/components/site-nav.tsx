@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useTheme } from "@/lib/use-theme";
 
 type SiteNavLink = {
   href: string;
@@ -16,38 +16,15 @@ type SiteNavProps = {
 const primaryLinks: SiteNavLink[] = [
   { href: "/", label: "Home" },
   { href: "/scales", label: "Scales" },
+  { href: "/chronos", label: "Chronos" },
+  { href: "/vitals", label: "Vital Signs" },
   { href: "/platforms", label: "Platforms" },
   { href: "/projects", label: "Projects" },
 ];
 
 export function SiteNav({ links = primaryLinks }: SiteNavProps) {
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const { theme, toggleTheme } = useTheme();
   const pathname = usePathname();
-
-  useEffect(() => {
-    // Check local storage or document class on mount
-    const savedTheme = localStorage.getItem("sapiens-theme");
-    const isLight = savedTheme === "light" || document.documentElement.classList.contains("light-theme");
-    if (isLight) {
-      document.documentElement.classList.add("light-theme");
-      setTimeout(() => setTheme("light"), 0);
-    } else {
-      document.documentElement.classList.remove("light-theme");
-      setTimeout(() => setTheme("dark"), 0);
-    }
-  }, []);
-
-  const toggleTheme = () => {
-    const nextTheme = theme === "dark" ? "light" : "dark";
-    setTheme(nextTheme);
-    if (nextTheme === "light") {
-      document.documentElement.classList.add("light-theme");
-      localStorage.setItem("sapiens-theme", "light");
-    } else {
-      document.documentElement.classList.remove("light-theme");
-      localStorage.setItem("sapiens-theme", "dark");
-    }
-  };
 
   const isActive = (href: string) => {
     if (href === "/") {
