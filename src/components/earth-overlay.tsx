@@ -575,8 +575,8 @@ function DataIndexPanel({
         isOpen ? "block" : "hidden",
       ].join(" ")}
       aria-label="Global Data Index"
-      onPanelPointerEnter={onPanelPointerEnter}
-      onPanelPointerLeave={onPanelPointerLeave}
+      onPointerEnter={onPanelPointerEnter}
+      onPointerLeave={onPanelPointerLeave}
       onWheel={handlePanelWheel}
       onWheelCapture={handlePanelWheel}
       onTouchMoveCapture={stopPanelScrollPropagation}
