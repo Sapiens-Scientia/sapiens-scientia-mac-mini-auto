@@ -14,7 +14,7 @@ import {
 export const metadata: Metadata = {
   title: "Morbus | Sapiens Scientia",
   description:
-    "Sapiens Scientia Morbus: the disease ontology inside Salus for plural classification of human disease.",
+    "Sapiens Scientia Morbus: the disease ontology inside Persona for plural classification of human disease.",
 };
 
 const morbusSources = [
@@ -31,14 +31,14 @@ export default function MorbusPage() {
         links={[
           { href: "/", label: "Home" },
           { href: "/platforms", label: "Platforms" },
-          { href: "/platforms/salus", label: "Salus" },
+          { href: "/platforms/persona", label: "Persona" },
         ]}
       />
 
       <section className="mx-auto flex max-w-7xl flex-col gap-10">
         <header className="max-w-4xl">
           <p className="mb-3 text-xl font-medium uppercase tracking-[0.24em] text-emerald-300/90">
-            Salus · Disease Ontology
+            Persona · Disease Ontology
           </p>
           <h1 className="text-5xl font-semibold tracking-normal sm:text-7xl">
             Sapiens Scientia Morbus
@@ -46,7 +46,7 @@ export default function MorbusPage() {
 
           <p className="mt-8 max-w-2xl text-lg leading-8 text-slate-300">
             Morbus is the human disease ontology, taxonomy, and model inside
-            Salus. It organizes disease knowledge without assuming that every
+            Persona. It organizes disease knowledge without assuming that every
             inherited clinical category is a clean natural kind — working from
             the hypothesis that many diseases are better understood as
             intersecting processes than as single objects.

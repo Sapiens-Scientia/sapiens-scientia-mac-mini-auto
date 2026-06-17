@@ -40,7 +40,7 @@ export function MorbusAxisMatrix() {
             <tr key={disease.id} className="border-b border-white/5 hover:bg-white/[0.02]">
               <td className="sticky left-0 z-10 bg-[#0a0a0a] px-3 py-2">
                 <Link
-                  href={`/platforms/salus/morbus#${disease.id}`}
+                  href={`/platforms/persona/morbus#${disease.id}`}
                   className="font-medium text-slate-200 underline-offset-2 hover:text-emerald-200 hover:underline"
                 >
                   {disease.name.replace(/ \(.*\)$/, "")}

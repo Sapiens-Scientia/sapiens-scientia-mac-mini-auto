@@ -8,7 +8,7 @@ import { CrossPlatformSimulator } from "@/components/cross-platform-simulator";
 export const metadata: Metadata = {
   title: "Platforms | Sapiens Scientia",
   description:
-    "The Sapiens Scientia platform triad: Salus for health, Societas for society, and Terra for Earth systems — with a coupled scenario simulator, cross-cutting coupling map, and Morbus for disease ontology.",
+    "The Sapiens Scientia platform triad: Persona for the human person, Societas for society, and Terra for Earth systems — with a coupled scenario simulator, cross-cutting coupling map, and modules for Soma, Salus, Morbus, and Domus.",
 };
 
 export default function PlatformsPage() {
@@ -27,7 +27,7 @@ export default function PlatformsPage() {
 
           <p className="mt-8 max-w-2xl text-lg leading-8 text-slate-300">
             Sapiens Scientia is organized as a family of human-centered platforms —
-            Salus, Societas, Terra, and Morbus. The platforms are deliberately not silos:
+            Persona, Societas, and Terra. The platforms are deliberately not silos:
             many of the most important questions are cross-cutting, living in the
             couplings between health, society, and Earth.
           </p>

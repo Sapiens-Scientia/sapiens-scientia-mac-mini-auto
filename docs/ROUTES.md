@@ -17,11 +17,13 @@ This is the current public route inventory for the Sapiens Scientia website.
 
 | Route | File | Purpose |
 |---|---|---|
-| `/platforms/salus` | `src/app/platforms/salus/page.tsx` | Human health platform. |
+| `/platforms/persona` | `src/app/platforms/persona/page.tsx` | Sapiens Persona platform landing page. |
 | `/platforms/societas` | `src/app/platforms/societas/page.tsx` | Human society platform. |
 | `/platforms/terra` | `src/app/platforms/terra/page.tsx` | Environmental / Earth systems platform. |
-| `/platforms/salus/soma` | `src/app/platforms/salus/soma/page.tsx` | Human body module inside Salus. |
-| `/platforms/salus/morbus` | `src/app/platforms/salus/morbus/page.tsx` | Disease ontology inside Salus. |
+| `/platforms/persona/soma` | `src/app/platforms/persona/soma/page.tsx` | Human body module inside Persona. |
+| `/platforms/persona/salus` | `src/app/platforms/persona/salus/page.tsx` | Health and welfare module inside Persona. |
+| `/platforms/persona/morbus` | `src/app/platforms/persona/morbus/page.tsx` | Disease ontology inside Persona. |
+| `/platforms/persona/domus` | `src/app/platforms/persona/domus/page.tsx` | Home/domestic life module inside Persona. |
 
 ## Project Pages
 

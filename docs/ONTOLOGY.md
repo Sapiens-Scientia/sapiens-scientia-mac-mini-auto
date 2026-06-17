@@ -9,16 +9,16 @@ that connect them. Source: `src/lib/ontology/`.
 - **Earth Systems:** 5 tiers · 45 systems
 - **Sapiens Platforms:** 3 platforms
 - **Digital Systems:** 29 systems
-- **Relationships:** 44 studies edges · 6 couplings
+- **Relationships:** 45 studies edges · 6 couplings
 
 ## Earth Systems (Physical Earth)
 
-The four-tier nested-systems taxonomy, from elementary particles to the Sun.
+The five-tier nested-systems taxonomy, from elementary particles to the Sun.
 
 ### Tier I — Nanosystems
 
 - **Scale:** Particles to molecules · 10⁻¹⁸–10⁻⁹ m
-- **Platforms:** salus
+- **Platforms:** persona
 
 The fundamental scale. Matter resolves into its constituents — elementary particles, atoms, and the molecules they bond into. This is the substrate from which everything larger on the ladder is assembled.
 
@@ -31,7 +31,7 @@ The fundamental scale. Matter resolves into its constituents — elementary part
 ### Tier II — Microsystems
 
 - **Scale:** Cells & microbes · 10⁻⁷–10⁻⁵ m
-- **Platforms:** salus
+- **Platforms:** persona
 
 The cellular scale. Life resolves into cells and the microbes, bacteria, and viruses that share the body — the smallest living and near-living units on the ladder.
 
@@ -45,7 +45,7 @@ The cellular scale. Life resolves into cells and the microbes, bacteria, and vir
 ### Tier III — Mesosystems
 
 - **Scale:** Organisms · 10⁻⁴–10¹ m
-- **Platforms:** salus
+- **Platforms:** persona
 
 The organismal scale — the scale of a single living body. Multicellular life, mammals, and Homo sapiens itself. This is the scale a human directly inhabits, and the reference point the entire ladder is read from.
 
@@ -70,7 +70,7 @@ The organismal scale — the scale of a single living body. Multicellular life, 
 ### Tier IV — Macrosystems
 
 - **Scale:** Cities & systems · 10¹–10⁶ m
-- **Platforms:** societas, salus
+- **Platforms:** societas, persona
 
 The collective scale. Many humans, coordinated by institutions and infrastructure: nations, legal and economic systems, healthcare, technology, energy, transport, and the built and digital environment. Society as a system.
 
@@ -126,11 +126,11 @@ The planetary scale. The Earth systems that contain everything below them — at
 
 The interpretive lenses that read the Earth and Digital domains.
 
-### Sapiens Scientia Salus
+### Sapiens Scientia Persona
 
-- **Lens:** Human Health Platform — Health, biology, medicine
-- **Modules:** Sapiens Scientia Soma, Sapiens Scientia Morbus
-- **Studies (Earth):** cells, microbes, bacteria, viruses, healthcare-system, people, homo-sapiens
+- **Lens:** Human Persona Platform — Human embodiment, health, home, and social systems
+- **Modules:** Sapiens Scientia Soma, Sapiens Scientia Salus, Sapiens Scientia Morbus, Sapiens Scientia Domus
+- **Studies (Earth):** cells, microbes, bacteria, viruses, healthcare-system, people, homo-sapiens, homes
 - **Studies (Digital):** life-sciences, databases, knowledge-graphs, decision-support
 
 ### Sapiens Scientia Societas
@@ -183,10 +183,10 @@ Computation, communication, data, and intelligence systems.
 
 ### Platform couplings
 
-- **Public health** (salus ↔ societas) — Disease spread, care access, and population health sit between bodies and institutions.
-- **Climate medicine** (salus ↔ terra) — Heat, air quality, and shifting disease ranges tie human health to Earth systems.
+- **Public health** (persona ↔ societas) — Disease spread, care access, and population health sit between bodies and institutions.
+- **Climate medicine** (persona ↔ terra) — Heat, air quality, and shifting disease ranges tie human health to Earth systems.
 - **Energy systems** (terra ↔ societas) — How societies power themselves drives both economies and planetary boundaries.
-- **Food systems** (salus ↔ societas ↔ terra) — Nutrition, agriculture, and land use couple health, society, and environment at once.
-- **Urbanization** (salus ↔ societas ↔ terra) — Cities concentrate people, reshape institutions, and transform local ecosystems.
-- **Disease ecology** (salus ↔ societas ↔ terra) — Pathogens move through human, social, and environmental systems together.
+- **Food systems** (persona ↔ societas ↔ terra) — Nutrition, agriculture, and land use couple health, society, and environment at once.
+- **Urbanization** (persona ↔ societas ↔ terra) — Cities concentrate people, reshape institutions, and transform local ecosystems.
+- **Disease ecology** (persona ↔ societas ↔ terra) — Pathogens move through human, social, and environmental systems together.
 

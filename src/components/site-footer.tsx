@@ -10,10 +10,10 @@ const columns: { title: string; links: FooterLink[] }[] = [
   {
     title: "Platforms",
     links: [
-      { href: "/platforms/salus", label: "Salus — Health" },
+      { href: "/platforms/persona", label: "Persona — Human" },
       { href: "/platforms/societas", label: "Societas — Society" },
       { href: "/platforms/terra", label: "Terra — Earth" },
-      { href: "/platforms/salus/morbus", label: "Morbus — Disease" },
+      { href: "/platforms/persona/morbus", label: "Morbus — Disease" },
     ],
   },
   {

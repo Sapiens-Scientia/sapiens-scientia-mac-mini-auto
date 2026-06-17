@@ -18,7 +18,7 @@ Agents working here should preserve the separation between implementation code a
 - Check the local `docs/` directory before changing platform names, ontology terms, major narrative language, route structure, or conceptual architecture.
 - Keep website-specific implementation details in this repo.
 - Record durable conceptual changes in `docs/DECISIONS.md`, `docs/CONTENT_MODEL.md`, or `docs/CODEX_HANDOFF.md`.
-- Preserve the current naming model unless the local docs are intentionally updated: `Salus`, `Societas`, `Terra`, and `Morbus`.
+- Preserve the current naming model unless the local docs are intentionally updated: `Persona`, `Societas`, and `Terra`.
 - Do not copy large sections of internal docs into public website copy unless the content is meant to be public.
 - If implementation reveals a constraint or mismatch, update the local handoff so future agents can see it.
 

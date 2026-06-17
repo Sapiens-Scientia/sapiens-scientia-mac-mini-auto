@@ -20,7 +20,7 @@ const systemSignals = [
     value: `${platformList.length}`,
     unit: "active",
     href: "/platforms",
-    detail: "Salus, Societas, and Terra as lenses on one coupled world.",
+    detail: "Persona, Societas, and Terra as lenses on one coupled world.",
   },
   {
     label: "Data Index",

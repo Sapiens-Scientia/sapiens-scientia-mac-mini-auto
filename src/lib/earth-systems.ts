@@ -47,7 +47,7 @@ export type HumanPlatformBridge = {
   digitalHighlights: string[];
   earthHighlights: string[];
   href: string;
-  id: "salus" | "societas" | "terra";
+  id: "persona" | "societas" | "terra";
   subtitle: string;
   title: string;
 };

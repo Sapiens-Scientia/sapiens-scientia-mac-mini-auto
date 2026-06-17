@@ -3,7 +3,7 @@ export type ScenarioInputs = {
   freshwaterStress: number;
   /** Societas — civic space and institutional openness (0 = closed, 100 = open). */
   civicSpace: number;
-  /** Salus — population with adequate healthcare access (0–100%). */
+  /** Persona — population with adequate healthcare access (0–100%). */
   healthcareAccess: number;
 };
 
@@ -130,7 +130,7 @@ export function computeCrossPlatformScenario(inputs: ScenarioInputs): ScenarioOu
     "The three platforms remain loosely coupled — adjustments stay within the range of recent historical variation.";
 
   if (couplingStress >= 75) {
-    narrative = `Stress concentrates in ${dominantCoupling.toLowerCase()}: ecological pressure, institutional strain, and care gaps reinforce each other across Salus, Societas, and Terra.`;
+    narrative = `Stress concentrates in ${dominantCoupling.toLowerCase()}: ecological pressure, institutional strain, and care gaps reinforce each other across Persona, Societas, and Terra.`;
   } else if (couplingStress >= 55) {
     narrative = `${dominantCoupling} shows the strongest cross-platform feedback. Freshwater stress and health access jointly shape vector-borne risk and displacement.`;
   } else if (civicSpace > 60 && healthcareAccess > 70) {

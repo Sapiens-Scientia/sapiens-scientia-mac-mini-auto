@@ -98,7 +98,7 @@ function buildDoc(): string {
     "",
     "## Earth Systems (Physical Earth)",
     "",
-    "The four-tier nested-systems taxonomy, from elementary particles to the Sun.",
+    "The five-tier nested-systems taxonomy, from elementary particles to the Sun.",
     "",
   );
   lines.push(...ontologyTiers.map(renderTier));

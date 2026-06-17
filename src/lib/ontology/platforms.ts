@@ -1,9 +1,9 @@
 // Sapiens Platforms domain of the Sapiens Scientia ontology.
 //
-// The three interpretive platforms (Salus / Societas / Terra) that read the
+// The three interpretive platforms (Persona / Societas / Terra) that read the
 // Earth Systems and Digital Systems domains. Each platform carries its base
-// definition (from `../platform-couplings`), any sub-modules (e.g. Salus
-// contains Soma and Morbus), and its SCOPE: the Earth and Digital entities it
+// definition (from `../platform-couplings`), any sub-modules (e.g. Persona
+// contains Soma, Salus, Morbus, and Domus), and its SCOPE: the Earth and Digital entities it
 // studies — the canonical source for the homepage platform-bridge highlights.
 
 import { platformDefinitions, type PlatformId } from "../platform-couplings";
@@ -35,23 +35,35 @@ export type PlatformOntologyEntry = {
 
 export const platformOntology: PlatformOntologyEntry[] = [
   {
-    ...platformDefinitions.salus,
+    ...platformDefinitions.persona,
     modules: [
       {
         id: "soma",
         name: "Sapiens Scientia Soma",
-        href: "/platforms/salus/soma",
-        tagline: "The healthy human body — anatomy, physiology, histology.",
+        href: "/platforms/persona/soma",
+        tagline: "Soma studies the body, anatomy, physiology, histology, form, and function.",
+      },
+      {
+        id: "salus",
+        name: "Sapiens Scientia Salus",
+        href: "/platforms/persona/salus",
+        tagline: "Salus studies health, care, welfare, flourishing, and preservation.",
       },
       {
         id: "morbus",
         name: "Sapiens Scientia Morbus",
-        href: "/platforms/salus/morbus",
-        tagline: "The disease ontology — how the body fails and is classified.",
+        href: "/platforms/persona/morbus",
+        tagline: "Morbus studies disease, pathology, dysfunction, suffering, and clinical categories.",
+      },
+      {
+        id: "domus",
+        name: "Sapiens Scientia Domus",
+        href: "/platforms/persona/domus",
+        tagline: "Domus studies the home as a human habitat: biological, social, technological, economic, and ecological.",
       },
     ],
     studies: {
-      earth: ["cells", "microbes", "bacteria", "viruses", "healthcare-system", "people", "homo-sapiens"],
+      earth: ["cells", "microbes", "bacteria", "viruses", "healthcare-system", "people", "homo-sapiens", "homes"],
       digital: ["life-sciences", "databases", "knowledge-graphs", "decision-support"],
     },
   },

@@ -22,11 +22,11 @@ export type ScalePlatform = {
 };
 
 export const platforms: Record<ScalePlatform["id"], ScalePlatform> = {
-  salus: {
-    id: "salus",
-    name: platformDefinitions.salus.shortName,
-    href: platformDefinitions.salus.href,
-    color: platformDefinitions.salus.color,
+  persona: {
+    id: "persona",
+    name: platformDefinitions.persona.shortName,
+    href: platformDefinitions.persona.href,
+    color: platformDefinitions.persona.color,
   },
   societas: {
     id: "societas",
@@ -83,15 +83,15 @@ export type ScaleRung = {
 // Representative entities plotted by characteristic physical size — the rungs of
 // the ladder. Ordered small to large.
 export const scaleRungs: ScaleRung[] = [
-  { name: "Elementary particles", log: -18, sizeLabel: "< 10⁻¹⁸ m", tier: "nano", note: "Quarks and electrons carry no measured size — point-like, the floor of the ladder.", platforms: ["salus"] },
-  { name: "Atoms", log: -10, sizeLabel: "~0.1 nm", tier: "nano", note: "A nucleus wrapped in an electron cloud; the smallest unit of a chemical element.", platforms: ["salus"] },
-  { name: "Molecules", log: -9, sizeLabel: "~1 nm", tier: "nano", note: "Bonded atoms — water, proteins, the DNA double helix two nanometres wide.", platforms: ["salus"] },
-  { name: "Viruses", log: -7, sizeLabel: "~100 nm", tier: "micro", note: "Genetic packages that borrow living cells to replicate; smaller than the cells they infect.", platforms: ["salus"] },
-  { name: "Bacteria", log: -6, sizeLabel: "~1 µm", tier: "micro", note: "Single-celled microbes; trillions live within and upon the human body.", platforms: ["salus"] },
-  { name: "Human cells", log: -5, sizeLabel: "~10 µm", tier: "micro", note: "The basic unit of the body — roughly thirty trillion of them per person.", platforms: ["salus"] },
-  { name: "Mammals", log: 0, sizeLabel: "~1 m", tier: "meso", note: "Multicellular animals; the lineage Homo sapiens belongs to.", platforms: ["salus"] },
-  { name: "Homo sapiens", log: 0.23, sizeLabel: "~1.7 m", tier: "meso", note: "You are here. The scale that reads every other rung on the ladder.", here: true, platforms: ["salus"] },
-  { name: "Buildings", log: 2, sizeLabel: "~100 m", tier: "macro", note: "The built environment — where most human life is now spent.", platforms: ["societas", "salus"] },
+  { name: "Elementary particles", log: -18, sizeLabel: "< 10⁻¹⁸ m", tier: "nano", note: "Quarks and electrons carry no measured size — point-like, the floor of the ladder.", platforms: ["persona"] },
+  { name: "Atoms", log: -10, sizeLabel: "~0.1 nm", tier: "nano", note: "A nucleus wrapped in an electron cloud; the smallest unit of a chemical element.", platforms: ["persona"] },
+  { name: "Molecules", log: -9, sizeLabel: "~1 nm", tier: "nano", note: "Bonded atoms — water, proteins, the DNA double helix two nanometres wide.", platforms: ["persona"] },
+  { name: "Viruses", log: -7, sizeLabel: "~100 nm", tier: "micro", note: "Genetic packages that borrow living cells to replicate; smaller than the cells they infect.", platforms: ["persona"] },
+  { name: "Bacteria", log: -6, sizeLabel: "~1 µm", tier: "micro", note: "Single-celled microbes; trillions live within and upon the human body.", platforms: ["persona"] },
+  { name: "Human cells", log: -5, sizeLabel: "~10 µm", tier: "micro", note: "The basic unit of the body — roughly thirty trillion of them per person.", platforms: ["persona"] },
+  { name: "Mammals", log: 0, sizeLabel: "~1 m", tier: "meso", note: "Multicellular animals; the lineage Homo sapiens belongs to.", platforms: ["persona"] },
+  { name: "Homo sapiens", log: 0.23, sizeLabel: "~1.7 m", tier: "meso", note: "You are here. The scale that reads every other rung on the ladder.", here: true, platforms: ["persona"] },
+  { name: "Buildings", log: 2, sizeLabel: "~100 m", tier: "macro", note: "The built environment — where most human life is now spent.", platforms: ["societas", "persona"] },
   { name: "Cities", log: 4, sizeLabel: "~10 km", tier: "macro", note: "Dense concentrations of people, institutions, and infrastructure.", platforms: ["societas"] },
   { name: "Nations", log: 6, sizeLabel: "~1,000 km", tier: "macro", note: "Legal, economic, and political systems spanning continents.", platforms: ["societas"] },
   { name: "The Earth", log: 7.1, sizeLabel: "~12,700 km", tier: "mega", note: "The planet and its coupled spheres — atmosphere, ocean, crust, biosphere.", platforms: ["terra"] },

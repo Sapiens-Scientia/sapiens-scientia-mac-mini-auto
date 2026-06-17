@@ -1,7 +1,7 @@
 // Earth Systems domain of the Sapiens Scientia ontology.
 //
-// This is the canonical four-tier nested-systems taxonomy (Microsystems /
-// Mesosystems / Macrosystems / Megasystems), its semantic groups, and the
+// This is the canonical five-tier nested-systems taxonomy (Nanosystems /
+// Microsystems / Mesosystems / Macrosystems / Megasystems), its semantic groups, and the
 // display label of every entity. It is one of three domains that make up the
 // full ontology (see `./index.ts`): Earth Systems, Sapiens Platforms, and
 // Digital Systems.
@@ -57,7 +57,7 @@ export const ontologyTiers: OntologyTier[] = [
     rangeLabel: "Particles to molecules · 10⁻¹⁸–10⁻⁹ m",
     principle:
       "The fundamental scale. Matter resolves into its constituents — elementary particles, atoms, and the molecules they bond into. This is the substrate from which everything larger on the ladder is assembled.",
-    platforms: ["salus"],
+    platforms: ["persona"],
     groups: [
       {
         id: "fundamental-constituents",
@@ -78,7 +78,7 @@ export const ontologyTiers: OntologyTier[] = [
     rangeLabel: "Cells & microbes · 10⁻⁷–10⁻⁵ m",
     principle:
       "The cellular scale. Life resolves into cells and the microbes, bacteria, and viruses that share the body — the smallest living and near-living units on the ladder.",
-    platforms: ["salus"],
+    platforms: ["persona"],
     groups: [
       {
         id: "cells-microbes",
@@ -100,7 +100,7 @@ export const ontologyTiers: OntologyTier[] = [
     rangeLabel: "Organisms · 10⁻⁴–10¹ m",
     principle:
       "The organismal scale — the scale of a single living body. Multicellular life, mammals, and Homo sapiens itself. This is the scale a human directly inhabits, and the reference point the entire ladder is read from.",
-    platforms: ["salus"],
+    platforms: ["persona"],
     groups: [
       {
         id: "multicellular-life",
@@ -144,7 +144,7 @@ export const ontologyTiers: OntologyTier[] = [
     rangeLabel: "Cities & systems · 10¹–10⁶ m",
     principle:
       "The collective scale. Many humans, coordinated by institutions and infrastructure: nations, legal and economic systems, healthcare, technology, energy, transport, and the built and digital environment. Society as a system.",
-    platforms: ["societas", "salus"],
+    platforms: ["societas", "persona"],
     groups: [
       {
         id: "people-institutions",

@@ -18,14 +18,13 @@ The documentation model is:
 
 There is no submodule, generated docs import, or build-time docs dependency.
 
-## Preserve The Platform Naming Model
+## Transition from Salus to Persona as the Top-Level Platform
 
-The current naming model is:
+The core platform model has been transitioned from `Salus` to `Persona` at the top level to better represent the intimate human scale. The platform architecture is now:
 
-- `Salus`: human health platform.
+- `Persona`: human persona platform, containing the modules Soma (body), Salus (health), Morbus (disease), and Domus (home).
 - `Societas`: human society platform.
 - `Terra`: environmental / Earth systems platform.
-- `Morbus`: disease ontology inside Salus.
 
 Do not rename these or introduce replacements unless the change intentionally updates `docs/CONTENT_MODEL.md`, relevant source modules, and public copy together.
 

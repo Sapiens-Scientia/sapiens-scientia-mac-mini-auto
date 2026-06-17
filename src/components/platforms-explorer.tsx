@@ -48,7 +48,7 @@ function SystemsMap({
   onSelectCoupling: (name: string | null) => void;
 }) {
   const nodes: Record<PlatformId, { cx: number; cy: number }> = {
-    salus: { cx: 410, cy: 120 },
+    persona: { cx: 410, cy: 120 },
     societas: { cx: 160, cy: 440 },
     terra: { cx: 660, cy: 440 },
   };
@@ -61,11 +61,11 @@ function SystemsMap({
       viewBox="0 0 820 560"
       className="h-auto w-full select-none"
       role="img"
-      aria-label="Systems map of the three Sapiens Scientia platforms — Salus, Societas, and Terra — connected by cross-cutting couplings"
+      aria-label="Systems map of the three Sapiens Scientia platforms — Persona, Societas, and Terra — connected by cross-cutting couplings"
     >
       <title>Cross-platform systems map</title>
       <desc>
-        Salus, Societas, and Terra are linked pairwise by public health, climate
+        Persona, Societas, and Terra are linked pairwise by public health, climate
         medicine, and energy systems, and jointly by food systems, urbanization,
         and disease ecology.
       </desc>

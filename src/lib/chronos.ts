@@ -16,14 +16,14 @@
 export type EonId = "cosmos" | "gaia" | "mind" | "sapiens";
 
 export type ChronosPlatform = {
-  id: "salus" | "societas" | "terra";
+  id: "persona" | "societas" | "terra";
   name: string;
   href: string;
   color: string;
 };
 
 export const chronosPlatforms: Record<ChronosPlatform["id"], ChronosPlatform> = {
-  salus: { id: "salus", name: "Salus", href: "/platforms/salus", color: "#38bdf8" },
+  persona: { id: "persona", name: "Persona", href: "/platforms/persona", color: "#38bdf8" },
   societas: { id: "societas", name: "Societas", href: "/platforms/societas", color: "#818cf8" },
   terra: { id: "terra", name: "Terra", href: "/platforms/terra", color: "#34d399" },
 };
@@ -68,7 +68,7 @@ export const eons: Eon[] = [
       { name: "Single cells", members: ["First Life", "Photosynthesis", "Oxygenation", "Complex Cells"] },
       { name: "Bodies", members: ["Multicellular Life", "The Biosphere"] },
     ],
-    platforms: ["terra", "salus"],
+    platforms: ["terra", "persona"],
   },
   {
     id: "mind",
@@ -82,7 +82,7 @@ export const eons: Eon[] = [
       { name: "Animal life", members: ["Cambrian Explosion", "Life on Land", "Mammals"] },
       { name: "Turning points", members: ["Mass Extinctions", "First Hominins"] },
     ],
-    platforms: ["salus"],
+    platforms: ["persona"],
   },
   {
     id: "sapiens",
@@ -99,7 +99,7 @@ export const eons: Eon[] = [
         members: ["Agriculture", "Writing", "Science", "Industry", "The Knowledge Age"],
       },
     ],
-    platforms: ["societas", "salus"],
+    platforms: ["societas", "persona"],
   },
 ];
 

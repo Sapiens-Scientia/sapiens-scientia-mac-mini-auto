@@ -14,7 +14,7 @@ import {
 export const metadata: Metadata = {
   title: "Soma | Sapiens Scientia",
   description:
-    "Sapiens Scientia Soma: the human body module inside Salus — anatomy, physiology, and histology of the body's organ systems.",
+    "Sapiens Scientia Soma: the human body module inside Persona — anatomy, physiology, and histology of the body's organ systems.",
 };
 
 const somaSources = [
@@ -31,21 +31,21 @@ export default function SomaPage() {
         links={[
           { href: "/", label: "Home" },
           { href: "/platforms", label: "Platforms" },
-          { href: "/platforms/salus", label: "Salus" },
+          { href: "/platforms/persona", label: "Persona" },
         ]}
       />
 
       <section className="mx-auto flex max-w-7xl flex-col gap-10">
         <header className="max-w-4xl">
           <p className="mb-3 text-xl font-medium uppercase tracking-[0.24em] text-rose-300/90">
-            Salus · Human Body Module
+            Persona · Human Body Module
           </p>
           <h1 className="text-5xl font-semibold tracking-normal sm:text-7xl">
             Sapiens Scientia Soma
           </h1>
 
           <p className="mt-8 max-w-2xl text-lg leading-8 text-slate-300">
-            Soma is the model of the healthy human body inside Salus. Where Morbus
+            Soma is the model of the healthy human body inside Persona. Where Morbus
             maps disease, Soma maps the living structure it acts on — examined
             through three disciplines at once: anatomy (form), physiology
             (function), and histology (tissue fabric).
@@ -223,7 +223,7 @@ export default function SomaPage() {
             </p>
           </div>
           <Link
-            href="/platforms/salus/morbus"
+            href="/platforms/persona/morbus"
             className="inline-flex w-fit items-center gap-2 text-sm font-medium text-emerald-200 transition-colors hover:text-emerald-50"
           >
             Explore the Morbus ontology

@@ -1,0 +1,155 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { SiteNav } from "@/components/site-nav";
+import { SiteFooter } from "@/components/site-footer";
+import { PlatformCouplingLinks } from "@/components/platform-coupling-links";
+import { ScaleRungLinks } from "@/components/scale-rung-links";
+
+export const metadata: Metadata = {
+  title: "Persona | Sapiens Scientia",
+  description:
+    "Sapiens Scientia Persona: the platform for the human person as an embodied, vulnerable, home-dwelling, health-seeking, disease-susceptible, socially embedded organism.",
+};
+
+const personaModules = [
+  {
+    id: "soma",
+    title: "Soma (Body)",
+    color: "text-rose-400 border-rose-400/20 bg-rose-400/[0.02] hover:bg-rose-400/[0.04] hover:border-rose-400/35",
+    tagline: "Body, anatomy, physiology, histology, form, and function.",
+    detail: "Soma models the physical substrate of human life: organ systems, tissue structures, metabolic processes, and physiological pathways.",
+    href: "/platforms/persona/soma",
+  },
+  {
+    id: "salus",
+    title: "Salus (Health)",
+    color: "text-sky-400 border-sky-400/20 bg-sky-400/[0.02] hover:bg-sky-400/[0.04] hover:border-sky-400/35",
+    tagline: "Health, care, welfare, flourishing, and preservation.",
+    detail: "Salus models the positive states of human health: medicine, therapeutics, healthcare delivery systems, public health interventions, and personal/collective welfare.",
+    href: "/platforms/persona/salus",
+  },
+  {
+    id: "morbus",
+    title: "Morbus (Disease)",
+    color: "text-emerald-400 border-emerald-400/20 bg-emerald-400/[0.02] hover:bg-emerald-400/[0.04] hover:border-emerald-400/35",
+    tagline: "Disease, pathology, dysfunction, suffering, and clinical categories.",
+    detail: "Morbus maps human disease through a multiaxial ontology: primary causes, emergent dysregulations, and clinical classifications.",
+    href: "/platforms/persona/morbus",
+  },
+  {
+    id: "domus",
+    title: "Domus (Home)",
+    color: "text-blue-400 border-blue-400/20 bg-blue-400/[0.02] hover:bg-blue-400/[0.04] hover:border-blue-400/35",
+    tagline: "Home, household, dwelling, domestic life, and intimate habitat.",
+    detail: "Domus models the direct physical, social, and technological interfaces where individual bodies sleep, eat, care, and adapt.",
+    href: "/platforms/persona/domus",
+  },
+];
+
+export default function PersonaPlatformPage() {
+  return (
+    <main className="min-h-screen bg-black px-6 py-8 text-white sm:px-10">
+      <SiteNav />
+
+      <section className="mx-auto flex max-w-7xl flex-col gap-12">
+        <header className="max-w-4xl">
+          <p className="mb-3 text-xl font-medium uppercase tracking-[0.24em] text-blue-400">
+            Sapiens Platforms · Persona
+          </p>
+          <h1 className="text-5xl font-semibold tracking-normal sm:text-7xl">
+            Sapiens Scientia Persona
+          </h1>
+          <p className="mt-8 max-w-3xl text-xl leading-8 text-slate-300">
+            Persona is the interpretive platform for the human person: an embodied, vulnerable,
+            home-dwelling, health-seeking, disease-susceptible, socially embedded organism.
+          </p>
+        </header>
+
+        {/* Why Persona Replaces Salus Section */}
+        <section className="grid gap-8 border-t border-white/10 pt-10 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="max-w-2xl">
+            <h2 className="text-3xl font-semibold tracking-normal text-slate-200">
+              The Intimate Human Layer
+            </h2>
+            <p className="mt-4 text-base leading-7 text-slate-400">
+              Previously, the top-level platform was named **Salus** (health). While Salus naturally
+              describes medicine, care, and flourishing, it had to stretch to contain the physical
+              body (Soma), pathology (Morbus), and especially domestic life (Domus).
+            </p>
+            <p className="mt-4 text-base leading-7 text-slate-400">
+              **Persona** is a broader, more human-centric umbrella. It recognizes that a person is not merely
+              a medical patient or a physiological machine. Instead, we study human life as a coupled,
+              lived reality nested within home environments, larger societal structures, and planetary boundaries.
+            </p>
+          </div>
+          <div className="border border-white/10 bg-white/[0.02] p-6 flex flex-col justify-center">
+            <p className="font-mono text-xs uppercase tracking-wider text-slate-500 mb-4">A person is not merely:</p>
+            <ul className="grid grid-cols-2 gap-3 font-mono text-sm text-slate-300">
+              <li className="flex items-center gap-2 line-through text-slate-500">
+                <span>• a body</span>
+              </li>
+              <li className="flex items-center gap-2 line-through text-slate-500">
+                <span>• a patient</span>
+              </li>
+              <li className="flex items-center gap-2 line-through text-slate-500">
+                <span>• a disease carrier</span>
+              </li>
+              <li className="flex items-center gap-2 line-through text-slate-500">
+                <span>• a citizen</span>
+              </li>
+              <li className="flex items-center gap-2 line-through text-slate-500">
+                <span>• a consumer</span>
+              </li>
+              <li className="flex items-center gap-2 line-through text-slate-500">
+                <span>• a data point</span>
+              </li>
+            </ul>
+            <p className="mt-6 font-mono text-xs uppercase tracking-wider text-blue-400 mb-2">But rather:</p>
+            <p className="text-sm text-slate-300 leading-relaxed">
+              An embodied being living in a home, embedded in society, dependent on Earth systems, and represented in digital systems.
+            </p>
+          </div>
+        </section>
+
+        {/* Modules Section */}
+        <section className="border-t border-white/10 pt-10">
+          <div className="max-w-3xl mb-8">
+            <h2 className="text-3xl font-semibold tracking-normal text-white sm:text-4xl">
+              Platform Modules
+            </h2>
+            <p className="mt-3 text-base text-slate-400">
+              Persona acts as the portal for four key sub-disciplines mapping human-scale reality.
+            </p>
+          </div>
+
+          <div className="grid gap-6 sm:grid-cols-2">
+            {personaModules.map((mod) => (
+              <Link
+                key={mod.id}
+                href={mod.href}
+                className={`border p-6 flex flex-col justify-between transition-all duration-300 ${mod.color}`}
+              >
+                <div>
+                  <h3 className="text-2xl font-bold tracking-tight">{mod.title}</h3>
+                  <p className="mt-2 text-xs font-mono tracking-wide uppercase opacity-75">{mod.tagline}</p>
+                  <p className="mt-4 text-sm text-slate-300 leading-relaxed">
+                    {mod.detail}
+                  </p>
+                </div>
+                <div className="mt-6 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider">
+                  <span>Open Module</span>
+                  <span aria-hidden="true">→</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        <PlatformCouplingLinks platform="persona" />
+
+        <ScaleRungLinks platform="persona" />
+      </section>
+      <SiteFooter />
+    </main>
+  );
+}

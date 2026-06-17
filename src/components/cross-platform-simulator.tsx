@@ -174,7 +174,7 @@ export function CrossPlatformSimulator() {
           </span>
           <h2 className="mt-1 text-2xl font-bold text-white">Coupled Scenario Simulator</h2>
           <p className="mt-2 text-sm leading-relaxed text-slate-400">
-            Adjust Terra, Societas, and Salus together. Outputs are heuristic projections of how
+            Adjust Terra, Societas, and Persona together. Outputs are heuristic projections of how
             ecological stress, institutions, and care access interact — not forecasts.
           </p>
         </div>
@@ -200,7 +200,7 @@ export function CrossPlatformSimulator() {
           />
           <SliderControl
             label="Healthcare access"
-            platform="Salus"
+            platform="Persona"
             color="#38bdf8"
             value={inputs.healthcareAccess}
             minLabel="Limited"
@@ -242,7 +242,7 @@ export function CrossPlatformSimulator() {
       <div className="flex flex-col gap-5">
         <div className="grid gap-3 sm:grid-cols-2">
           <MetricCard
-            platform="Salus"
+            platform="Persona"
             color="#38bdf8"
             label="Vector-borne disease pressure index"
             value={outputs.vectorDiseaseRisk.toFixed(0)}
@@ -250,7 +250,7 @@ export function CrossPlatformSimulator() {
             delta={delta(outputs.vectorDiseaseRisk, baselineOutputs.vectorDiseaseRisk, "")}
           />
           <MetricCard
-            platform="Salus"
+            platform="Persona"
             color="#38bdf8"
             label="Heat-related mortality stress index"
             value={outputs.heatMortalityIndex.toFixed(0)}

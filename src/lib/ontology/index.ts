@@ -1,7 +1,7 @@
 // The Sapiens Scientia Ontology — umbrella over three domains.
 //
-//   • Earth Systems    (Physical Earth) — four-tier nested-systems taxonomy
-//   • Sapiens Platforms — Salus / Societas / Terra lenses (+ Salus modules)
+//   • Earth Systems    (Physical Earth) — five-tier nested-systems taxonomy
+//   • Sapiens Platforms — Persona / Societas / Terra lenses (+ Persona modules)
 //   • Digital Systems   (Digital Halo) — computation, comms, data, intelligence
 //
 // plus the cross-domain relationships that connect them (studies + couplings).
