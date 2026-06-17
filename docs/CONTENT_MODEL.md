@@ -8,7 +8,7 @@ Sapiens Scientia presents reality as nested systems across scale, time, Earth, S
 
 The full Sapiens Scientia Ontology lives in `src/lib/ontology/` and spans three domains plus the relationships between them:
 
-- **Earth Systems** (Physical Earth) — the four-tier nested-systems taxonomy (Microsystems / Mesosystems / Macrosystems / Megasystems). `ontology/earth-systems.ts`.
+- **Earth Systems** (Physical Earth) — the five-tier nested-systems taxonomy (Nanosystems / Microsystems / Mesosystems / Macrosystems / Megasystems). `ontology/earth-systems.ts`.
 - **Sapiens Platforms** — Salus / Societas / Terra, each with its modules (Salus contains Soma and Morbus) and its scope: the Earth and Digital entities it studies. `ontology/platforms.ts`.
 - **Digital Systems** (Digital Halo) — computation, communication, data, and intelligence systems. `ontology/digital-systems.ts`.
 - **Relationships** — platform→entity "studies" edges and platform↔platform couplings. `ontology/relationships.ts`.
@@ -38,16 +38,17 @@ Short names are `Salus`, `Societas`, `Terra`, `Soma`, and `Morbus`.
 
 ## Scale Model
 
-The Ladder of Scale has four tiers:
+The Ladder of Scale has five tiers:
 
 | Tier | Public Name | Meaning |
 |---|---|---|
-| I | Microsystems | Particles, atoms, molecules, cells, microbes, bacteria, viruses. |
-| II | Mesosystems | Multicellular life, mammals, Homo sapiens. |
-| III | Macrosystems | Humans coordinated through nations, institutions, infrastructure, healthcare, technology, energy, finance, and other collective systems. |
-| IV | Megasystems | The Sun, atmosphere, climate, freshwater, fossil fuels, waste, soils, ecosystems, biosphere, hydrosphere, and geosphere. |
+| I | Nanosystems | Elementary particles, atoms, molecules. |
+| II | Microsystems | Cells, microbes, bacteria, viruses. |
+| III | Mesosystems | Multicellular life, mammals, Homo sapiens. |
+| IV | Macrosystems | Humans coordinated through nations, institutions, infrastructure, healthcare, technology, energy, finance, and other collective systems. |
+| V | Megasystems | The Sun, atmosphere, climate, freshwater, fossil fuels, waste, soils, ecosystems, biosphere, hydrosphere, and geosphere. |
 
-Tiers, groups, and members come from `src/lib/ontology.ts`; `src/lib/scales.ts` projects them onto length scales (and owns the separate length-anchored `scaleRungs`).
+Tiers, groups, and members come from `src/lib/ontology/`; `src/lib/scales.ts` projects them onto length scales (and owns the separate length-anchored `scaleRungs`).
 
 ## Time Model
 

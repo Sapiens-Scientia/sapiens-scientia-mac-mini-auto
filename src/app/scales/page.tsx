@@ -37,7 +37,7 @@ export default function ScalesPage() {
       <section className="flex flex-col gap-7">
         <div className="max-w-3xl">
           <h2 className="text-3xl font-semibold tracking-normal text-white sm:text-4xl">
-            One Ladder, Four Tiers
+            One Ladder, Five Tiers
           </h2>
           <p className="mt-4 text-base leading-7 text-slate-300">
             The same matter, organized at ever-larger scales, becomes physics,

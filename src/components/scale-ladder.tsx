@@ -37,6 +37,7 @@ function exponentLabel(log: number) {
 }
 
 const tierColor: Record<ScaleTierId, string> = {
+  nano: "#22d3ee",
   micro: "#38bdf8",
   meso: "#a78bfa",
   macro: "#818cf8",
@@ -45,7 +46,8 @@ const tierColor: Record<ScaleTierId, string> = {
 
 // Relative log-spans used to size the tier mini-map segments.
 const tierWeight: Record<ScaleTierId, number> = {
-  micro: 14,
+  nano: 10,
+  micro: 4,
   meso: 5.5,
   macro: 5,
   mega: 4.7,

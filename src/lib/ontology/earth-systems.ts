@@ -20,7 +20,7 @@
 
 import type { PlatformId } from "../platform-couplings";
 
-export type OntologyTierId = "micro" | "meso" | "macro" | "mega";
+export type OntologyTierId = "nano" | "micro" | "meso" | "macro" | "mega";
 
 /** A single system in the taxonomy. May nest to express containment. */
 export type OntologyEntity = {
@@ -50,27 +50,39 @@ export type OntologyTier = {
 
 export const ontologyTiers: OntologyTier[] = [
   {
-    id: "micro",
-    name: "Microsystems",
+    id: "nano",
+    name: "Nanosystems",
     ordinal: "Tier I",
-    color: "#38bdf8",
-    rangeLabel: "Quarks to cells · 10⁻¹⁸–10⁻⁵ m",
+    color: "#22d3ee",
+    rangeLabel: "Particles to molecules · 10⁻¹⁸–10⁻⁹ m",
     principle:
-      "The constituent scale. Matter resolves into particles, atoms, and molecules; life resolves into cells and the microbes, bacteria, and viruses that share the body. Everything larger on the ladder is assembled from here.",
+      "The fundamental scale. Matter resolves into its constituents — elementary particles, atoms, and the molecules they bond into. This is the substrate from which everything larger on the ladder is assembled.",
     platforms: ["salus"],
     groups: [
       {
-        id: "nanosystems",
-        name: "Nanosystems",
+        id: "fundamental-constituents",
+        name: "Fundamental constituents",
         members: [
           { id: "elementary-particles", label: "Elementary Particles" },
           { id: "atoms", label: "Atoms" },
           { id: "molecules", label: "Molecules" },
         ],
       },
+    ],
+  },
+  {
+    id: "micro",
+    name: "Microsystems",
+    ordinal: "Tier II",
+    color: "#38bdf8",
+    rangeLabel: "Cells & microbes · 10⁻⁷–10⁻⁵ m",
+    principle:
+      "The cellular scale. Life resolves into cells and the microbes, bacteria, and viruses that share the body — the smallest living and near-living units on the ladder.",
+    platforms: ["salus"],
+    groups: [
       {
-        id: "microsystems-group",
-        name: "Microsystems",
+        id: "cells-microbes",
+        name: "Cells & microbes",
         members: [
           { id: "cells", label: "Cells" },
           { id: "microbes", label: "Microbes" },
@@ -83,7 +95,7 @@ export const ontologyTiers: OntologyTier[] = [
   {
     id: "meso",
     name: "Mesosystems",
-    ordinal: "Tier II",
+    ordinal: "Tier III",
     color: "#a78bfa",
     rangeLabel: "Organisms · 10⁻⁴–10¹ m",
     principle:
@@ -127,7 +139,7 @@ export const ontologyTiers: OntologyTier[] = [
   {
     id: "macro",
     name: "Macrosystems",
-    ordinal: "Tier III",
+    ordinal: "Tier IV",
     color: "#818cf8",
     rangeLabel: "Cities & systems · 10¹–10⁶ m",
     principle:
@@ -172,7 +184,7 @@ export const ontologyTiers: OntologyTier[] = [
   {
     id: "mega",
     name: "Megasystems",
-    ordinal: "Tier IV",
+    ordinal: "Tier V",
     color: "#34d399",
     rangeLabel: "Planet & star · 10⁷–10¹¹ m",
     principle:

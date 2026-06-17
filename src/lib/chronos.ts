@@ -40,7 +40,7 @@ export type Eon = {
 };
 
 // Four eons, warm-to-cool from the fire of the early universe to the present —
-// the temporal counterpart to the four tiers of scale.
+// the temporal counterpart to the tiers of scale.
 export const eons: Eon[] = [
   {
     id: "cosmos",

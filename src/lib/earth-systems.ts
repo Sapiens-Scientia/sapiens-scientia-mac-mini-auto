@@ -77,16 +77,16 @@ export const dataCenterSites: DataCenterSite[] = [
 ];
 
 export const earthSystemNodes: ConceptNode[] = [
+  ontologyNode("nano", 0),
+  ontologyNode("elementary-particles", 1),
+  ontologyNode("atoms", 1),
+  ontologyNode("molecules", 1),
+
   ontologyNode("micro", 0),
-  ontologyNode("nanosystems", 1),
-  ontologyNode("elementary-particles", 2),
-  ontologyNode("atoms", 2),
-  ontologyNode("molecules", 2),
-  ontologyNode("microsystems-group", 1),
-  ontologyNode("cells", 2),
-  ontologyNode("microbes", 2),
-  ontologyNode("bacteria", 2),
-  ontologyNode("viruses", 2),
+  ontologyNode("cells", 1),
+  ontologyNode("microbes", 1),
+  ontologyNode("bacteria", 1),
+  ontologyNode("viruses", 1),
 
   ontologyNode("meso", 0),
   ontologyNode("multicellular-life-forms", 1),

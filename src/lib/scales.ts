@@ -1,6 +1,6 @@
-// The Ladder of Scale, expressed as a ladder of physical scale. The four tiers
+// The Ladder of Scale, expressed as a ladder of physical scale. The five tiers
 // and their member systems are projected from the canonical taxonomy in
-// `src/lib/ontology.ts` (the single source of truth, shared with the homepage
+// `src/lib/ontology` (the single source of truth, shared with the homepage
 // Earth Systems tree); here they are anchored to characteristic length scales so
 // the hierarchy reads as a powers-of-ten journey from elementary particles to
 // the Sun.
@@ -12,7 +12,7 @@
 import { platformDefinitions, type PlatformId } from "@/lib/platforms";
 import { flattenMemberLabels, ontologyTiers } from "@/lib/ontology";
 
-export type ScaleTierId = "micro" | "meso" | "macro" | "mega";
+export type ScaleTierId = "nano" | "micro" | "meso" | "macro" | "mega";
 
 export type ScalePlatform = {
   id: PlatformId;
@@ -83,9 +83,9 @@ export type ScaleRung = {
 // Representative entities plotted by characteristic physical size — the rungs of
 // the ladder. Ordered small to large.
 export const scaleRungs: ScaleRung[] = [
-  { name: "Elementary particles", log: -18, sizeLabel: "< 10⁻¹⁸ m", tier: "micro", note: "Quarks and electrons carry no measured size — point-like, the floor of the ladder.", platforms: ["salus"] },
-  { name: "Atoms", log: -10, sizeLabel: "~0.1 nm", tier: "micro", note: "A nucleus wrapped in an electron cloud; the smallest unit of a chemical element.", platforms: ["salus"] },
-  { name: "Molecules", log: -9, sizeLabel: "~1 nm", tier: "micro", note: "Bonded atoms — water, proteins, the DNA double helix two nanometres wide.", platforms: ["salus"] },
+  { name: "Elementary particles", log: -18, sizeLabel: "< 10⁻¹⁸ m", tier: "nano", note: "Quarks and electrons carry no measured size — point-like, the floor of the ladder.", platforms: ["salus"] },
+  { name: "Atoms", log: -10, sizeLabel: "~0.1 nm", tier: "nano", note: "A nucleus wrapped in an electron cloud; the smallest unit of a chemical element.", platforms: ["salus"] },
+  { name: "Molecules", log: -9, sizeLabel: "~1 nm", tier: "nano", note: "Bonded atoms — water, proteins, the DNA double helix two nanometres wide.", platforms: ["salus"] },
   { name: "Viruses", log: -7, sizeLabel: "~100 nm", tier: "micro", note: "Genetic packages that borrow living cells to replicate; smaller than the cells they infect.", platforms: ["salus"] },
   { name: "Bacteria", log: -6, sizeLabel: "~1 µm", tier: "micro", note: "Single-celled microbes; trillions live within and upon the human body.", platforms: ["salus"] },
   { name: "Human cells", log: -5, sizeLabel: "~10 µm", tier: "micro", note: "The basic unit of the body — roughly thirty trillion of them per person.", platforms: ["salus"] },

@@ -6,7 +6,7 @@
 The canonical model of the project, in three domains plus the relationships
 that connect them. Source: `src/lib/ontology/`.
 
-- **Earth Systems:** 4 tiers · 45 systems
+- **Earth Systems:** 5 tiers · 45 systems
 - **Sapiens Platforms:** 3 platforms
 - **Digital Systems:** 29 systems
 - **Relationships:** 44 studies edges · 6 couplings
@@ -15,27 +15,34 @@ that connect them. Source: `src/lib/ontology/`.
 
 The four-tier nested-systems taxonomy, from elementary particles to the Sun.
 
-### Tier I — Microsystems
+### Tier I — Nanosystems
 
-- **Scale:** Quarks to cells · 10⁻¹⁸–10⁻⁵ m
+- **Scale:** Particles to molecules · 10⁻¹⁸–10⁻⁹ m
 - **Platforms:** salus
 
-The constituent scale. Matter resolves into particles, atoms, and molecules; life resolves into cells and the microbes, bacteria, and viruses that share the body. Everything larger on the ladder is assembled from here.
+The fundamental scale. Matter resolves into its constituents — elementary particles, atoms, and the molecules they bond into. This is the substrate from which everything larger on the ladder is assembled.
 
-#### Nanosystems
+#### Fundamental constituents
 
 - Elementary Particles
 - Atoms
 - Molecules
 
-#### Microsystems
+### Tier II — Microsystems
+
+- **Scale:** Cells & microbes · 10⁻⁷–10⁻⁵ m
+- **Platforms:** salus
+
+The cellular scale. Life resolves into cells and the microbes, bacteria, and viruses that share the body — the smallest living and near-living units on the ladder.
+
+#### Cells & microbes
 
 - Cells
 - Microbes
 - Bacteria
 - Viruses
 
-### Tier II — Mesosystems
+### Tier III — Mesosystems
 
 - **Scale:** Organisms · 10⁻⁴–10¹ m
 - **Platforms:** salus
@@ -60,7 +67,7 @@ The organismal scale — the scale of a single living body. Multicellular life, 
 - Local ecosystems
 - Watersheds
 
-### Tier III — Macrosystems
+### Tier IV — Macrosystems
 
 - **Scale:** Cities & systems · 10¹–10⁶ m
 - **Platforms:** societas, salus
@@ -91,7 +98,7 @@ The collective scale. Many humans, coordinated by institutions and infrastructur
 - Information Systems
 - Data Centers
 
-### Tier IV — Megasystems
+### Tier V — Megasystems
 
 - **Scale:** Planet & star · 10⁷–10¹¹ m
 - **Platforms:** terra
