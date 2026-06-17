@@ -851,7 +851,7 @@ function HumanPlatformsBridgePanel({
     <aside
       ref={panelRef}
       className="scrollbar-hidden pointer-events-auto max-h-[24vh] w-72 overflow-y-auto overscroll-contain bg-black/42 px-6 py-4 text-center text-white shadow-[0_0_28px_rgba(59,130,246,0.16)] backdrop-blur-sm max-lg:w-full max-lg:px-4 max-lg:py-3"
-      aria-label="Sapiens Platforms"
+      aria-label="Platforms"
       onPointerEnter={onPanelPointerEnter}
       onPointerLeave={() => {
         onBridgeLeave();
@@ -865,7 +865,7 @@ function HumanPlatformsBridgePanel({
           href="/platforms"
           className="rounded-sm transition-colors hover:text-sky-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-300"
         >
-          Sapiens Platforms
+          Platforms
         </Link>
       </h2>
       <ol className="space-y-1.5">

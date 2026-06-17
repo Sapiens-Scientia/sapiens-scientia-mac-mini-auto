@@ -7,7 +7,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { dataIndexCategories, dataIndexEntries } from "@/lib/data-index";
-import { dataCenterSites, type DataCenterSite } from "@/lib/earth-systems";
 import { EARTHVIEW_PAGE_PATH } from "@/lib/projects";
 
 const physicalCenter = new THREE.Vector3(-1.9, 0.28, 0);
@@ -93,40 +92,6 @@ function latLonToSpherePoint(lat: number, lon: number, radius: number) {
   );
 }
 
-function DataCenterMarker({
-  site,
-}: {
-  site: DataCenterSite;
-}) {
-  const markerRef = useRef<THREE.Mesh>(null);
-  const surfacePoint = useMemo(() => latLonToSpherePoint(site.lat, site.lon, 1.105), [site.lat, site.lon]);
-
-  useFrame(({ clock }) => {
-    if (!markerRef.current) {
-      return;
-    }
-
-    const pulse = 1 + Math.sin(clock.getElapsedTime() * 3.2 + site.lon * 0.04) * 0.22;
-    markerRef.current.scale.setScalar(pulse);
-  });
-
-  return (
-    <mesh ref={markerRef} position={surfacePoint}>
-      <sphereGeometry args={[0.032, 18, 18]} />
-      <meshBasicMaterial color="#57a6ff" transparent opacity={0.95} />
-    </mesh>
-  );
-}
-
-function DataCenterMarkers() {
-  return (
-    <group>
-      {dataCenterSites.map((site) => (
-        <DataCenterMarker key={site.name} site={site} />
-      ))}
-    </group>
-  );
-}
 
 const monthLabels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -398,7 +363,6 @@ function PhysicalEarth({
           <sphereGeometry args={[1.08, 96, 96]} />
           <meshStandardMaterial map={texture} roughness={0.85} metalness={0.02} />
         </mesh>
-        <DataCenterMarkers />
       </group>
       <mesh ref={atmosphereRef} scale={1.04}>
         <sphereGeometry args={[1.1, 64, 64]} />

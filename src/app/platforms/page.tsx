@@ -51,8 +51,8 @@ export default function PlatformsPage() {
           <p className="mb-3 text-xl font-medium uppercase tracking-[0.24em] text-blue-400">
             Sapiens Scientia · Architecture
           </p>
-          <h1 className="text-5xl font-semibold tracking-normal sm:text-7xl">
-            Sapiens Platforms
+          <h1 className="text-3xl font-semibold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl sm:whitespace-nowrap">
+            Sapiens Scientia Platforms
           </h1>
 
           <p className="mt-8 max-w-3xl text-lg leading-8 text-slate-300">
