@@ -11,9 +11,10 @@ import { dataCenterSites, type DataCenterSite } from "@/lib/earth-systems";
 import { EARTHVIEW_PAGE_PATH } from "@/lib/projects";
 
 const physicalCenter = new THREE.Vector3(-1.9, -0.08, 0);
-const digitalCenter = new THREE.Vector3(1.9, -0.08, 0);
+const haloCenter = new THREE.Vector3(1.9, -0.08, 0);
 const metaCenter = new THREE.Vector3(0, -0.08, 0);
-const digitalNetworkRadius = 1.16;
+const haloMajorRadius = 0.98;
+const haloMinorScale = 0.28;
 const maxPanTargetRadius = 0.9;
 const labelFont = "/fonts/geist-regular.ttf";
 const earthLabelFont = "/fonts/geist-semibold.ttf";
@@ -37,18 +38,18 @@ function seededRandom(seed: number) {
   };
 }
 
-function spherePoint(index: number, count: number, radius: number) {
-  const phi = Math.acos(1 - (2 * index + 1) / count);
-  const theta = Math.PI * (1 + Math.sqrt(5)) * index;
+function haloPoint(index: number, count: number, radius: number, lane = 0) {
+  const angle = (Math.PI * 2 * index) / count + lane * 0.23;
+  const laneOffset = (lane - 1) * 0.12;
 
   return new THREE.Vector3(
-    Math.cos(theta) * Math.sin(phi) * radius,
-    Math.cos(phi) * radius,
-    Math.sin(theta) * Math.sin(phi) * radius,
+    Math.cos(angle) * radius,
+    Math.sin(angle) * radius * haloMinorScale,
+    laneOffset + Math.sin(angle * 2 + lane) * 0.035,
   );
 }
 
-function clusteredSpherePoint({
+function clusteredHaloPoint({
   categoryIndex,
   categoryTotal,
   entryIndex,
@@ -61,27 +62,18 @@ function clusteredSpherePoint({
   entryTotal: number;
   radius: number;
 }) {
-  const categoryAngle = (Math.PI * 2 * categoryIndex) / categoryTotal + 0.28;
-  const latitudeBand = [-0.42, 0.18, -0.18][categoryIndex % 3];
-  const clusterCenter = new THREE.Vector3(
-    Math.cos(categoryAngle) * Math.sqrt(1 - latitudeBand * latitudeBand),
-    latitudeBand,
-    Math.sin(categoryAngle) * Math.sqrt(1 - latitudeBand * latitudeBand),
-  ).normalize();
-  const up = Math.abs(clusterCenter.y) > 0.86 ? new THREE.Vector3(1, 0, 0) : new THREE.Vector3(0, 1, 0);
-  const tangentA = new THREE.Vector3().crossVectors(up, clusterCenter).normalize();
-  const tangentB = new THREE.Vector3().crossVectors(clusterCenter, tangentA).normalize();
+  const categoryAngle = (Math.PI * 2 * categoryIndex) / categoryTotal + 0.34;
   const angle = (Math.PI * 2 * entryIndex) / entryTotal + categoryIndex * 0.42;
-  const ring = entryTotal > 5 && entryIndex % 2 === 0 ? 0.31 : 0.22;
-  const offset = tangentA
-    .clone()
-    .multiplyScalar(Math.cos(angle) * ring)
-    .add(tangentB.clone().multiplyScalar(Math.sin(angle) * ring));
-  const point = clusterCenter.add(offset).normalize();
+  const ringRadius = radius + [-0.18, 0, 0.18][categoryIndex % 3];
+  const clusterSpread = entryTotal > 5 ? 0.22 : 0.16;
+  const orbitAngle = categoryAngle + Math.cos(angle) * clusterSpread;
+  const laneOffset = (categoryIndex % 3 - 1) * 0.14 + Math.sin(angle) * 0.035;
 
-  point.y = THREE.MathUtils.clamp(point.y, -0.68, 0.68);
-
-  return point.normalize().multiplyScalar(radius);
+  return new THREE.Vector3(
+    Math.cos(orbitAngle) * ringRadius,
+    Math.sin(orbitAngle) * ringRadius * haloMinorScale,
+    laneOffset,
+  );
 }
 
 function latLonToSpherePoint(lat: number, lon: number, radius: number) {
@@ -422,7 +414,7 @@ function PhysicalEarth({
   );
 }
 
-function DigitalEarth({
+function DigitalHalo({
   isInteractive,
   targetPosition,
   theme = "dark",
@@ -434,7 +426,6 @@ function DigitalEarth({
   timelineYear: number;
 }) {
   const groupRef = useRef<THREE.Group>(null);
-  const shellRef = useRef<THREE.Mesh>(null);
   const networkRef = useRef<THREE.Group>(null);
   const pointsRef = useRef<THREE.Points>(null);
   const linesRef = useRef<THREE.LineSegments>(null);
@@ -444,9 +435,12 @@ function DigitalEarth({
     const nodes: number[] = [];
     const links: number[] = [];
     const count = 190;
-    const nodeVectors = Array.from({ length: count }, (_, index) =>
-      spherePoint(index, count, digitalNetworkRadius),
-    );
+    const nodeVectors = Array.from({ length: count }, (_, index) => {
+      const lane = index % 3;
+      const radius = haloMajorRadius + (lane - 1) * 0.18;
+
+      return haloPoint(index, count, radius, lane);
+    });
 
     nodeVectors.forEach((point) => nodes.push(point.x, point.y, point.z));
 
@@ -479,11 +473,6 @@ function DigitalEarth({
       groupRef.current.position.lerp(targetPosition, 1 - Math.pow(0.0008, delta));
     }
 
-    if (shellRef.current) {
-      shellRef.current.rotation.y += delta * 0.08;
-      shellRef.current.rotation.x = Math.sin(clock.getElapsedTime() * 0.35) * 0.04;
-    }
-
     const activeFraction = (timelineYear - 1970) / (2050 - 1970);
     const activeCount = Math.floor(10 + activeFraction * 180);
 
@@ -506,32 +495,36 @@ function DigitalEarth({
 
     if (networkRef.current) {
       const rotationSpeed = 0.02 + activeFraction * 0.14;
-      networkRef.current.rotation.y -= delta * rotationSpeed;
+      networkRef.current.rotation.z -= delta * rotationSpeed;
+      networkRef.current.rotation.x = Math.sin(clock.getElapsedTime() * 0.24) * 0.025;
     }
   });
 
   return (
-    <group ref={groupRef}>
-      <mesh ref={shellRef}>
-        <sphereGeometry args={[1.12, 96, 96]} />
-        <meshPhysicalMaterial
-          color={theme === "light" ? "#93c5fd" : "#1d76ff"}
-          roughness={0.28}
-          metalness={0.12}
-          transmission={0.25}
-          thickness={0.9}
-          transparent
-          opacity={theme === "light" ? 0.42 : 0.22}
-          side={THREE.DoubleSide}
-          depthTest
-          depthWrite
-        />
-      </mesh>
-      <mesh scale={1.045}>
-        <sphereGeometry args={[1.12, 32, 32]} />
-        <meshBasicMaterial color={theme === "light" ? "#38bdf8" : "#62c7ff"} wireframe transparent opacity={0.16} depthTest depthWrite={false} />
-      </mesh>
+    <group ref={groupRef} rotation={[0.18, 0.08, -0.12]}>
       <group ref={networkRef}>
+        {[0.8, 0.98, 1.16].map((radius, index) => (
+          <mesh key={radius} scale={[1, haloMinorScale, 1]} renderOrder={12 + index}>
+            <torusGeometry args={[radius, index === 1 ? 0.012 : 0.008, 12, 192]} />
+            <meshBasicMaterial
+              color={theme === "light" ? "#38bdf8" : "#62c7ff"}
+              transparent
+              opacity={index === 1 ? 0.42 : 0.26}
+              depthTest
+              depthWrite={false}
+            />
+          </mesh>
+        ))}
+        <mesh renderOrder={18}>
+          <sphereGeometry args={[0.13, 32, 32]} />
+          <meshBasicMaterial
+            color={theme === "light" ? "#bae6fd" : "#d8fbff"}
+            transparent
+            opacity={0.58}
+            depthTest
+            depthWrite={false}
+          />
+        </mesh>
         <points ref={pointsRef}>
           <bufferGeometry>
             <bufferAttribute attach="attributes-position" args={[nodePositions, 3]} />
@@ -552,14 +545,14 @@ function DigitalEarth({
           </bufferGeometry>
           <lineBasicMaterial color={theme === "light" ? "#0ea5e9" : "#2fe3ff"} transparent opacity={0.38} depthTest depthWrite={false} />
         </lineSegments>
-        <DataIndexSurfaceNodes isInteractive={isInteractive} theme={theme} />
+        <DataIndexHaloNodes isInteractive={isInteractive} theme={theme} />
         <FeaturedDigitalNode isInteractive={isInteractive} />
       </group>
     </group>
   );
 }
 
-function DataIndexSurfaceNodes({ 
+function DataIndexHaloNodes({
   isInteractive, 
   theme = "dark" 
 }: { 
@@ -574,12 +567,12 @@ function DataIndexSurfaceNodes({
 
       return dataIndexEntries.map((entry) => {
         const categoryIndex = categoryIndexLookup.get(entry.category) ?? 0;
-        const position = clusteredSpherePoint({
+        const position = clusteredHaloPoint({
           categoryIndex,
           categoryTotal: dataIndexCategories.length,
           entryIndex: entry.entryIndex,
           entryTotal: entry.entryTotal,
-          radius: 1.21,
+          radius: haloMajorRadius,
         });
 
         return {
@@ -594,7 +587,7 @@ function DataIndexSurfaceNodes({
   return (
     <group>
       {surfaceNodes.map((entry) => (
-        <DataIndexSurfaceNode
+        <DataIndexHaloNode
           key={`${entry.category}-${entry.name}`}
           color={entry.color}
           href={entry.href}
@@ -608,7 +601,7 @@ function DataIndexSurfaceNodes({
   );
 }
 
-function DataIndexSurfaceNode({
+function DataIndexHaloNode({
   color,
   href,
   isInteractive,
@@ -711,7 +704,7 @@ function DataIndexSurfaceNode({
           anchorY="middle"
           color={theme === "light" ? "#1c1917" : "#ffffff"}
           font={labelFont}
-          fontSize={isHovered ? 0.086 : 0.069}
+          fontSize={isHovered ? 0.072 : 0.055}
           fontWeight={300}
           outlineColor={theme === "light" ? "#faf8f5" : "#000000"}
           outlineWidth={0.008}
@@ -729,7 +722,7 @@ function FeaturedDigitalNode({ isInteractive }: { isInteractive: boolean }) {
   const [isHovered, setIsHovered] = useState(false);
   const nodeRef = useRef<THREE.Mesh>(null);
   const labelRef = useRef<THREE.Mesh>(null);
-  const position: [number, number, number] = [0, 1.21, 0];
+  const position: [number, number, number] = [0, 0.54, 0.04];
 
   useFrame(({ clock }) => {
     if (!nodeRef.current) {
@@ -798,14 +791,14 @@ function FeaturedDigitalNode({ isInteractive }: { isInteractive: boolean }) {
           depthWrite={false}
         />
       </mesh>
-      <Billboard position={[0, 0.28, 0.08]} follow lockX={false} lockY={false} lockZ={false}>
+      <Billboard position={[0, 0.22, 0.08]} follow lockX={false} lockY={false} lockZ={false}>
         <Text
           ref={labelRef}
           anchorX="center"
           anchorY="middle"
           color="#ffffff"
           font={labelFont}
-          fontSize={isHovered ? 0.14 : 0.12}
+          fontSize={isHovered ? 0.11 : 0.095}
           fontWeight={300}
           renderOrder={50}
           onClick={isInteractive ? handleActivate : undefined}
@@ -834,9 +827,9 @@ function DataConnectors() {
         physicalCenter.z + zOffset,
       );
       const end = new THREE.Vector3(
-        digitalCenter.x - 1.0,
-        digitalCenter.y + yOffset * 0.72,
-        digitalCenter.z - zOffset * 0.6,
+        haloCenter.x - 1.0,
+        haloCenter.y + yOffset * 0.72,
+        haloCenter.z - zOffset * 0.6,
       );
       const lift = 0.5 + random() * 0.6;
       const middle = new THREE.Vector3(0, yOffset * 0.35 + lift, zOffset * 0.2);
@@ -1056,7 +1049,7 @@ export function EarthScene({
 }) {
   const router = useRouter();
   const physicalTarget = isMerged ? metaCenter : physicalCenter;
-  const digitalTarget = isMerged ? metaCenter : digitalCenter;
+  const haloTarget = isMerged ? metaCenter : haloCenter;
 
   return (
     <>
@@ -1081,7 +1074,7 @@ export function EarthScene({
         <Stars radius={16} depth={24} count={900} factor={2.4} saturation={0} fade speed={0.18} />
       )}
       <PhysicalEarth isInteractive={!isMerged} targetPosition={physicalTarget} timelineYear={timelineYear} />
-      <DigitalEarth isInteractive={!isMerged} targetPosition={digitalTarget} theme={theme} timelineYear={timelineYear} />
+      <DigitalHalo isInteractive={!isMerged} targetPosition={haloTarget} theme={theme} timelineYear={timelineYear} />
       {!isMerged && <DataConnectors />}
       <EarthSunOrbitModel
         position={[0, metaCenter.y + defaultOrbitTuning.yOffset, metaCenter.z + 0.18]}
@@ -1100,10 +1093,10 @@ export function EarthScene({
             Physical Earth
           </GlobeLabel>
           <GlobeLabel 
-            position={[digitalCenter.x, digitalCenter.y + 1.72, digitalCenter.z + 0.08]}
+            position={[haloCenter.x, haloCenter.y + 1.72, haloCenter.z + 0.08]}
             theme={theme}
           >
-            Digital Earth
+            Digital Halo
           </GlobeLabel>
         </>
       )}

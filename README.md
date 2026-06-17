@@ -21,7 +21,7 @@ Start with:
 
 ## Concept
 
-A cinematic 3D visualization connecting a Physical Earth to a Digital Earth, representing the bridge between planetary infrastructure and digital knowledge.
+A cinematic 3D visualization connecting a Physical Earth to a Digital Halo, representing the bridge between planetary infrastructure and orbiting digital knowledge systems.
 
 ## Related repositories
 

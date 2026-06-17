@@ -6,7 +6,7 @@ This is the current public route inventory for the Sapiens Scientia website.
 
 | Route | File | Purpose |
 |---|---|---|
-| `/` | `src/app/page.tsx` | Homepage with Physical Earth / Digital Earth / Meta Earth hero and overview content. |
+| `/` | `src/app/page.tsx` | Homepage with Physical Earth / Digital Halo / Meta Earth hero and overview content. |
 | `/scales` | `src/app/scales/page.tsx` | Ladder of Scale, from particles to the Sun. |
 | `/chronos` | `src/app/chronos/page.tsx` | Arc of Time, from the Big Bang to the present. |
 | `/platforms` | `src/app/platforms/page.tsx` | Cross-platform systems map and simulator. |

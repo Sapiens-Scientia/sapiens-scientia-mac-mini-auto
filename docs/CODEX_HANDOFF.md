@@ -24,11 +24,11 @@ If the implementation reveals a conceptual mismatch or durable constraint, updat
 ## Current Implementation Notes
 
 - `src/components/earth-hero.tsx` owns the homepage hero shell, React Three Fiber canvas, theme toggle, and timeline state.
-- `src/components/earth-scene.tsx` owns the 3D scene: Physical Earth, Digital Earth, Meta Earth label, data connectors, solar orbit model, and orbit controls.
+- `src/components/earth-scene.tsx` owns the 3D scene: Physical Earth, Digital Halo, Meta Earth label, data connectors, solar orbit model, and orbit controls.
 - `src/components/earth-overlay.tsx` owns homepage overlays: Earth Systems, Digital Systems, Human Platforms, vital signs popout, data index popout, clock, and timeline controls.
 - `src/lib/earth-systems.ts` is the homepage taxonomy source for Earth Systems, Digital Systems, and platform bridge highlighting.
 - `src/lib/vital-signs.ts` feeds both `/vitals` and homepage vital-sign overlays.
-- `src/lib/data-index.ts` feeds `/projects/sapiens-scientia-data-index` and the Digital Earth/data index surfaces.
+- `src/lib/data-index.ts` feeds `/projects/sapiens-scientia-data-index` and the Digital Halo/data index surfaces.
 
 ## Recent Context To Preserve
 

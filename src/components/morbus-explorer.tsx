@@ -739,17 +739,17 @@ export function MorbusExplorer() {
         </div>
       </div>
 
-      {/* Digital Earth Knowledge Crosswalk */}
+      {/* Digital Halo Knowledge Crosswalk */}
       <div className="flex flex-col gap-5 border-t border-white/10 pt-6">
         <div>
           <span className="text-[0.62rem] font-bold uppercase tracking-widest text-sky-400">
-            Digital Earth Integration
+            Digital Halo Integration
           </span>
           <h4 className="text-lg font-bold text-slate-100 mt-0.5">
-            Digital Earth Knowledge Crosswalk
+            Digital Halo Knowledge Crosswalk
           </h4>
           <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-            Simulate how a computational agent queries the database registries of the Digital Earth to aggregate physiological evidence. Click a tab to select a database.
+            Simulate how a computational agent queries the database registries of the Digital Halo to aggregate physiological evidence. Click a tab to select a database.
           </p>
         </div>
 
