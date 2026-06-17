@@ -15,7 +15,7 @@ const haloCenter = new THREE.Vector3(1.9, -0.08, 0);
 const metaCenter = new THREE.Vector3(0, -0.08, 0);
 const haloMajorRadius = 1.36;
 const physicalEarthTilt: [number, number, number] = [0.26, -0.04, -0.08];
-const haloRingTilt: [number, number, number] = [0.82, 0.08, -0.16];
+const haloRingTilt: [number, number, number] = [0.6 + Math.PI / 2, 0, 0];
 const maxPanTargetRadius = 0.9;
 const labelFont = "/fonts/geist-regular.ttf";
 const earthLabelFont = "/fonts/geist-semibold.ttf";
@@ -551,16 +551,6 @@ function DigitalHalo({
           />
         </mesh>
       ))}
-      <mesh renderOrder={18}>
-        <sphereGeometry args={[0.13, 32, 32]} />
-        <meshBasicMaterial
-          color={theme === "light" ? "#bae6fd" : "#d8fbff"}
-          transparent
-          opacity={0.58}
-          depthTest
-          depthWrite={false}
-        />
-      </mesh>
       <points ref={pointsRef}>
         <bufferGeometry>
           <bufferAttribute attach="attributes-position" args={[nodePositions, 3]} />
@@ -654,28 +644,6 @@ function DataIndexHaloNode({
   const [isHovered, setIsHovered] = useState(false);
   const nodeRef = useRef<THREE.Mesh>(null);
   const labelRef = useRef<THREE.Mesh>(null);
-  const labelFrame = useMemo(() => {
-    const normal = new THREE.Vector3(...position).normalize();
-    const worldUp = new THREE.Vector3(0, 1, 0);
-    const fallbackTangent = new THREE.Vector3(1, 0, 0);
-    const tangentX = new THREE.Vector3().crossVectors(worldUp, normal);
-
-    if (tangentX.lengthSq() < 0.0001) {
-      tangentX.copy(fallbackTangent);
-    } else {
-      tangentX.normalize();
-    }
-
-    const tangentY = new THREE.Vector3().crossVectors(normal, tangentX).normalize();
-    const matrix = new THREE.Matrix4().makeBasis(tangentX, tangentY, normal);
-    const quaternion = new THREE.Quaternion().setFromRotationMatrix(matrix);
-    const labelPosition = normal.multiplyScalar(0.17).add(tangentY.multiplyScalar(0.1));
-
-    return {
-      position: [labelPosition.x, labelPosition.y, labelPosition.z] as [number, number, number],
-      quaternion,
-    };
-  }, [position]);
 
   useFrame(({ clock }) => {
     if (nodeRef.current) {
@@ -732,7 +700,7 @@ function DataIndexHaloNode({
         <sphereGeometry args={[0.062, 22, 22]} />
         <meshBasicMaterial color={color} transparent opacity={isHovered ? 0.3 : 0.13} depthTest depthWrite={false} />
       </mesh>
-      <group position={labelFrame.position} quaternion={labelFrame.quaternion}>
+      <Billboard position={[0, 0.13, 0.04]} follow lockX={false} lockY={false} lockZ={false}>
         <Text
           ref={labelRef}
           anchorX="center"
@@ -747,7 +715,7 @@ function DataIndexHaloNode({
         >
           {name}
         </Text>
-      </group>
+      </Billboard>
     </group>
   );
 }
@@ -757,7 +725,7 @@ function FeaturedDigitalNode({ isInteractive }: { isInteractive: boolean }) {
   const [isHovered, setIsHovered] = useState(false);
   const nodeRef = useRef<THREE.Mesh>(null);
   const labelRef = useRef<THREE.Mesh>(null);
-  const position: [number, number, number] = [0, 0.42, 0.04];
+  const position: [number, number, number] = [0, haloMajorRadius, 0.04];
 
   useFrame(({ clock }) => {
     if (!nodeRef.current) {
