@@ -434,6 +434,7 @@ function DigitalHalo({
   const groupRef = useRef<THREE.Group>(null);
   const pointsRef = useRef<THREE.Points>(null);
   const linesRef = useRef<THREE.LineSegments>(null);
+  const orbitGroupRef = useRef<THREE.Group>(null);
   const hasPositionedRef = useRef(false);
   const dataPhaseRef = useRef(0);
 
@@ -501,6 +502,12 @@ function DigitalHalo({
 
     const rotationSpeed = 0.02 + activeFraction * 0.14;
     dataPhaseRef.current += delta * rotationSpeed;
+
+    if (orbitGroupRef.current) {
+      // Orbit the labeled nodes around the ring normal (local Z) in lockstep
+      // with the particle points, which advance by `-phase` in writeHaloVector.
+      orbitGroupRef.current.rotation.z = -dataPhaseRef.current;
+    }
 
     if (pointsRef.current) {
       const pointAttribute = pointsRef.current.geometry.getAttribute("position") as THREE.BufferAttribute;
@@ -571,8 +578,10 @@ function DigitalHalo({
         </bufferGeometry>
         <lineBasicMaterial color={theme === "light" ? "#0ea5e9" : "#2fe3ff"} transparent opacity={0.38} depthTest depthWrite={false} />
       </lineSegments>
-      <DataIndexHaloNodes isInteractive={isInteractive} theme={theme} />
-      <FeaturedDigitalNode isInteractive={isInteractive} />
+      <group ref={orbitGroupRef}>
+        <DataIndexHaloNodes isInteractive={isInteractive} theme={theme} />
+        <FeaturedDigitalNode isInteractive={isInteractive} />
+      </group>
     </group>
   );
 }
