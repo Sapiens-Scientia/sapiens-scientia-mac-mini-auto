@@ -8,43 +8,123 @@ import { CrossPlatformSimulator } from "@/components/cross-platform-simulator";
 export const metadata: Metadata = {
   title: "Platforms | Sapiens Scientia",
   description:
-    "The Sapiens Scientia platform triad: Persona for the human person, Societas for society, and Terra for Earth systems — with a coupled scenario simulator, cross-cutting coupling map, and modules for Soma, Salus, Morbus, and Domus.",
+    "The Sapiens Platforms: Persona for human embodiment and health, Societas for society and cooperation, and Terra for Earth systems — with a coupled scenario simulator and cross-cutting coupling map.",
 };
+
+const platformsList = [
+  {
+    id: "persona",
+    title: "Persona",
+    subtitle: "Human & Intimate Scale",
+    color: "text-sky-400 border-sky-400/20 bg-sky-400/[0.02] hover:bg-sky-400/[0.05] hover:border-sky-400/35",
+    description: "Studies the human person as an embodied, vulnerable, home-dwelling, health-seeking, and disease-susceptible organism.",
+    modules: ["Soma (Body)", "Salus (Health)", "Morbus (Disease)", "Domus (Home)"],
+    href: "/platforms/persona",
+  },
+  {
+    id: "societas",
+    title: "Societas",
+    subtitle: "Collective & Institutional Scale",
+    color: "text-indigo-400 border-indigo-400/20 bg-indigo-400/[0.02] hover:bg-indigo-400/[0.05] hover:border-indigo-400/35",
+    description: "Studies human society as a complex system: culture, governance, economics, technology, and cooperation.",
+    modules: ["Institutions", "Governance", "Economics", "Social Systems"],
+    href: "/platforms/societas",
+  },
+  {
+    id: "terra",
+    title: "Terra",
+    subtitle: "Planetary & Ecological Scale",
+    color: "text-emerald-400 border-emerald-400/20 bg-emerald-400/[0.02] hover:bg-emerald-400/[0.05] hover:border-emerald-400/35",
+    description: "Studies Earth systems: climate, oceans, atmosphere, biosphere, energy flows, and planetary boundaries.",
+    modules: ["Planetary Boundaries", "Climate System", "Ecosystems", "Energy Systems"],
+    href: "/platforms/terra",
+  },
+];
 
 export default function PlatformsPage() {
   return (
     <main className="min-h-screen bg-black px-6 py-8 text-white sm:px-10">
       <SiteNav />
 
-      <section className="mx-auto flex max-w-7xl flex-col gap-10">
+      <section className="mx-auto flex max-w-7xl flex-col gap-14">
         <header className="max-w-4xl">
           <p className="mb-3 text-xl font-medium uppercase tracking-[0.24em] text-blue-400">
             Sapiens Scientia · Architecture
           </p>
           <h1 className="text-5xl font-semibold tracking-normal sm:text-7xl">
-            Cross-Platform Systems Map
+            Sapiens Platforms
           </h1>
 
-          <p className="mt-8 max-w-2xl text-lg leading-8 text-slate-300">
-            Sapiens Scientia is organized as a family of human-centered platforms —
-            Persona, Societas, and Terra. The platforms are deliberately not silos:
-            many of the most important questions are cross-cutting, living in the
-            couplings between health, society, and Earth.
+          <p className="mt-8 max-w-3xl text-lg leading-8 text-slate-300">
+            Sapiens Scientia is organized around three interpretive platforms that read the physical Earth and Digital systems.
+            Rather than separate disciplines, they act as coupled lenses on one interconnected world — mapping human life
+            from cells, to households, to global economies, and finally to the planet itself.
           </p>
         </header>
 
-        <CrossPlatformSimulator />
+        {/* Platforms Grid */}
+        <section className="grid gap-6 md:grid-cols-3">
+          {platformsList.map((platform) => (
+            <Link
+              key={platform.id}
+              href={platform.href}
+              className={`border p-6 flex flex-col justify-between transition-all duration-300 ${platform.color}`}
+            >
+              <div>
+                <p className="text-xs font-mono uppercase tracking-wider opacity-60">{platform.subtitle}</p>
+                <h2 className="mt-2 text-3xl font-bold tracking-tight">{platform.title}</h2>
+                <p className="mt-4 text-sm leading-relaxed text-slate-300">
+                  {platform.description}
+                </p>
+                <div className="mt-6 flex flex-wrap gap-1.5">
+                  {platform.modules.map((m) => (
+                    <span
+                      key={m}
+                      className="border border-white/5 bg-white/[0.03] px-2 py-0.5 text-[0.68rem] font-mono text-slate-400"
+                    >
+                      {m}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div className="mt-8 flex items-center gap-1 text-xs font-semibold uppercase tracking-wider">
+                <span>Explore {platform.title}</span>
+                <span aria-hidden="true">→</span>
+              </div>
+            </Link>
+          ))}
+        </section>
 
-        <PlatformsExplorer />
+        {/* Cross-Platform Dynamics */}
+        <section className="flex flex-col gap-8 border-t border-white/10 pt-12">
+          <div>
+            <span className="text-[0.62rem] font-bold uppercase tracking-widest text-blue-400">
+              Systemic Feedbacks
+            </span>
+            <h2 className="mt-1 text-3xl font-semibold tracking-normal text-white sm:text-4xl">
+              Cross-Platform Dynamics
+            </h2>
+            <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300">
+              The platforms are deliberately not silos. The most critical challenges of our time
+              do not reside within a single domain, but in the feedbacks between them: how climate change (Terra)
+              affects public health (Persona) and triggers institutional changes (Societas).
+            </p>
+          </div>
 
-        <section className="flex flex-col gap-4 border-t border-white/10 pt-10">
+          <CrossPlatformSimulator />
+
+          <PlatformsExplorer />
+        </section>
+
+        {/* Bridge Model */}
+        <section className="flex flex-col gap-4 border-t border-white/10 pt-12">
           <div className="max-w-3xl">
             <h2 className="text-3xl font-semibold tracking-normal text-white sm:text-4xl">
-              Bridge Model
+              The Bridge Model
             </h2>
             <p className="mt-4 text-base leading-7 text-slate-300">
               On the homepage, the Sapiens Platforms sit as the interpretive bridge
-              between Earth Systems and Digital Systems. The platforms are not
+              between Earth Systems (Physical Earth) and Digital Systems (Digital Halo). The platforms are not
               separate from the planet they study or the digital knowledge that
               represents it — they mediate between lived planetary reality and
               organized understanding.
