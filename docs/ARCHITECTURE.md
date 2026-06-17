@@ -68,10 +68,11 @@ Most durable content lives in `src/lib/` modules instead of page-local arrays.
 
 | Module | Feeds |
 |---|---|
+| `ontology/` | The full Sapiens Scientia Ontology across three domains (`earth-systems`, `platforms`, `digital-systems`) plus `relationships`, with a shared label registry in `index.ts`. Single source of truth for `scales.ts` and `earth-systems.ts`; rendered to `docs/ONTOLOGY.md` by `npm run gen:ontology`. |
 | `platforms.ts` | Platform names, labels, colors, and cross-platform couplings. |
-| `scales.ts` | Ladder of Scale tiers, rungs, platform affinity, and sources. |
+| `scales.ts` | Ladder of Scale tiers (projected from `ontology.ts`), length-anchored rungs, and sources. |
 | `chronos.ts` | Arc of Time eons, moments, platforms, and sources. |
-| `earth-systems.ts` | Homepage Earth/Digital system nodes and platform bridge highlights. |
+| `earth-systems.ts` | Projection logic for the homepage Earth/Digital system trees and platform bridge highlights (all derived from `ontology/`). |
 | `data-index.ts` | Data Index categories, entries, slugs, and counts. |
 | `vital-signs.ts` | Planetary vital-sign domains, indicator values, history, projection, and sources. |
 | `morbus.ts` | Morbus disease groups, exemplars, axes, crosswalks, and counts. |

@@ -1,3 +1,29 @@
+// Homepage Earth/Digital system trees and platform-bridge highlights.
+//
+// All taxonomy data here is projected from the canonical ontology
+// (`src/lib/ontology`): the Earth Systems tree is a curated projection (its own
+// order, nesting, and inclusion — e.g. it omits Data Centers) that resolves
+// labels by id; the Digital Systems tree and the platform bridges are derived
+// directly from the Digital Systems domain and the platform scope edges. Edit
+// the ontology, not this file, to change labels or membership.
+
+import {
+  flattenDigitalNodes,
+  ontologyLabel,
+  ontologyLabelsFor,
+  platformOntology,
+} from "@/lib/ontology";
+
+// Resolve an ontology entity to a homepage node at the given indentation level.
+function ontologyNode(id: string, level: number): ConceptNode {
+  return { label: ontologyLabel(id), level };
+}
+
+// Resolve a list of ontology ids to their canonical labels.
+function ontologyHighlights(ids: string[]): string[] {
+  return ontologyLabelsFor(ids);
+}
+
 export type DataCenterSite = {
   name: string;
   lat: number;
@@ -51,157 +77,88 @@ export const dataCenterSites: DataCenterSite[] = [
 ];
 
 export const earthSystemNodes: ConceptNode[] = [
-  { label: "Microsystems", level: 0 },
-  { label: "Nanosystems", level: 1 },
-  { label: "Elementary Particles", level: 2 },
-  { label: "Atoms", level: 2 },
-  { label: "Molecules", level: 2 },
-  { label: "Microsystems", level: 1 },
-  { label: "Cells", level: 2 },
-  { label: "Microbes", level: 2 },
-  { label: "Bacteria", level: 2 },
-  { label: "Viruses", level: 2 },
-  { label: "Mesosystems", level: 0 },
-  { label: "Multicellular Life Forms", level: 1 },
-  { label: "Mammals", level: 2 },
-  { label: "Homo sapiens", level: 3 },
-  { label: "Homes", level: 1 },
-  { label: "Buildings", level: 1 },
-  { label: "Schools", level: 1 },
-  { label: "Hospitals", level: 1 },
-  { label: "Workplaces", level: 1 },
-  { label: "Farms", level: 1 },
-  { label: "Neighborhoods", level: 1 },
-  { label: "Local ecosystems", level: 1 },
-  { label: "Watersheds", level: 1 },
-  { label: "Macrosystems", level: 0 },
-  { label: "Nations", level: 1 },
-  { label: "Legal System", level: 1 },
-  { label: "Economic System", level: 1 },
-  { label: "Healthcare System", level: 1 },
-  { label: "People", level: 1 },
-  { label: "Technology", level: 1 },
-  { label: "Information Systems", level: 1 },
-  { label: "Infrastructure", level: 1 },
-  { label: "Transportation, Pipes, & Cables", level: 1 },
-  { label: "Business & Industrial System", level: 1 },
-  { label: "Financial System", level: 1 },
-  { label: "Agricultural Systems", level: 1 },
-  { label: "Energy Generation System", level: 1 },
-  { label: "Waste Management System", level: 1 },
-  { label: "Megasystems", level: 0 },
-  { label: "The Sun", level: 1 },
-  { label: "Atmosphere", level: 1 },
-  { label: "Climate System", level: 1 },
-  { label: "Freshwater", level: 1 },
-  { label: "Fossil Fuels", level: 1 },
-  { label: "Anthropogenic Waste", level: 1 },
-  { label: "Soil System", level: 1 },
-  { label: "Ecosystems", level: 1 },
-  { label: "Biosphere", level: 1 },
-  { label: "Hydrosphere", level: 1 },
-  { label: "Geosphere", level: 1 },
+  ontologyNode("micro", 0),
+  ontologyNode("nanosystems", 1),
+  ontologyNode("elementary-particles", 2),
+  ontologyNode("atoms", 2),
+  ontologyNode("molecules", 2),
+  ontologyNode("microsystems-group", 1),
+  ontologyNode("cells", 2),
+  ontologyNode("microbes", 2),
+  ontologyNode("bacteria", 2),
+  ontologyNode("viruses", 2),
+
+  ontologyNode("meso", 0),
+  ontologyNode("multicellular-life-forms", 1),
+  ontologyNode("mammals", 2),
+  ontologyNode("homo-sapiens", 3),
+  ontologyNode("homes", 1),
+  ontologyNode("buildings", 1),
+  ontologyNode("schools", 1),
+  ontologyNode("hospitals", 1),
+  ontologyNode("workplaces", 1),
+  ontologyNode("farms", 1),
+  ontologyNode("neighborhoods", 1),
+  ontologyNode("local-ecosystems", 1),
+  ontologyNode("watersheds", 1),
+
+  ontologyNode("macro", 0),
+  ontologyNode("nations", 1),
+  ontologyNode("legal-system", 1),
+  ontologyNode("economic-system", 1),
+  ontologyNode("healthcare-system", 1),
+  ontologyNode("people", 1),
+  ontologyNode("technology", 1),
+  ontologyNode("information-systems", 1),
+  ontologyNode("infrastructure", 1),
+  ontologyNode("transportation-pipes-cables", 1),
+  ontologyNode("business-industrial-system", 1),
+  ontologyNode("financial-system", 1),
+  ontologyNode("agricultural-systems", 1),
+  ontologyNode("energy-generation-system", 1),
+  ontologyNode("waste-management-system", 1),
+
+  ontologyNode("mega", 0),
+  ontologyNode("the-sun", 1),
+  ontologyNode("atmosphere", 1),
+  ontologyNode("climate-system", 1),
+  ontologyNode("freshwater", 1),
+  ontologyNode("fossil-fuels", 1),
+  ontologyNode("anthropogenic-waste", 1),
+  ontologyNode("soil-system", 1),
+  ontologyNode("ecosystems", 1),
+  ontologyNode("biosphere", 1),
+  ontologyNode("hydrosphere", 1),
+  ontologyNode("geosphere", 1),
 ];
 
-export const humanPlatformBridges: HumanPlatformBridge[] = [
-  {
-    id: "salus",
-    title: "Sapiens Scientia Salus",
-    subtitle: "Human Health Platform",
-    href: "/platforms/salus",
-    color: "#38bdf8",
-    earthHighlights: ["Cells", "Microbes", "Bacteria", "Viruses", "Healthcare System", "People", "Homo sapiens"],
-    digitalHighlights: ["Life Sciences", "Databases", "Knowledge Graphs", "Decision Support"],
-  },
-  {
-    id: "societas",
-    title: "Sapiens Scientia Societas",
-    subtitle: "Human Society Platform",
-    href: "/platforms/societas",
-    color: "#818cf8",
-    earthHighlights: [
-      "Nations",
-      "Legal System",
-      "Economic System",
-      "Healthcare System",
-      "People",
-      "Technology",
-      "Information Systems",
-      "Infrastructure",
-      "Transportation, Pipes, & Cables",
-      "Business & Industrial System",
-      "Financial System",
-      "Agricultural Systems",
-      "Energy Generation System",
-      "Waste Management System",
-    ],
-    digitalHighlights: ["Public Data", "Platforms", "Law & Patents", "General Knowledge"],
-  },
-  {
-    id: "terra",
-    title: "Sapiens Scientia Terra",
-    subtitle: "Environmental Platform",
-    href: "/platforms/terra",
-    color: "#34d399",
-    earthHighlights: [
-      "The Sun",
-      "Atmosphere",
-      "Climate System",
-      "Freshwater",
-      "Fossil Fuels",
-      "Anthropogenic Waste",
-      "Soil System",
-      "Ecosystems",
-      "Biosphere",
-      "Hydrosphere",
-      "Geosphere",
-    ],
-    digitalHighlights: ["Public Data", "Digital Twins", "Simulation Models", "Sensor Networks"],
-  },
-];
+// Derived from each platform's declared scope in the ontology, so the bridge
+// highlights always match the canonical entity labels.
+export const humanPlatformBridges: HumanPlatformBridge[] = platformOntology.map(
+  (platform) => ({
+    id: platform.id,
+    title: platform.name,
+    subtitle: platform.label,
+    href: platform.href,
+    color: platform.color,
+    earthHighlights: ontologyHighlights(platform.studies.earth),
+    digitalHighlights: ontologyHighlights(platform.studies.digital),
+  }),
+);
 
-export const digitalSystemNodes: ConceptNode[] = [
-  { label: "Computational Systems", level: 0 },
-  { label: "Cloud Infrastructure", level: 1 },
-  { label: "Data Centers", level: 1 },
-  { label: "Edge Computing", level: 1 },
-  { label: "Device Networks", level: 1 },
-  { label: "Communication Systems", level: 0 },
-  { label: "Internet Backbone", level: 1 },
-  { label: "Wireless Networks", level: 1 },
-  { label: "Satellite Networks", level: 1 },
-  { label: "Sensor Networks", level: 1 },
-  { label: "Data Systems", level: 0 },
-  { label: "Knowledge Graphs", level: 1 },
-  { label: "Databases", level: 1, href: "/projects/sapiens-scientia-data-index" },
-  { label: "General Knowledge", level: 2, color: "#2dd4bf", href: "/projects/sapiens-scientia-data-index#general-knowledge" },
-  { label: "Scholarly Indexes", level: 2, color: "#7dd3fc", href: "/projects/sapiens-scientia-data-index#scholarly-indexes" },
-  { label: "Life Sciences", level: 2, color: "#34d399", href: "/projects/sapiens-scientia-data-index#life-sciences" },
-  { label: "Physical Sciences", level: 2, color: "#a78bfa", href: "/projects/sapiens-scientia-data-index#physical-sciences" },
-  { label: "Books & Archives", level: 2, color: "#fbbf24", href: "/projects/sapiens-scientia-data-index#books-archives" },
-  { label: "Law & Patents", level: 2, color: "#fb7185", href: "/projects/sapiens-scientia-data-index#law-patents" },
-  { label: "Public Data", level: 2, color: "#22d3ee", href: "/projects/sapiens-scientia-data-index#public-data" },
-  { label: "Platforms", level: 2, color: "#f472b6", href: "/projects/sapiens-scientia-data-index#platforms" },
-  { label: "Registries", level: 2, color: "#c4b5fd", href: "/projects/sapiens-scientia-data-index#registries" },
-  { label: "Data Pipelines", level: 1 },
-  { label: "Digital Twins", level: 1 },
-  { label: "Intelligence Systems", level: 0 },
-  { label: "Machine Learning", level: 1 },
-  { label: "Simulation Models", level: 1 },
-  { label: "Decision Support", level: 1 },
-  { label: "Autonomous Agents", level: 1 },
-];
+// The Digital Halo, projected from the Digital Systems domain of the ontology.
+export const digitalSystemNodes: ConceptNode[] = flattenDigitalNodes();
 
 export const digitalDataIndexHighlights: ConceptHighlight[] = [
-  { color: "#22d3ee", labels: ["Databases", "Public Data"] },
-  { color: "#2dd4bf", labels: ["General Knowledge"] },
-  { color: "#7dd3fc", labels: ["Scholarly Indexes"] },
-  { color: "#34d399", labels: ["Life Sciences"] },
-  { color: "#a78bfa", labels: ["Physical Sciences"] },
-  { color: "#fbbf24", labels: ["Books & Archives"] },
-  { color: "#fb7185", labels: ["Law & Patents"] },
-  { color: "#f472b6", labels: ["Platforms"] },
-  { color: "#c4b5fd", labels: ["Registries"] },
+  { color: "#22d3ee", labels: ontologyHighlights(["databases", "public-data"]) },
+  { color: "#2dd4bf", labels: ontologyHighlights(["general-knowledge"]) },
+  { color: "#7dd3fc", labels: ontologyHighlights(["scholarly-indexes"]) },
+  { color: "#34d399", labels: ontologyHighlights(["life-sciences"]) },
+  { color: "#a78bfa", labels: ontologyHighlights(["physical-sciences"]) },
+  { color: "#fbbf24", labels: ontologyHighlights(["books-archives"]) },
+  { color: "#fb7185", labels: ontologyHighlights(["law-patents"]) },
+  { color: "#f472b6", labels: ontologyHighlights(["data-index-platforms"]) },
+  { color: "#c4b5fd", labels: ontologyHighlights(["registries"]) },
 ];
 
 export function platformBridgeHighlights(

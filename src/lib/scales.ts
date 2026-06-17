@@ -1,15 +1,16 @@
-// The nested-systems hierarchy that the whole Sapiens Scientia project is built
-// on, expressed as a ladder of physical scale. The four tiers and their member
-// systems mirror the `earthSystemNodes` taxonomy rendered in the homepage hero
-// (Microsystems / Mesosystems / Macrosystems / Megasystems); here they are
-// anchored to characteristic length scales so the hierarchy can be read as a
-// powers-of-ten journey from elementary particles to the Sun.
+// The Ladder of Scale, expressed as a ladder of physical scale. The four tiers
+// and their member systems are projected from the canonical taxonomy in
+// `src/lib/ontology.ts` (the single source of truth, shared with the homepage
+// Earth Systems tree); here they are anchored to characteristic length scales so
+// the hierarchy reads as a powers-of-ten journey from elementary particles to
+// the Sun.
 //
 // Length scales are order-of-magnitude characteristic sizes (log10 of metres),
 // not precise measurements. Physical anchors follow NIST/CODATA, NASA planetary
 // fact sheets, and standard cell-biology reference values.
 
 import { platformDefinitions, type PlatformId } from "@/lib/platforms";
+import { flattenMemberLabels, ontologyTiers } from "@/lib/ontology";
 
 export type ScaleTierId = "micro" | "meso" | "macro" | "mega";
 
@@ -52,114 +53,19 @@ export type ScaleTier = {
   platforms: ScalePlatform["id"][];
 };
 
-export const scaleTiers: ScaleTier[] = [
-  {
-    id: "micro",
-    name: "Microsystems",
-    ordinal: "Tier I",
-    color: "#38bdf8",
-    rangeLabel: "Quarks to cells · 10⁻¹⁸–10⁻⁵ m",
-    principle:
-      "The constituent scale. Matter resolves into particles, atoms, and molecules; life resolves into cells and the microbes, bacteria, and viruses that share the body. Everything larger on the ladder is assembled from here.",
-    groups: [
-      { name: "Nanosystems", members: ["Elementary Particles", "Atoms", "Molecules"] },
-      { name: "Microsystems", members: ["Cells", "Microbes", "Bacteria", "Viruses"] },
-    ],
-    platforms: ["salus"],
-  },
-  {
-    id: "meso",
-    name: "Mesosystems",
-    ordinal: "Tier II",
-    color: "#a78bfa",
-    rangeLabel: "Organisms · 10⁻⁴–10¹ m",
-    principle:
-      "The organismal scale — the scale of a single living body. Multicellular life, mammals, and Homo sapiens itself. This is the scale a human directly inhabits, and the reference point the entire ladder is read from.",
-    groups: [
-      {
-        name: "Multicellular life",
-        members: ["Multicellular Life Forms", "Mammals", "Homo sapiens"],
-      },
-      {
-        name: "Lived environments",
-        members: [
-          "Homes",
-          "Buildings",
-          "Schools",
-          "Hospitals",
-          "Workplaces",
-          "Farms",
-          "Neighborhoods",
-          "Local ecosystems",
-          "Watersheds",
-        ],
-      },
-    ],
-    platforms: ["salus"],
-  },
-  {
-    id: "macro",
-    name: "Macrosystems",
-    ordinal: "Tier III",
-    color: "#818cf8",
-    rangeLabel: "Cities & systems · 10¹–10⁶ m",
-    principle:
-      "The collective scale. Many humans, coordinated by institutions and infrastructure: nations, legal and economic systems, healthcare, technology, energy, transport, and the built and digital environment. Society as a system.",
-    groups: [
-      {
-        name: "People & institutions",
-        members: [
-          "Nations",
-          "People",
-          "Legal System",
-          "Economic System",
-          "Financial System",
-          "Business & Industrial System",
-        ],
-      },
-      {
-        name: "Provisioning systems",
-        members: [
-          "Healthcare System",
-          "Agricultural Systems",
-          "Energy Generation System",
-          "Waste Management System",
-        ],
-      },
-      {
-        name: "Built & digital fabric",
-        members: [
-          "Infrastructure",
-          "Transportation, Pipes, & Cables",
-          "Technology",
-          "Information Systems",
-          "Data Centers",
-        ],
-      },
-    ],
-    platforms: ["societas", "salus"],
-  },
-  {
-    id: "mega",
-    name: "Megasystems",
-    ordinal: "Tier IV",
-    color: "#34d399",
-    rangeLabel: "Planet & star · 10⁷–10¹¹ m",
-    principle:
-      "The planetary scale. The Earth systems that contain everything below them — atmosphere, hydrosphere, geosphere, biosphere, soils, and climate — and the Sun that powers them. The boundary conditions of all human life.",
-    groups: [
-      {
-        name: "Planetary spheres",
-        members: ["Atmosphere", "Hydrosphere", "Geosphere", "Biosphere", "Soil System", "Ecosystems"],
-      },
-      {
-        name: "Flows & forcings",
-        members: ["The Sun", "Climate System", "Freshwater", "Fossil Fuels", "Anthropogenic Waste"],
-      },
-    ],
-    platforms: ["terra"],
-  },
-];
+export const scaleTiers: ScaleTier[] = ontologyTiers.map((tier) => ({
+  id: tier.id,
+  name: tier.name,
+  ordinal: tier.ordinal,
+  color: tier.color,
+  rangeLabel: tier.rangeLabel,
+  principle: tier.principle,
+  platforms: tier.platforms,
+  groups: tier.groups.map((group) => ({
+    name: group.name,
+    members: flattenMemberLabels(group.members),
+  })),
+}));
 
 export type ScaleRung = {
   name: string;

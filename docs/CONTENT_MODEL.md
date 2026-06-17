@@ -6,6 +6,15 @@ This document describes the current Sapiens Scientia taxonomy, naming model, and
 
 Sapiens Scientia presents reality as nested systems across scale, time, Earth, Sapiens platforms, and digital knowledge.
 
+The full Sapiens Scientia Ontology lives in `src/lib/ontology/` and spans three domains plus the relationships between them:
+
+- **Earth Systems** (Physical Earth) — the four-tier nested-systems taxonomy (Microsystems / Mesosystems / Macrosystems / Megasystems). `ontology/earth-systems.ts`.
+- **Sapiens Platforms** — Salus / Societas / Terra, each with its modules (Salus contains Soma and Morbus) and its scope: the Earth and Digital entities it studies. `ontology/platforms.ts`.
+- **Digital Systems** (Digital Halo) — computation, communication, data, and intelligence systems. `ontology/digital-systems.ts`.
+- **Relationships** — platform→entity "studies" edges and platform↔platform couplings. `ontology/relationships.ts`.
+
+This is the single source of truth: the Ladder of Scale (`src/lib/scales.ts`), the homepage Earth/Digital trees and platform bridges (`src/lib/earth-systems.ts`) all project from it, so every entity label lives in exactly one place. A human-readable rendering is generated to `docs/ONTOLOGY.md` via `npm run gen:ontology` — do not edit that file by hand.
+
 The homepage visualizes this as:
 
 - Physical Earth: the material planet and Earth systems.
@@ -38,7 +47,7 @@ The Ladder of Scale has four tiers:
 | III | Macrosystems | Humans coordinated through nations, institutions, infrastructure, healthcare, technology, energy, finance, and other collective systems. |
 | IV | Megasystems | The Sun, atmosphere, climate, freshwater, fossil fuels, waste, soils, ecosystems, biosphere, hydrosphere, and geosphere. |
 
-The source of truth is `src/lib/scales.ts`.
+Tiers, groups, and members come from `src/lib/ontology.ts`; `src/lib/scales.ts` projects them onto length scales (and owns the separate length-anchored `scaleRungs`).
 
 ## Time Model
 
@@ -54,7 +63,7 @@ The homepage side panels are not arbitrary navigation lists. They are conceptual
 - Digital Systems: compute, communication, data systems, and intelligence systems, visualized as the Digital Halo rather than as a second Earth.
 - Sapiens Platforms: Salus, Societas, and Terra connect the Earth side to the Digital side.
 
-The source of truth is `src/lib/earth-systems.ts`.
+Both the Earth Systems and Digital Systems trees are projected from `src/lib/ontology/` (the Earth tree is a curated projection with its own order/nesting/inclusion — e.g. it omits Data Centers). The platform bridges derive their highlights from each platform's `studies` scope in the ontology. `src/lib/earth-systems.ts` holds only the projection logic.
 
 ## Morbus Model
 
