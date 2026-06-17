@@ -30,7 +30,6 @@ const columns: { title: string; links: FooterLink[] }[] = [
   {
     title: "Project",
     links: [
-      { href: "https://github.com/Sapiens-Scientia/sapiens-scientia-docs", label: "Documentation", external: true },
       { href: EARTHVIEW_PAGE_PATH, label: "EarthView 3D" },
     ],
   },

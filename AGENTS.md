@@ -2,22 +2,26 @@
 
 This repository is the public website implementation for Sapiens Scientia.
 
-Agents working here should preserve the separation between implementation code and project doctrine. Build and refactor the website in this repo, but treat the companion docs repo as the source of truth for platform taxonomy, naming, ontology, conceptual framing, brand voice, and durable handoffs.
+Agents working here should preserve the separation between implementation code and project doctrine. Build and refactor the website in this repo, and treat the local `docs/` directory as the source of truth for platform taxonomy, naming, ontology, conceptual framing, brand voice, and durable handoffs.
 
-## Companion docs repo
+## Local project memory
 
-- GitHub: `https://github.com/Sapiens-Scientia/sapiens-scientia-docs`
-- Local checkout: a sibling clone of the `sapiens-scientia-docs` repo kept alongside this one. The absolute path is machine-specific, so do not hardcode it here.
+- `docs/README.md` explains the local documentation model.
+- `docs/ARCHITECTURE.md` explains how the website is built.
+- `docs/CONTENT_MODEL.md` records taxonomy, naming, and narrative architecture.
+- `docs/ROUTES.md` records the current public route inventory.
+- `docs/DECISIONS.md` records durable product, taxonomy, naming, and architecture decisions.
+- `docs/CODEX_HANDOFF.md` records implementation handoffs, constraints, and context future agents should see.
 
 ## Working rules
 
-- Check the docs repo before changing platform names, ontology terms, major narrative language, or conceptual architecture.
+- Check the local `docs/` directory before changing platform names, ontology terms, major narrative language, route structure, or conceptual architecture.
 - Keep website-specific implementation details in this repo.
-- Record durable conceptual changes in the docs repo, usually in `docs/DECISIONS.md` or `docs/CODEX_HANDOFF.md`.
-- Preserve the current naming model unless the docs repo is intentionally updated: `Salus`, `Societas`, `Terra`, and `Morbus`.
-- Do not copy large sections of docs content into the website repo unless the content is meant to be public website copy.
-- If implementation reveals a constraint or mismatch, update the docs handoff so future agents can see it.
+- Record durable conceptual changes in `docs/DECISIONS.md`, `docs/CONTENT_MODEL.md`, or `docs/CODEX_HANDOFF.md`.
+- Preserve the current naming model unless the local docs are intentionally updated: `Salus`, `Societas`, `Terra`, and `Morbus`.
+- Do not copy large sections of internal docs into public website copy unless the content is meant to be public.
+- If implementation reveals a constraint or mismatch, update the local handoff so future agents can see it.
 
-## Current relationship
+## Current documentation model
 
-`sapiensscientia.com` consumes the conceptual direction defined in `sapiens-scientia-docs`. The relationship is documented rather than enforced by submodules, generated content, or build-time dependencies.
+`sapiensscientia.com` now carries its own project memory in `docs/`. The documentation relationship is local and explicit; there are no submodules, generated docs imports, or build-time documentation dependencies.
