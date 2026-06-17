@@ -1,4 +1,4 @@
-import { useSyncExternalStore } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export type Theme = "dark" | "light";
 
@@ -32,12 +32,6 @@ function getSnapshot(): Theme {
     : "dark";
 }
 
-function getServerSnapshot(): Theme {
-  // Server and first client render assume dark; the init script reconciles the
-  // real value before paint, so there is no visible flash or hydration drift.
-  return "dark";
-}
-
 function applyTheme(theme: Theme) {
   const root = document.documentElement;
   if (theme === "light") {
@@ -54,12 +48,21 @@ function applyTheme(theme: Theme) {
 }
 
 export function useTheme() {
-  const theme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const [theme, setThemeState] = useState<Theme>("dark");
+
+  useEffect(() => {
+    const updateTheme = () => setThemeState(getSnapshot());
+
+    updateTheme();
+    return subscribe(updateTheme);
+  }, []);
 
   // Read the live snapshot at call time so rapid toggles before a re-render
   // don't act on a stale closured value.
-  const toggleTheme = () => applyTheme(getSnapshot() === "dark" ? "light" : "dark");
-  const setTheme = (next: Theme) => applyTheme(next);
+  const toggleTheme = useCallback(() => {
+    applyTheme(getSnapshot() === "dark" ? "light" : "dark");
+  }, []);
+  const setTheme = useCallback((next: Theme) => applyTheme(next), []);
 
   return { theme, toggleTheme, setTheme };
 }

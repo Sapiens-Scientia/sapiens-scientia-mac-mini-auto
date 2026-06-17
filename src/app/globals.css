@@ -85,6 +85,11 @@ canvas {
   display: block;
 }
 
+.earth-hero-canvas canvas {
+  height: 100% !important;
+  width: 100% !important;
+}
+
 .scrollbar-hidden {
   scrollbar-width: none;
 }
@@ -364,4 +369,3 @@ canvas {
     stroke-dashoffset: 0;
   }
 }
-

@@ -1034,7 +1034,7 @@ function TimeOverlay({
   onPanelPointerLeave: () => void;
 }) {
   const [selectedTimeZone, setSelectedTimeZone] = useState("America/New_York");
-  const [now, setNow] = useState<Date | null>(null);
+  const [now, setNow] = useState(() => new Date());
 
   useEffect(() => {
     const tick = () => {

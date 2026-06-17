@@ -43,13 +43,13 @@ export function EarthHero() {
   }, [isPlayMode]);
 
   return (
-    <section className="relative min-h-screen bg-black">
-      <div className="absolute inset-0">
+    <section className="relative h-screen min-h-[48rem] overflow-hidden bg-black">
+      <div className="absolute inset-0 h-full w-full">
         <Canvas
           camera={{ position: [0, 0.28, 9.99], fov: 45 }}
           dpr={[1, 1.8]}
           gl={{ antialias: true, alpha: false }}
-          className="!h-full !w-full"
+          className="earth-hero-canvas !h-full !w-full"
           style={{ height: "100%", width: "100%" }}
         >
           <Suspense fallback={null}>
