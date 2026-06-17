@@ -17,8 +17,8 @@ const haloMajorRadius = 1.36;
 const physicalEarthTilt: [number, number, number] = [0.26, -0.04, -0.08];
 const haloRingTilt: [number, number, number] = [0.6 + Math.PI / 2, 0, 0];
 const maxPanTargetRadius = 0.9;
-const labelFont = "/fonts/geist-regular.ttf";
-const earthLabelFont = "/fonts/geist-semibold.ttf";
+const labelFont = "/fonts/quicksand-regular.ttf";
+const earthLabelFont = "/fonts/quicksand-bold.ttf";
 const defaultOrbitTuning = {
   tilt: 0.2,
   yOffset: -1.64,
