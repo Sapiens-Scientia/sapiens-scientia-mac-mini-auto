@@ -56,7 +56,7 @@ function formatClockTime(date: Date | null, timeZone: string) {
 
   return new Intl.DateTimeFormat("en-US", {
     hour: "2-digit",
-    hour12: false,
+    hour12: true,
     minute: "2-digit",
     timeZone,
     timeZoneName: "short",
