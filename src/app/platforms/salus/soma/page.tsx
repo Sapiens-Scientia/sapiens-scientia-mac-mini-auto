@@ -3,6 +3,7 @@ import Link from "next/link";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { SomaExplorer } from "@/components/soma-explorer";
+import { SomaBodyFigure } from "@/components/soma-body-figure";
 import {
   somaLenses,
   somaLevels,
@@ -53,6 +54,10 @@ export default function SomaPage() {
             {somaSystemCount} organ systems · 3 disciplinary lenses · couples to Morbus
           </p>
         </header>
+
+        <div className="relative flex justify-center overflow-hidden rounded-lg border border-rose-200/15 bg-gradient-to-b from-rose-500/[0.04] to-transparent p-6">
+          <SomaBodyFigure className="h-[clamp(18rem,38vw,28rem)] w-auto" />
+        </div>
 
         {/* Overview stats */}
         <div className="flex flex-wrap gap-x-10 gap-y-4 border-y border-white/15 py-5 text-sm uppercase tracking-[0.2em] text-slate-400">
