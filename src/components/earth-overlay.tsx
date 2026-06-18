@@ -850,7 +850,7 @@ function HumanPlatformsBridgePanel({
   return (
     <aside
       ref={panelRef}
-      className="scrollbar-hidden pointer-events-auto max-h-[24vh] w-72 overflow-y-auto overscroll-contain bg-black/42 px-6 py-4 text-center text-white shadow-[0_0_28px_rgba(59,130,246,0.16)] backdrop-blur-sm max-lg:w-full max-lg:px-4 max-lg:py-3"
+      className="scrollbar-hidden pointer-events-auto max-h-[24vh] w-48 overflow-y-auto overscroll-contain bg-black/42 px-6 py-4 text-center text-white shadow-[0_0_28px_rgba(59,130,246,0.16)] backdrop-blur-sm max-lg:w-full max-lg:px-4 max-lg:py-3"
       aria-label="Platforms"
       onPointerEnter={onPanelPointerEnter}
       onPointerLeave={() => {

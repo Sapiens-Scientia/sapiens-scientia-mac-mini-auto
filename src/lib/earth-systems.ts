@@ -137,7 +137,7 @@ export const earthSystemNodes: ConceptNode[] = [
 export const humanPlatformBridges: HumanPlatformBridge[] = platformOntology.map(
   (platform) => ({
     id: platform.id,
-    title: platform.name,
+    title: platform.shortName,
     subtitle: platform.label,
     href: platform.href,
     color: platform.color,
