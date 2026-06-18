@@ -43,7 +43,7 @@ export default function PersonaPlatformPage() {
             Human Individual Platform
           </p>
           <h1 className="text-5xl font-semibold tracking-normal sm:text-7xl">
-            Sapiens Scientia Persona
+            Persona
           </h1>
           <p className="mt-8 max-w-3xl text-xl leading-8 text-slate-300">
             Persona is the interpretive platform for the human person: an embodied, vulnerable,

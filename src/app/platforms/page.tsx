@@ -52,7 +52,7 @@ export default function PlatformsPage() {
             Sapiens Scientia · Architecture
           </p>
           <h1 className="text-3xl font-semibold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl sm:whitespace-nowrap">
-            Sapiens Scientia Platforms
+            Platforms
           </h1>
 
           <p className="mt-8 max-w-3xl text-lg leading-8 text-slate-300">

@@ -83,7 +83,7 @@ export default function SalusModulePage() {
             Persona · Health Module
           </p>
           <h1 className="text-5xl font-semibold tracking-normal sm:text-7xl">
-            Sapiens Scientia Salus
+            Salus
           </h1>
           <p className="mt-8 max-w-2xl text-lg leading-8 text-slate-300">
             Salus studies health, care, welfare, flourishing, and preservation: the practices and
@@ -162,7 +162,7 @@ export default function SalusModulePage() {
 
           <div className="mt-4 border border-emerald-500/20 bg-emerald-500/[0.02] p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-all hover:bg-emerald-500/[0.04]">
             <div className="max-w-xl">
-              <h3 className="text-lg font-semibold text-emerald-300">Sapiens Scientia Morbus</h3>
+              <h3 className="text-lg font-semibold text-emerald-300">Morbus</h3>
               <p className="mt-1 text-sm text-slate-400">
                 Explore the detailed human disease ontology: etiology, physiological failure modes, axes matrix, and classification crosswalks.
               </p>
@@ -185,7 +185,7 @@ export default function SalusModulePage() {
                   Primary Module
                 </span>
                 <h3 className="text-2xl font-bold tracking-tight text-rose-200 mt-3">
-                  Sapiens Scientia Soma
+                  Soma
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-slate-300">
                   Explore the physical substrate of human life. Soma models the healthy body as an integrated physiological machine across multiple scales of representation.

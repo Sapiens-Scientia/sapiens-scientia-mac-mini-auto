@@ -35,7 +35,7 @@ export default function TerraPage() {
             Environmental Platform
           </p>
           <h1 className="text-5xl font-semibold tracking-normal sm:text-7xl">
-            Sapiens Scientia Terra
+            Terra
           </h1>
 
           <p className="mt-8 max-w-2xl text-lg leading-8 text-slate-300">

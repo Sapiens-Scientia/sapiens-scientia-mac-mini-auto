@@ -41,7 +41,7 @@ export default function SomaPage() {
             Persona · Human Body Module
           </p>
           <h1 className="text-5xl font-semibold tracking-normal sm:text-7xl">
-            Sapiens Scientia Soma
+            Soma
           </h1>
 
           <p className="mt-8 max-w-2xl text-lg leading-8 text-slate-300">

@@ -57,10 +57,10 @@ export default function DomusModulePage() {
             Persona · Home Module
           </p>
           <h1 className="text-5xl font-semibold tracking-normal sm:text-7xl">
-            Sapiens Scientia Domus
+            Domus
           </h1>
           <p className="mt-8 max-w-3xl text-lg leading-8 text-slate-300">
-            Sapiens Scientia Domus is the Persona module for home, household, dwelling, and domestic life:
+            Domus is the Persona module for home, household, dwelling, and domestic life:
             the intimate human habitat where bodies are sheltered, cared for, reproduced, repaired, and
             connected to wider social, technological, and Earth systems.
           </p>
