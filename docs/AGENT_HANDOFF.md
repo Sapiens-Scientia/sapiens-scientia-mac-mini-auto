@@ -30,6 +30,11 @@ If the implementation reveals a conceptual mismatch or durable constraint, updat
 - `src/lib/vital-signs.ts` feeds both `/vitals` and homepage vital-sign overlays.
 - `src/lib/data-index.ts` feeds `/projects/sapiens-scientia-data-index` and the Digital Halo/data index surfaces.
 - `src/lib/soma.ts` feeds `/platforms/persona/salus/soma` and the Soma section on `/platforms/persona/salus`.
+- The Soma hero uses `public/models/soma-anatomy.glb`, a Meshopt-compressed
+  derivative of the CC BY-SA Z-Anatomy atlas. Attribution and license details are
+  in `public/models/README.md`. Regenerate it from a downloaded Z-Anatomy
+  `Startup.blend` with `scripts/build-soma-anatomy.py`; Blender is required only
+  for that asset-build step, not at website runtime.
 
 ## Recent Context To Preserve
 

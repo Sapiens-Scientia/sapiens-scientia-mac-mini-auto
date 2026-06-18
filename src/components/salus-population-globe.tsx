@@ -192,10 +192,6 @@ function SalusGlobeScene() {
         <sphereGeometry args={[1, 64, 64]} />
         <meshBasicMaterial color="#77b9ff" transparent opacity={0.11} side={THREE.BackSide} />
       </mesh>
-      <mesh rotation={[Math.PI / 2.35, 0.35, 0]}>
-        <torusGeometry args={[1.08, 0.0035, 8, 160]} />
-        <meshBasicMaterial color="#d8eeff" transparent opacity={0.2} />
-      </mesh>
       <OrbitControls enablePan={false} enableZoom={false} rotateSpeed={0.25} />
     </>
   );
