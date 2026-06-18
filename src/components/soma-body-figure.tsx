@@ -105,10 +105,12 @@ export function SomaBodyFigure({ className }: { className?: string }) {
         <OrbitControls
           makeDefault
           enableDamping
-          enablePan={false}
+          enablePan
           enableZoom
+          screenSpacePanning
+          panSpeed={0.65}
           minDistance={1.7}
-          maxDistance={6}
+          maxDistance={4.5}
           minPolarAngle={Math.PI * 0.32}
           maxPolarAngle={Math.PI * 0.68}
           minAzimuthAngle={-Math.PI * 0.72}
@@ -118,7 +120,7 @@ export function SomaBodyFigure({ className }: { className?: string }) {
       </Canvas>
 
       <div className="pointer-events-none absolute bottom-3 left-3 border border-rose-100/10 bg-black/55 px-3 py-1.5 font-mono text-[0.6rem] uppercase tracking-[0.2em] text-rose-100/55 backdrop-blur-sm">
-        Drag to rotate
+        Drag to rotate · Right-drag to pan
       </div>
     </div>
   );

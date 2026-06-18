@@ -33,6 +33,21 @@ COLLECTION_CATEGORY = {
 # Open the thoracic and abdominal wall so the organs remain legible from the
 # front, matching the educational cutaway used as the Soma visual reference.
 EXCLUDED_NAME_PARTS = (
+    # Soma's overview figure is intentionally non-reproductive and suitable for
+    # a general-audience systems overview.
+    "genital",
+    "penis",
+    "glans",
+    "cavernosum",
+    "spongiosum",
+    "scrot",
+    "testis",
+    "testicular",
+    "epididym",
+    "ductus deferens",
+    "seminal",
+    "prostate",
+    "ejaculatory",
     "fascia",
     "peritone",
     "omentum",
