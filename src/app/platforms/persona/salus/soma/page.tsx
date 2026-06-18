@@ -198,22 +198,90 @@ export default function SomaPage() {
         </section>
 
         {/* Relationship to Morbus */}
-        <section className="flex flex-col gap-5 border-t border-rose-200/15 pt-10">
-          <div className="max-w-3xl">
+        <section className="flex flex-col gap-8 border-t border-rose-200/15 pt-10">
+          <div className="max-w-4xl">
             <h2 className="text-3xl font-semibold tracking-normal text-white sm:text-4xl">
               Human Disease
             </h2>
+            <p className="mt-4 text-base leading-7 text-slate-300">
+              The healthy physical structures mapped by <strong>Soma</strong> break down under pathological states. 
+              Rather than treating diseases as monolithic, single-cause entities, the <strong>Morbus</strong> ontology 
+              analyzes them across a multiaxial system of 9 coupled dimensions of human failure.
+            </p>
           </div>
-          <div className="border border-emerald-500/20 bg-emerald-500/[0.02] p-6 rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-all hover:bg-emerald-500/[0.04]">
-            <div className="max-w-xl">
-              <h3 className="text-lg font-semibold text-emerald-300">Morbus</h3>
-              <p className="mt-1 text-sm text-slate-400">
-                Explore the detailed human disease ontology: etiology, physiological failure modes, axes matrix, and classification crosswalks.
+
+          {/* Multiaxial Dimensions Grid */}
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="border border-white/5 bg-white/[0.01] p-4 rounded-lg">
+              <span className="text-[0.65rem] font-mono font-semibold uppercase tracking-wider text-emerald-400 bg-emerald-400/10 px-2.5 py-1 rounded-full">Axis I-III</span>
+              <h3 className="text-base font-semibold text-slate-200 mt-3">Physical Substrate</h3>
+              <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                <strong>Anatomical:</strong> Where dysfunction manifests. <br/>
+                <strong>Etiologic:</strong> Initiating cause (e.g. viral, genetic). <br/>
+                <strong>Molecular:</strong> Signaling, receptors, mutations.
+              </p>
+            </div>
+            <div className="border border-white/5 bg-white/[0.01] p-4 rounded-lg">
+              <span className="text-[0.65rem] font-mono font-semibold uppercase tracking-wider text-sky-400 bg-sky-400/10 px-2.5 py-1 rounded-full">Axis IV-VI</span>
+              <h3 className="text-base font-semibold text-slate-200 mt-3">Physiological Host</h3>
+              <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                <strong>Immunological:</strong> Host response and inflammation. <br/>
+                <strong>Barrier:</strong> Cellular junctions and mucosal linings. <br/>
+                <strong>Ecological:</strong> Environmental exposures and coinfections.
+              </p>
+            </div>
+            <div className="border border-white/5 bg-white/[0.01] p-4 rounded-lg">
+              <span className="text-[0.65rem] font-mono font-semibold uppercase tracking-wider text-rose-400 bg-rose-400/10 px-2.5 py-1 rounded-full">Axis VII-IX</span>
+              <h3 className="text-base font-semibold text-slate-200 mt-3">Temporal & Social Lenses</h3>
+              <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                <strong>Developmental:</strong> Latency and acute-to-chronic timeline. <br/>
+                <strong>Social:</strong> Access, disparities, and policy dynamics. <br/>
+                <strong>Experiential:</strong> Lived burden and sensory suffering.
+              </p>
+            </div>
+          </div>
+
+          {/* Classification Groups Grid */}
+          <div className="flex flex-col gap-4">
+            <h3 className="text-lg font-semibold text-slate-300">Classification Classes</h3>
+            <div className="grid gap-4 md:grid-cols-3">
+              <div className="border border-white/5 bg-emerald-500/[0.01] p-4 rounded-lg hover:bg-emerald-500/[0.02] transition-all">
+                <h4 className="text-sm font-semibold text-emerald-300">Primary Etiologic</h4>
+                <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                  Pathology organized around a relatively clear initiating cause, such as physical injury, genetic mutation, or infection.
+                </p>
+              </div>
+              <div className="border border-white/5 bg-sky-500/[0.01] p-4 rounded-lg hover:bg-sky-500/[0.02] transition-all">
+                <h4 className="text-sm font-semibold text-sky-300">Secondary Physiological</h4>
+                <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                  Emergent failures of physiological systems, representing dysregulation of feedback loops, metabolism, or tissue integrity.
+                </p>
+              </div>
+              <div className="border border-white/5 bg-purple-500/[0.01] p-4 rounded-lg hover:bg-purple-500/[0.02] transition-all">
+                <h4 className="text-sm font-semibold text-purple-300">Hybrid / Multiaxial</h4>
+                <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                  Complex, multi-system disorders (e.g. autoimmune, cancer, neurodegeneration) requiring simultaneous analysis of multiple axes.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-2 border border-emerald-500/20 bg-gradient-to-r from-emerald-950/20 via-black to-black p-6 rounded-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-all hover:border-emerald-500/40 hover:shadow-[0_0_30px_rgba(16,185,129,0.06)] relative overflow-hidden group">
+            {/* Visual glow accent */}
+            <div className="absolute top-0 right-0 -mt-6 -mr-6 w-32 h-32 rounded-full bg-emerald-500/5 blur-3xl group-hover:bg-emerald-500/10 transition-all duration-500 pointer-events-none" />
+            
+            <div className="max-w-xl relative z-10">
+              <span className="text-xs font-mono font-semibold uppercase tracking-wider text-emerald-400 bg-emerald-400/10 px-2.5 py-1 rounded-full">
+                Ontology Explorer
+              </span>
+              <h3 className="text-xl font-bold tracking-tight text-emerald-200 mt-3">Morbus (Disease)</h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-300">
+                Explore the detailed multiaxial disease database: etiology, failure modes, axis matrices, and classification crosswalks.
               </p>
             </div>
             <Link
               href="/platforms/persona/salus/soma/morbus"
-              className="inline-flex items-center gap-2 rounded bg-emerald-500/10 px-4 py-2 text-sm font-semibold text-emerald-300 transition-all hover:bg-emerald-500/20"
+              className="relative z-10 inline-flex items-center gap-2 rounded-lg bg-emerald-500/15 px-5 py-2.5 text-sm font-semibold text-emerald-300 transition-all duration-300 hover:bg-emerald-500 hover:text-white hover:scale-[1.02] shadow-md hover:shadow-emerald-500/20"
             >
               Open Morbus Explorer →
             </Link>
