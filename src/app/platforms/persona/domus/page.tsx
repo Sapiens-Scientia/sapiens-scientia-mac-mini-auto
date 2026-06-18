@@ -48,6 +48,7 @@ export default function DomusModulePage() {
           { href: "/", label: "Home" },
           { href: "/platforms", label: "Platforms" },
           { href: "/platforms/persona", label: "Persona" },
+          { href: "/platforms/persona/domus", label: "Domus" },
         ]}
       />
 

@@ -34,6 +34,7 @@ export default function MorbusPage() {
           { href: "/platforms/persona", label: "Persona" },
           { href: "/platforms/persona/salus", label: "Salus" },
           { href: "/platforms/persona/salus/soma", label: "Soma" },
+          { href: "/platforms/persona/salus/soma/morbus", label: "Morbus" },
         ]}
       />
 

@@ -74,6 +74,7 @@ export default function SalusModulePage() {
           { href: "/", label: "Home" },
           { href: "/platforms", label: "Platforms" },
           { href: "/platforms/persona", label: "Persona" },
+          { href: "/platforms/persona/salus", label: "Salus" },
         ]}
       />
 
