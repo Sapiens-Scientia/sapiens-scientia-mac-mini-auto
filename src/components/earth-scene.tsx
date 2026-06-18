@@ -9,7 +9,7 @@ import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { dataIndexCategories, dataIndexEntries } from "@/lib/data-index";
 import { EARTHVIEW_PAGE_PATH } from "@/lib/projects";
 
-const physicalCenter = new THREE.Vector3(-1.9, 0.28, 0);
+const physicalCenter = new THREE.Vector3(-2.0, 0.28, 0);
 const haloCenter = new THREE.Vector3(2.3, 0.28, 0);
 const metaCenter = new THREE.Vector3(0, 0.28, 0);
 const haloMajorRadius = 1.36;
