@@ -10,7 +10,7 @@ import { dataIndexCategories, dataIndexEntries } from "@/lib/data-index";
 import { EARTHVIEW_PAGE_PATH } from "@/lib/projects";
 
 const physicalCenter = new THREE.Vector3(-1.9, 0.28, 0);
-const haloCenter = new THREE.Vector3(1.9, 0.28, 0);
+const haloCenter = new THREE.Vector3(2.3, 0.28, 0);
 const metaCenter = new THREE.Vector3(0, 0.28, 0);
 const haloMajorRadius = 1.36;
 const physicalEarthTilt: [number, number, number] = [0.26, -0.04, -0.08];
@@ -786,7 +786,7 @@ function DataConnectors() {
         physicalCenter.z + zOffset,
       );
       const end = new THREE.Vector3(
-        haloCenter.x - 1.0,
+        1.9 - 1.0, // Keep original X end coordinate to prevent stretching the horizontal span of the arcs
         haloCenter.y + yOffset * 0.72,
         haloCenter.z - zOffset * 0.6,
       );
