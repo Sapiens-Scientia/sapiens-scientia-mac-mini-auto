@@ -43,6 +43,11 @@
   
   --grid-line: rgba(28, 25, 23, 0.025);
   --grid-glow: rgba(2, 132, 199, 0.03);
+
+  /* Translucent paper surface for glass panels (nav, overlays) that use
+     bg-black/XX in the markup. Kept fairly opaque so backdrop-blur text
+     stays readable over busy 3D scenes. */
+  --glass-bg: rgba(250, 248, 245, 0.78);
 }
 
 @theme inline {
@@ -104,6 +109,24 @@ canvas {
   background-color: var(--background) !important;
 }
 
+/* Translucent glass panels (nav, earth overlays, search fields) ship as
+   bg-black/XX in the markup. Without these the surfaces stay dark in light
+   mode — most visibly the sticky site nav. Map them all to the paper glass. */
+.light-theme .bg-black\/40,
+.light-theme .bg-black\/42,
+.light-theme .bg-black\/48,
+.light-theme .bg-black\/50,
+.light-theme .bg-black\/54,
+.light-theme .bg-black\/55,
+.light-theme .bg-black\/58,
+.light-theme .bg-black\/60 {
+  background-color: var(--glass-bg) !important;
+}
+
+.light-theme .hover\:bg-black\/60:hover {
+  background-color: var(--panel-hover) !important;
+}
+
 .light-theme .text-white {
   color: var(--foreground) !important;
 }
@@ -130,6 +153,38 @@ canvas {
 
 .light-theme .text-slate-500 {
   color: var(--text-muted) !important;
+}
+
+/* Opacity-suffixed slate variants used by the homepage earth overlay (system
+   trees, clock, vitals feed). Without these the text renders near-white on the
+   light scene and is barely legible. */
+.light-theme .text-slate-100\/88 {
+  color: var(--text-primary) !important;
+}
+
+.light-theme .text-slate-200\/88,
+.light-theme .text-slate-300\/80,
+.light-theme .text-slate-300\/84 {
+  color: var(--text-secondary) !important;
+}
+
+/* Pale sky/blue accents in the overlay (tree group headers, clock readout,
+   feed links) — map to the readable light-mode blue accent. */
+.light-theme .text-sky-100,
+.light-theme .text-sky-300,
+.light-theme .text-blue-200,
+.light-theme .text-blue-300\/80,
+.light-theme .text-blue-300\/85 {
+  color: var(--accent-blue) !important;
+}
+
+.light-theme .text-emerald-300,
+.light-theme .text-emerald-400\/80 {
+  color: var(--accent-emerald) !important;
+}
+
+.light-theme .text-amber-400\/80 {
+  color: var(--accent-amber) !important;
 }
 
 /* Borders */

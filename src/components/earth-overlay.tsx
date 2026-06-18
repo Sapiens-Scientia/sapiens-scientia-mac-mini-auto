@@ -17,6 +17,7 @@ import {
 import { earthVitalSignHighlights, type EarthVitalSign } from "@/lib/vital-signs";
 import { useLiveVitalSigns, type LiveVitalSignsStatus } from "@/hooks/use-live-vital-signs";
 import { VitalSignChart } from "@/components/vital-sign-chart";
+import { useTheme } from "@/lib/use-theme";
 
 type PopoutSide = "left" | "right";
 
@@ -200,7 +201,15 @@ function ConceptColumnNode({
   node: ConceptNode;
   size: "large" | "compact";
 }) {
-  const displayColor = highlightColor ?? node.color;
+  const { theme } = useTheme();
+  // The leaf node.color values are bright pastels tuned for the dark scene;
+  // on the light (paper) scene they wash out, so darken them toward ink while
+  // keeping their hue. Highlight colors stay vivid as a transient emphasis.
+  const baseColor = highlightColor ?? node.color;
+  const displayColor =
+    !highlightColor && node.color && theme === "light"
+      ? `color-mix(in srgb, ${node.color} 62%, #1c1917)`
+      : baseColor;
 
   return (
     <li
