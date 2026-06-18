@@ -32,13 +32,15 @@ export default function MorbusPage() {
           { href: "/", label: "Home" },
           { href: "/platforms", label: "Platforms" },
           { href: "/platforms/persona", label: "Persona" },
+          { href: "/platforms/persona/salus", label: "Salus" },
+          { href: "/platforms/persona/salus/soma", label: "Soma" },
         ]}
       />
 
       <section className="mx-auto flex max-w-7xl flex-col gap-10">
         <header className="max-w-4xl">
           <p className="mb-3 text-xl font-medium uppercase tracking-[0.24em] text-emerald-300/90">
-            Persona · Disease Ontology
+            Soma · Disease Ontology
           </p>
           <h1 className="text-5xl font-semibold tracking-normal sm:text-7xl">
             Morbus

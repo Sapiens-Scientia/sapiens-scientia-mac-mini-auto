@@ -9,7 +9,7 @@ Sapiens Scientia presents reality as nested systems across scale, time, Earth, S
 The full Sapiens Scientia Ontology lives in `src/lib/ontology/` and spans three domains plus the relationships between them:
 
 - **Earth Systems** (Physical Earth) — the five-tier nested-systems taxonomy (Nanosystems / Microsystems / Mesosystems / Macrosystems / Megasystems). `ontology/earth-systems.ts`.
-- **Sapiens Platforms** — Persona / Societas / Terra, each with its modules (Persona contains Salus and Domus, with Soma and Morbus nested inside Salus) and its scope: the Earth and Digital entities it studies. `ontology/platforms.ts`.
+- **Sapiens Platforms** — Persona / Societas / Terra, each with its modules (Persona contains Salus and Domus, with Soma nested inside Salus, and Morbus nested inside Soma) and its scope: the Earth and Digital entities it studies. `ontology/platforms.ts`.
 - **Digital Systems** (Digital Halo) — computation, communication, data, and intelligence systems. `ontology/digital-systems.ts`.
 - **Relationships** — platform→entity "studies" edges and platform↔platform couplings. `ontology/relationships.ts`.
 
@@ -33,7 +33,7 @@ Preserve these names unless a deliberate taxonomy change updates docs, source mo
 | `Sapiens Scientia Terra` | Environmental / Earth systems platform. | `/platforms/terra` |
 | `Sapiens Scientia Soma` | Human body module inside Salus. | `/platforms/persona/salus/soma` |
 | `Sapiens Scientia Salus` | Human health module inside Persona. | `/platforms/persona/salus` |
-| `Sapiens Scientia Morbus` | Disease ontology module inside Salus. | `/platforms/persona/salus/morbus` |
+| `Sapiens Scientia Morbus` | Disease ontology module inside Soma. | `/platforms/persona/salus/soma/morbus` |
 | `Sapiens Scientia Domus` | Home/domestic life module inside Persona. | `/platforms/persona/domus` |
 
 Short names are `Persona`, `Societas`, `Terra`, `Soma`, `Salus`, `Morbus`, and `Domus`.

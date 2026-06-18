@@ -32,6 +32,7 @@ export default function SomaPage() {
           { href: "/", label: "Home" },
           { href: "/platforms", label: "Platforms" },
           { href: "/platforms/persona", label: "Persona" },
+          { href: "/platforms/persona/salus", label: "Salus" },
         ]}
       />
 
@@ -200,35 +201,23 @@ export default function SomaPage() {
         <section className="flex flex-col gap-5 border-t border-rose-200/15 pt-10">
           <div className="max-w-3xl">
             <h2 className="text-3xl font-semibold tracking-normal text-white sm:text-4xl">
-              Soma and Morbus
+              Human Disease
             </h2>
           </div>
-          <div className="grid gap-4 border border-emerald-200/10 bg-emerald-200/[0.035] p-5 text-sm leading-6 text-slate-300 md:grid-cols-[0.85fr_1.45fr]">
-            <div>
-              <h3 className="text-base font-semibold text-emerald-100">
-                Independent, but coupled
-              </h3>
-              <p className="mt-2 text-slate-400">
-                Soma is the healthy body; Morbus is its pathology. Each stands alone,
-                and each links to the other.
+          <div className="border border-emerald-500/20 bg-emerald-500/[0.02] p-6 rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-all hover:bg-emerald-500/[0.04]">
+            <div className="max-w-xl">
+              <h3 className="text-lg font-semibold text-emerald-300">Morbus</h3>
+              <p className="mt-1 text-sm text-slate-400">
+                Explore the detailed human disease ontology: etiology, physiological failure modes, axes matrix, and classification crosswalks.
               </p>
             </div>
-            <p>
-              A Morbus disease names a process by which a Soma system breaks down —
-              heart failure against the cardiovascular system, IBD against the
-              digestive tract, Alzheimer&apos;s against the nervous system. Reading
-              the body and reading its diseases are two views of the same anatomy,
-              physiology, and histology, kept as separate modules so neither has to
-              inherit the other&apos;s structure.
-            </p>
+            <Link
+              href="/platforms/persona/salus/soma/morbus"
+              className="inline-flex items-center gap-2 rounded bg-emerald-500/10 px-4 py-2 text-sm font-semibold text-emerald-300 transition-all hover:bg-emerald-500/20"
+            >
+              Open Morbus Explorer →
+            </Link>
           </div>
-          <Link
-            href="/platforms/persona/salus/morbus"
-            className="inline-flex w-fit items-center gap-2 text-sm font-medium text-emerald-200 transition-colors hover:text-emerald-50"
-          >
-            Explore the Morbus ontology
-            <span aria-hidden>→</span>
-          </Link>
 
           <div className="mt-2 flex flex-wrap gap-x-5 gap-y-2 text-xs leading-5 text-slate-500">
             {somaSources.map((source) => (

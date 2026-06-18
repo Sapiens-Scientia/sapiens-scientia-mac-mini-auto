@@ -49,12 +49,14 @@ export const platformOntology: PlatformOntologyEntry[] = [
             name: "Sapiens Scientia Soma",
             href: "/platforms/persona/salus/soma",
             tagline: "Soma studies the body, anatomy, physiology, histology, form, and function.",
-          },
-          {
-            id: "morbus",
-            name: "Sapiens Scientia Morbus",
-            href: "/platforms/persona/salus/morbus",
-            tagline: "Morbus studies disease, pathology, dysfunction, suffering, and clinical categories.",
+            modules: [
+              {
+                id: "morbus",
+                name: "Sapiens Scientia Morbus",
+                href: "/platforms/persona/salus/soma/morbus",
+                tagline: "Morbus studies disease, pathology, dysfunction, suffering, and clinical categories.",
+              },
+            ],
           },
         ],
       },

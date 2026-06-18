@@ -7,7 +7,7 @@ This file records practical handoff context for future agents working on the Sap
 - The site is a Next.js App Router application using React, Tailwind CSS, and React Three Fiber.
 - Project memory is local to this repository under `docs/`.
 - The homepage is a full-screen 3D experience with overlay panels, time controls, theme support, and platform bridge interactions.
-- The main platform model is `Persona`, `Societas`, `Terra`, with `Salus` and `Domus` nested inside Persona, and `Soma` and `Morbus` nested inside Salus.
+- The main platform model is `Persona`, `Societas`, `Terra`, with `Salus` and `Domus` nested inside Persona, `Soma` nested inside Salus, and `Morbus` nested inside Soma.
 - Public project routes include the Data Index and EarthView 3D.
 
 ## Read Before Conceptual Changes

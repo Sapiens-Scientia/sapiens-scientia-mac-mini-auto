@@ -22,7 +22,7 @@ This is the current public route inventory for the Sapiens Scientia website.
 | `/platforms/terra` | `src/app/platforms/terra/page.tsx` | Environmental / Earth systems platform. |
 | `/platforms/persona/salus/soma` | `src/app/platforms/persona/salus/soma/page.tsx` | Human body module nested inside Salus. |
 | `/platforms/persona/salus` | `src/app/platforms/persona/salus/page.tsx` | Health and welfare module inside Persona. |
-| `/platforms/persona/salus/morbus` | `src/app/platforms/persona/salus/morbus/page.tsx` | Disease ontology nested inside Salus. |
+| `/platforms/persona/salus/soma/morbus` | `src/app/platforms/persona/salus/soma/morbus/page.tsx` | Disease ontology nested inside Soma. |
 | `/platforms/persona/domus` | `src/app/platforms/persona/domus/page.tsx` | Home/domestic life module inside Persona. |
 
 ## Project Pages

@@ -12,7 +12,7 @@ const routes = [
   "/platforms/persona",
   "/platforms/persona/salus/soma",
   "/platforms/persona/salus",
-  "/platforms/persona/salus/morbus",
+  "/platforms/persona/salus/soma/morbus",
   "/platforms/persona/domus",
   "/platforms/societas",
   "/platforms/terra",

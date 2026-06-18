@@ -62,3 +62,10 @@ This establishes a cleaner hierarchy: `Persona` directly models standard human r
 Following the relocation of Morbus under Salus, the healthy body ontology module (`Soma`) has also been nested under the health module (`Salus`) rather than sitting directly under the `Persona` platform. The new path is `/platforms/persona/salus/soma` (residing in `src/app/platforms/persona/salus/soma/page.tsx`).
 
 This leaves `Persona` with two direct modules: `Salus` (Health) and `Domus` (Home), with the healthy physical body (`Soma`) and its pathological states (`Morbus`) nested as submodules of the health platform.
+
+## Move Morbus under Soma
+
+The disease ontology module (`Morbus`) has been nested under the body module (`Soma`), which resides under the health module (`Salus`). The new path is `/platforms/persona/salus/soma/morbus` (residing in `src/app/platforms/persona/salus/soma/morbus/page.tsx`).
+
+This establishes a nested hierarchy: `Persona` -> `Salus` (Health) -> `Soma` (Body) -> `Morbus` (Disease). Organisms are understood first through their healthy physiological substrate (`Soma`), while pathological states (`Morbus`) are modeled directly as failures of specific body systems.
+

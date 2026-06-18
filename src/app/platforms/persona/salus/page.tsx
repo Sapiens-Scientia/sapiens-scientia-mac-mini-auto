@@ -160,22 +160,7 @@ export default function SalusModulePage() {
             ))}
           </div>
 
-          <div className="mt-4 border border-emerald-500/20 bg-emerald-500/[0.02] p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-all hover:bg-emerald-500/[0.04]">
-            <div className="max-w-xl">
-              <h3 className="text-lg font-semibold text-emerald-300">Morbus</h3>
-              <p className="mt-1 text-sm text-slate-400">
-                Explore the detailed human disease ontology: etiology, physiological failure modes, axes matrix, and classification crosswalks.
-              </p>
-            </div>
-            <Link
-              href="/platforms/persona/salus/morbus"
-              className="inline-flex items-center gap-2 rounded bg-emerald-500/10 px-4 py-2 text-sm font-semibold text-emerald-300 transition-all hover:bg-emerald-500/20"
-            >
-              Open Morbus Explorer →
-            </Link>
-          </div>
-
-          <div className="mt-6 border border-rose-500/20 bg-gradient-to-br from-rose-950/20 via-black to-black p-6 rounded-xl flex flex-col gap-6 transition-all duration-300 hover:border-rose-500/40 hover:shadow-[0_0_30px_rgba(244,63,94,0.06)] relative overflow-hidden group">
+          <div className="mt-4 border border-rose-500/20 bg-gradient-to-br from-rose-950/20 via-black to-black p-6 rounded-xl flex flex-col gap-6 transition-all duration-300 hover:border-rose-500/40 hover:shadow-[0_0_30px_rgba(244,63,94,0.06)] relative overflow-hidden group">
             {/* Visual glow accent */}
             <div className="absolute top-0 right-0 -mt-6 -mr-6 w-32 h-32 rounded-full bg-rose-500/5 blur-3xl group-hover:bg-rose-500/10 transition-all duration-500 pointer-events-none" />
             
