@@ -65,52 +65,6 @@ export default function PersonaPlatformPage() {
           </p>
         </header>
 
-        {/* Why Persona Replaces Salus Section */}
-        <section className="grid gap-8 border-t border-white/10 pt-10 lg:grid-cols-[1.1fr_0.9fr]">
-          <div className="max-w-2xl">
-            <h2 className="text-3xl font-semibold tracking-normal text-slate-200">
-              The Intimate Human Layer
-            </h2>
-            <p className="mt-4 text-base leading-7 text-slate-400">
-              Previously, the top-level platform was named **Salus** (health). While Salus naturally
-              describes medicine, care, and flourishing, it had to stretch to contain the physical
-              body (Soma), pathology (Morbus), and especially domestic life (Domus).
-            </p>
-            <p className="mt-4 text-base leading-7 text-slate-400">
-              **Persona** is a broader, more human-centric umbrella. It recognizes that a person is not merely
-              a medical patient or a physiological machine. Instead, we study human life as a coupled,
-              lived reality nested within home environments, larger societal structures, and planetary boundaries.
-            </p>
-          </div>
-          <div className="border border-white/10 bg-white/[0.02] p-6 flex flex-col justify-center">
-            <p className="font-mono text-xs uppercase tracking-wider text-slate-500 mb-4">A person is not merely:</p>
-            <ul className="grid grid-cols-2 gap-3 font-mono text-sm text-slate-300">
-              <li className="flex items-center gap-2 line-through text-slate-500">
-                <span>• a body</span>
-              </li>
-              <li className="flex items-center gap-2 line-through text-slate-500">
-                <span>• a patient</span>
-              </li>
-              <li className="flex items-center gap-2 line-through text-slate-500">
-                <span>• a disease carrier</span>
-              </li>
-              <li className="flex items-center gap-2 line-through text-slate-500">
-                <span>• a citizen</span>
-              </li>
-              <li className="flex items-center gap-2 line-through text-slate-500">
-                <span>• a consumer</span>
-              </li>
-              <li className="flex items-center gap-2 line-through text-slate-500">
-                <span>• a data point</span>
-              </li>
-            </ul>
-            <p className="mt-6 font-mono text-xs uppercase tracking-wider text-blue-400 mb-2">But rather:</p>
-            <p className="text-sm text-slate-300 leading-relaxed">
-              An embodied being living in a home, embedded in society, dependent on Earth systems, and represented in digital systems.
-            </p>
-          </div>
-        </section>
-
         {/* Modules Section */}
         <section className="border-t border-white/10 pt-10">
           <div className="max-w-3xl mb-8">
