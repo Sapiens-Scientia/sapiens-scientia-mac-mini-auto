@@ -663,6 +663,11 @@ function HumanPlatformsBridgePanel({
         onBridgeLeave();
         onPanelPointerLeave();
       }}
+      onPointerDown={(e) => e.stopPropagation()}
+      onMouseDown={(e) => e.stopPropagation()}
+      onPointerUp={(e) => e.stopPropagation()}
+      onMouseUp={(e) => e.stopPropagation()}
+      onClick={(e) => e.stopPropagation()}
       onWheelCapture={stopPanelScrollPropagation}
       onTouchMoveCapture={stopPanelScrollPropagation}
     >
@@ -818,7 +823,7 @@ export function EarthOverlay({
         <button
           type="button"
           aria-label="Separate Meta Earth"
-          className="pointer-events-auto absolute left-1/2 top-[calc(50%-9.25rem)] z-40 h-10 w-36 -translate-x-1/2 bg-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200/80"
+          className="pointer-events-auto absolute left-1/2 top-[calc(50%-9.25rem)] z-[9] h-10 w-36 -translate-x-1/2 bg-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200/80"
           onClick={onMetaEarthToggle}
         />
       ) : null}
@@ -836,7 +841,7 @@ export function EarthOverlay({
           onPanelPointerLeave={onPanelPointerLeave}
         />
       </div>
-      <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 lg:-mt-20 z-10 flex flex-col items-center gap-4 px-8 max-lg:top-auto max-lg:bottom-6 max-lg:translate-y-0 max-lg:inset-x-4 max-lg:px-0">
+      <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 lg:-mt-20 z-[45] flex flex-col items-center gap-4 px-8 max-lg:top-auto max-lg:bottom-6 max-lg:translate-y-0 max-lg:inset-x-4 max-lg:px-0">
         <HumanPlatformsBridgePanel
           activeBridgeId={activeBridge?.id ?? null}
           onBridgeEnter={setActiveBridge}
