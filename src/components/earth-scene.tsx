@@ -1044,13 +1044,13 @@ export function EarthScene({
             onClick={() => {
               router.push(EARTHVIEW_PAGE_PATH);
             }}
-            position={[physicalCenter.x, physicalCenter.y + 1.72, physicalCenter.z + 0.08]}
+            position={[-2.1, physicalCenter.y + 1.72, physicalCenter.z + 0.08]}
             theme={theme}
           >
             Physical Earth
           </GlobeLabel>
           <GlobeLabel 
-            position={[haloCenter.x, haloCenter.y + 1.72, haloCenter.z + 0.08]}
+            position={[2.1, haloCenter.y + 1.72, haloCenter.z + 0.08]}
             theme={theme}
           >
             Digital Halo
