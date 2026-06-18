@@ -13,6 +13,7 @@ export type PlatformModule = {
   name: string;
   href: string;
   tagline: string;
+  modules?: PlatformModule[];
 };
 
 /** What a platform studies, as ids into the Earth Systems / Digital Systems domains. */
@@ -38,22 +39,24 @@ export const platformOntology: PlatformOntologyEntry[] = [
     ...platformDefinitions.persona,
     modules: [
       {
-        id: "soma",
-        name: "Sapiens Scientia Soma",
-        href: "/platforms/persona/soma",
-        tagline: "Soma studies the body, anatomy, physiology, histology, form, and function.",
-      },
-      {
         id: "salus",
         name: "Sapiens Scientia Salus",
         href: "/platforms/persona/salus",
         tagline: "Salus studies health, care, welfare, flourishing, and preservation.",
-      },
-      {
-        id: "morbus",
-        name: "Sapiens Scientia Morbus",
-        href: "/platforms/persona/morbus",
-        tagline: "Morbus studies disease, pathology, dysfunction, suffering, and clinical categories.",
+        modules: [
+          {
+            id: "soma",
+            name: "Sapiens Scientia Soma",
+            href: "/platforms/persona/salus/soma",
+            tagline: "Soma studies the body, anatomy, physiology, histology, form, and function.",
+          },
+          {
+            id: "morbus",
+            name: "Sapiens Scientia Morbus",
+            href: "/platforms/persona/salus/morbus",
+            tagline: "Morbus studies disease, pathology, dysfunction, suffering, and clinical categories.",
+          },
+        ],
       },
       {
         id: "domus",
@@ -123,9 +126,15 @@ export function platformLabelEntries(): [string, string][] {
   const entries: [string, string][] = [];
   for (const platform of platformOntology) {
     entries.push([platform.id, platform.shortName]);
-    for (const mod of platform.modules) {
-      entries.push([mod.id, mod.name]);
-    }
+    const addModules = (mods: PlatformModule[]) => {
+      for (const mod of mods) {
+        entries.push([mod.id, mod.name]);
+        if (mod.modules) {
+          addModules(mod.modules);
+        }
+      }
+    };
+    addModules(platform.modules);
   }
   return entries;
 }

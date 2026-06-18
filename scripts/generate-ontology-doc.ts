@@ -18,6 +18,7 @@ import {
   type DigitalNode,
   type OntologyEntity,
   type OntologyTier,
+  type PlatformModule,
 } from "../src/lib/ontology";
 
 function renderMembers(members: OntologyEntity[], depth = 0): string[] {
@@ -110,7 +111,13 @@ function buildDoc(): string {
     lines.push("");
     lines.push(`- **Lens:** ${platform.label} — ${platform.domain}`);
     if (platform.modules.length) {
-      lines.push(`- **Modules:** ${platform.modules.map((m) => m.name).join(", ")}`);
+      const formatModule = (m: PlatformModule): string => {
+        if (m.modules && m.modules.length > 0) {
+          return `${m.name} (containing ${m.modules.map(formatModule).join(", ")})`;
+        }
+        return m.name;
+      };
+      lines.push(`- **Modules:** ${platform.modules.map(formatModule).join(", ")}`);
     }
     lines.push(
       `- **Studies (Earth):** ${platform.studies.earth.join(", ")}`,

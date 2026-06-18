@@ -13,7 +13,6 @@ const columns: { title: string; links: FooterLink[] }[] = [
       { href: "/platforms/persona", label: "Persona — Human" },
       { href: "/platforms/societas", label: "Societas — Society" },
       { href: "/platforms/terra", label: "Terra — Earth" },
-      { href: "/platforms/persona/morbus", label: "Morbus — Disease" },
     ],
   },
   {

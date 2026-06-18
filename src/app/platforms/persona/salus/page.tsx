@@ -97,7 +97,6 @@ export default function SalusModulePage() {
           </h2>
 
           <SalusPopulationGlobe />
-
           <div className="grid max-w-3xl gap-3 border-l border-sky-200/20 pl-5 text-sm leading-6 text-slate-300">
             <p>
               Salus begins with humanity as a planetary population: unevenly distributed,
@@ -108,6 +107,8 @@ export default function SalusModulePage() {
               descends into health systems, bodies, cells, microbes, bacteria, and viruses.
             </p>
           </div>
+
+
         </div>
 
         <section className="flex flex-col gap-7 border-t border-sky-200/15 pt-10">
@@ -158,29 +159,68 @@ export default function SalusModulePage() {
               </a>
             ))}
           </div>
+
+          <div className="mt-4 border border-emerald-500/20 bg-emerald-500/[0.02] p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-all hover:bg-emerald-500/[0.04]">
+            <div className="max-w-xl">
+              <h3 className="text-lg font-semibold text-emerald-300">Sapiens Scientia Morbus</h3>
+              <p className="mt-1 text-sm text-slate-400">
+                Explore the detailed human disease ontology: etiology, physiological failure modes, axes matrix, and classification crosswalks.
+              </p>
+            </div>
+            <Link
+              href="/platforms/persona/salus/morbus"
+              className="inline-flex items-center gap-2 rounded bg-emerald-500/10 px-4 py-2 text-sm font-semibold text-emerald-300 transition-all hover:bg-emerald-500/20"
+            >
+              Open Morbus Explorer →
+            </Link>
+          </div>
+
+          <div className="mt-6 border border-rose-500/20 bg-gradient-to-br from-rose-950/20 via-black to-black p-6 rounded-xl flex flex-col gap-6 transition-all duration-300 hover:border-rose-500/40 hover:shadow-[0_0_30px_rgba(244,63,94,0.06)] relative overflow-hidden group">
+            {/* Visual glow accent */}
+            <div className="absolute top-0 right-0 -mt-6 -mr-6 w-32 h-32 rounded-full bg-rose-500/5 blur-3xl group-hover:bg-rose-500/10 transition-all duration-500 pointer-events-none" />
+            
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative z-10">
+              <div className="max-w-xl">
+                <span className="text-xs font-mono font-semibold uppercase tracking-wider text-rose-400 bg-rose-400/10 px-2.5 py-1 rounded-full">
+                  Primary Module
+                </span>
+                <h3 className="text-2xl font-bold tracking-tight text-rose-200 mt-3">
+                  Sapiens Scientia Soma
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-300">
+                  Explore the physical substrate of human life. Soma models the healthy body as an integrated physiological machine across multiple scales of representation.
+                </p>
+              </div>
+              <Link
+                href="/platforms/persona/salus/soma"
+                className="inline-flex items-center gap-2 rounded-lg bg-rose-500/15 px-5 py-2.5 text-sm font-semibold text-rose-300 transition-all duration-300 hover:bg-rose-500 hover:text-white hover:scale-[1.02] shadow-md hover:shadow-rose-500/20"
+              >
+                Open Soma Explorer
+                <span className="transition-transform group-hover:translate-x-1">→</span>
+              </Link>
+            </div>
+
+            {/* Sub-features or scales grid */}
+            <div className="grid gap-3 sm:grid-cols-3 border-t border-rose-500/10 pt-5 relative z-10">
+              <div className="border border-white/5 bg-white/[0.01] p-3 rounded-lg hover:bg-white/[0.02] transition-colors">
+                <h4 className="text-xs font-semibold text-rose-300 uppercase tracking-wider">Anatomy</h4>
+                <p className="text-xs text-slate-400 mt-1">Bodily structures, form, and spatial relationships.</p>
+              </div>
+              <div className="border border-white/5 bg-white/[0.01] p-3 rounded-lg hover:bg-white/[0.02] transition-colors">
+                <h4 className="text-xs font-semibold text-rose-300 uppercase tracking-wider">Physiology</h4>
+                <p className="text-xs text-slate-400 mt-1">Functions, regulatory loops, and homeostatic mechanisms.</p>
+              </div>
+              <div className="border border-white/5 bg-white/[0.01] p-3 rounded-lg hover:bg-white/[0.02] transition-colors">
+                <h4 className="text-xs font-semibold text-rose-300 uppercase tracking-wider">Histology</h4>
+                <p className="text-xs text-slate-400 mt-1">Tissue-level fabric and cellular architecture.</p>
+              </div>
+            </div>
+          </div>
         </section>
 
         <section className="flex flex-col gap-4 border-t border-sky-200/15 pt-10">
           <h2 className="text-2xl font-semibold text-white">Related Persona Modules</h2>
-          <div className="grid gap-4 sm:grid-cols-3">
-            <Link
-              href="/platforms/persona/soma"
-              className="border border-white/10 bg-white/[0.02] p-4 transition-colors hover:bg-white/[0.045]"
-            >
-              <h3 className="text-lg font-semibold text-rose-300">Soma (Body)</h3>
-              <p className="mt-2 text-sm text-slate-400">
-                Anatomy, physiology, histology, form, and function.
-              </p>
-            </Link>
-            <Link
-              href="/platforms/persona/morbus"
-              className="border border-white/10 bg-white/[0.02] p-4 transition-colors hover:bg-white/[0.045]"
-            >
-              <h3 className="text-lg font-semibold text-emerald-300">Morbus (Disease)</h3>
-              <p className="mt-2 text-sm text-slate-400">
-                Disease, pathology, dysfunction, and clinical categories.
-              </p>
-            </Link>
+          <div className="grid gap-4 sm:grid-cols-1">
             <Link
               href="/platforms/persona/domus"
               className="border border-white/10 bg-white/[0.02] p-4 transition-colors hover:bg-white/[0.045]"

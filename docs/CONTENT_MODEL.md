@@ -9,7 +9,7 @@ Sapiens Scientia presents reality as nested systems across scale, time, Earth, S
 The full Sapiens Scientia Ontology lives in `src/lib/ontology/` and spans three domains plus the relationships between them:
 
 - **Earth Systems** (Physical Earth) — the five-tier nested-systems taxonomy (Nanosystems / Microsystems / Mesosystems / Macrosystems / Megasystems). `ontology/earth-systems.ts`.
-- **Sapiens Platforms** — Persona / Societas / Terra, each with its modules (Persona contains Soma, Salus, Morbus, and Domus) and its scope: the Earth and Digital entities it studies. `ontology/platforms.ts`.
+- **Sapiens Platforms** — Persona / Societas / Terra, each with its modules (Persona contains Salus and Domus, with Soma and Morbus nested inside Salus) and its scope: the Earth and Digital entities it studies. `ontology/platforms.ts`.
 - **Digital Systems** (Digital Halo) — computation, communication, data, and intelligence systems. `ontology/digital-systems.ts`.
 - **Relationships** — platform→entity "studies" edges and platform↔platform couplings. `ontology/relationships.ts`.
 
@@ -31,9 +31,9 @@ Preserve these names unless a deliberate taxonomy change updates docs, source mo
 | `Sapiens Scientia Persona` | Human persona platform. | `/platforms/persona` |
 | `Sapiens Scientia Societas` | Human society platform. | `/platforms/societas` |
 | `Sapiens Scientia Terra` | Environmental / Earth systems platform. | `/platforms/terra` |
-| `Sapiens Scientia Soma` | Human body module inside Persona. | `/platforms/persona/soma` |
+| `Sapiens Scientia Soma` | Human body module inside Salus. | `/platforms/persona/salus/soma` |
 | `Sapiens Scientia Salus` | Human health module inside Persona. | `/platforms/persona/salus` |
-| `Sapiens Scientia Morbus` | Disease ontology module inside Persona. | `/platforms/persona/morbus` |
+| `Sapiens Scientia Morbus` | Disease ontology module inside Salus. | `/platforms/persona/salus/morbus` |
 | `Sapiens Scientia Domus` | Home/domestic life module inside Persona. | `/platforms/persona/domus` |
 
 Short names are `Persona`, `Societas`, `Terra`, `Soma`, `Salus`, `Morbus`, and `Domus`.
@@ -70,7 +70,7 @@ Both the Earth Systems and Digital Systems trees are projected from `src/lib/ont
 
 ## Morbus Model
 
-Morbus is the disease ontology module inside Persona. It organizes disease knowledge using:
+Morbus is the disease ontology module inside Salus. It organizes disease knowledge using:
 
 - Primary Etiologic Diseases.
 - Secondary Physiological Diseases.
@@ -82,7 +82,7 @@ The source of truth is `src/lib/morbus.ts`.
 
 ## Soma Model
 
-Soma is the human body module inside Persona. It models the healthy body across:
+Soma is the human body module inside Salus. It models the healthy body across:
 
 - Anatomy: bodily structures and spatial relationships.
 - Physiology: functions, mechanisms, flows, and regulatory loops.

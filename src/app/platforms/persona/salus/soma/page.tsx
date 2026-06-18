@@ -223,7 +223,7 @@ export default function SomaPage() {
             </p>
           </div>
           <Link
-            href="/platforms/persona/morbus"
+            href="/platforms/persona/salus/morbus"
             className="inline-flex w-fit items-center gap-2 text-sm font-medium text-emerald-200 transition-colors hover:text-emerald-50"
           >
             Explore the Morbus ontology

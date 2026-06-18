@@ -50,3 +50,15 @@ When updating copy that reflects these concepts, prefer editing the source modul
 ## Keep Internal Memory Separate From Public Copy
 
 Docs in this directory are internal project memory. Do not expose long internal notes directly on public pages unless they have been intentionally adapted into public website copy.
+
+## Move Morbus under Salus
+
+The disease ontology module (`Morbus`) has been nested under the health module (`Salus`) rather than sitting directly under the `Persona` platform. The new path is `/platforms/persona/salus/morbus` (residing in `src/app/platforms/persona/salus/morbus/page.tsx`).
+
+This establishes a cleaner hierarchy: `Persona` directly models standard human reality through the body (`Soma`), health preservation (`Salus`), and the home habitat (`Domus`), while pathological states (`Morbus`) are organized as a submodule of health systems and preservation.
+
+## Move Soma under Salus
+
+Following the relocation of Morbus under Salus, the healthy body ontology module (`Soma`) has also been nested under the health module (`Salus`) rather than sitting directly under the `Persona` platform. The new path is `/platforms/persona/salus/soma` (residing in `src/app/platforms/persona/salus/soma/page.tsx`).
+
+This leaves `Persona` with two direct modules: `Salus` (Health) and `Domus` (Home), with the healthy physical body (`Soma`) and its pathological states (`Morbus`) nested as submodules of the health platform.

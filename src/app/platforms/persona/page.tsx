@@ -12,14 +12,7 @@ export const metadata: Metadata = {
 };
 
 const personaModules = [
-  {
-    id: "soma",
-    title: "Soma (Body)",
-    color: "text-rose-400 border-rose-400/20 bg-rose-400/[0.02] hover:bg-rose-400/[0.04] hover:border-rose-400/35",
-    tagline: "Body, anatomy, physiology, histology, form, and function.",
-    detail: "Soma models the physical substrate of human life: organ systems, tissue structures, metabolic processes, and physiological pathways.",
-    href: "/platforms/persona/soma",
-  },
+
   {
     id: "salus",
     title: "Salus (Health)",
@@ -28,14 +21,7 @@ const personaModules = [
     detail: "Salus models the positive states of human health: medicine, therapeutics, healthcare delivery systems, public health interventions, and personal/collective welfare.",
     href: "/platforms/persona/salus",
   },
-  {
-    id: "morbus",
-    title: "Morbus (Disease)",
-    color: "text-emerald-400 border-emerald-400/20 bg-emerald-400/[0.02] hover:bg-emerald-400/[0.04] hover:border-emerald-400/35",
-    tagline: "Disease, pathology, dysfunction, suffering, and clinical categories.",
-    detail: "Morbus maps human disease through a multiaxial ontology: primary causes, emergent dysregulations, and clinical classifications.",
-    href: "/platforms/persona/morbus",
-  },
+
   {
     id: "domus",
     title: "Domus (Home)",

@@ -313,37 +313,7 @@ export function PlatformsExplorer() {
 
   return (
     <div className="flex flex-col gap-10">
-      {/* Platform Triad Section */}
-      <section className="flex flex-col gap-7">
-        <h2 className="text-3xl font-semibold tracking-normal text-white sm:text-4xl">
-          The Triad
-        </h2>
 
-        <div className="grid gap-4 lg:grid-cols-3">
-          {platforms.map((platform) => (
-            <Link
-              key={platform.id}
-              href={platform.href}
-              className="group flex flex-col gap-2 border bg-white/[0.025] p-5 transition-colors hover:bg-white/[0.05]"
-              style={{ borderColor: `${platform.color}33` }}
-            >
-              <span
-                className="text-xs font-medium uppercase tracking-[0.18em]"
-                style={{ color: platform.color }}
-              >
-                {platform.short}
-              </span>
-              <h3 className="text-xl font-semibold text-slate-50">
-                {platform.name}
-              </h3>
-              <p className="text-sm leading-6 text-slate-400">{platform.domain}</p>
-              <span className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-slate-300 transition-colors group-hover:text-white">
-                Open platform <span aria-hidden>→</span>
-              </span>
-            </Link>
-          ))}
-        </div>
-      </section>
 
       {/* Systems Map and Interaction Section */}
       <section className="flex flex-col gap-7 border-t border-white/10 pt-10">

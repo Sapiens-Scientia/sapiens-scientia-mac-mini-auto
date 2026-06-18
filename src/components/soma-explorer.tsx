@@ -144,7 +144,7 @@ export function SomaExplorer() {
             Where this system fails — Morbus
           </h4>
           <Link
-            href="/platforms/persona/morbus"
+            href="/platforms/persona/salus/morbus"
             className="font-mono text-[0.7rem] uppercase tracking-wider text-emerald-200/70 transition-colors hover:text-emerald-100"
           >
             Open Morbus →
@@ -155,7 +155,7 @@ export function SomaExplorer() {
             {linkedDiseases.map((disease) => (
               <Link
                 key={disease.id}
-                href={`/platforms/persona/morbus#${disease.id}`}
+                href={`/platforms/persona/salus/morbus#${disease.id}`}
                 className="border border-emerald-200/15 bg-emerald-200/[0.05] px-3 py-1.5 text-sm leading-5 text-emerald-100 transition-colors hover:border-emerald-200/40 hover:text-emerald-50"
               >
                 {disease.name.replace(/ \(.*\)/, "")}

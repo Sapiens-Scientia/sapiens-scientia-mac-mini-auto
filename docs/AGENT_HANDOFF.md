@@ -7,7 +7,7 @@ This file records practical handoff context for future agents working on the Sap
 - The site is a Next.js App Router application using React, Tailwind CSS, and React Three Fiber.
 - Project memory is local to this repository under `docs/`.
 - The homepage is a full-screen 3D experience with overlay panels, time controls, theme support, and platform bridge interactions.
-- The main platform model is `Persona`, `Societas`, `Terra`, with `Soma`, `Salus`, `Morbus`, and `Domus` nested inside Persona.
+- The main platform model is `Persona`, `Societas`, `Terra`, with `Salus` and `Domus` nested inside Persona, and `Soma` and `Morbus` nested inside Salus.
 - Public project routes include the Data Index and EarthView 3D.
 
 ## Read Before Conceptual Changes
@@ -29,7 +29,7 @@ If the implementation reveals a conceptual mismatch or durable constraint, updat
 - `src/lib/earth-systems.ts` is the homepage taxonomy source for Earth Systems, Digital Systems, and platform bridge highlighting.
 - `src/lib/vital-signs.ts` feeds both `/vitals` and homepage vital-sign overlays.
 - `src/lib/data-index.ts` feeds `/projects/sapiens-scientia-data-index` and the Digital Halo/data index surfaces.
-- `src/lib/soma.ts` feeds `/platforms/persona/soma` and the Soma section on `/platforms/persona`.
+- `src/lib/soma.ts` feeds `/platforms/persona/salus/soma` and the Soma section on `/platforms/persona/salus`.
 
 ## Recent Context To Preserve
 

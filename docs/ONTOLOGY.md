@@ -129,7 +129,7 @@ The interpretive lenses that read the Earth and Digital domains.
 ### Sapiens Scientia Persona
 
 - **Lens:** Human Persona Platform — Human embodiment, health, home, and social systems
-- **Modules:** Sapiens Scientia Soma, Sapiens Scientia Salus, Sapiens Scientia Morbus, Sapiens Scientia Domus
+- **Modules:** Sapiens Scientia Salus (containing Sapiens Scientia Soma, Sapiens Scientia Morbus), Sapiens Scientia Domus
 - **Studies (Earth):** cells, microbes, bacteria, viruses, healthcare-system, people, homo-sapiens, homes
 - **Studies (Digital):** life-sciences, databases, knowledge-graphs, decision-support
 

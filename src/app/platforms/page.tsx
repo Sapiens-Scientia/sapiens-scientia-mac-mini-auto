@@ -18,7 +18,7 @@ const platformsList = [
     subtitle: "Human & Intimate Scale",
     color: "text-sky-400 border-sky-400/20 bg-sky-400/[0.02] hover:bg-sky-400/[0.05] hover:border-sky-400/35",
     description: "Studies the human person as an embodied, vulnerable, home-dwelling, health-seeking, and disease-susceptible organism.",
-    modules: ["Soma (Body)", "Salus (Health)", "Morbus (Disease)", "Domus (Home)"],
+    modules: ["Salus (Health)", "Domus (Home)"],
     href: "/platforms/persona",
   },
   {

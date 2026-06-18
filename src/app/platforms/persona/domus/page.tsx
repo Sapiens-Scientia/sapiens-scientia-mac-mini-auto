@@ -132,16 +132,7 @@ export default function DomusModulePage() {
 
         <section className="flex flex-col gap-4 border-t border-white/10 pt-10">
           <h2 className="text-2xl font-semibold text-white">Related Persona Modules</h2>
-          <div className="grid gap-4 sm:grid-cols-3">
-            <Link
-              href="/platforms/persona/soma"
-              className="border border-white/10 bg-white/[0.02] p-4 transition-colors hover:bg-white/[0.045]"
-            >
-              <h3 className="text-lg font-semibold text-rose-300">Soma (Body)</h3>
-              <p className="mt-2 text-sm text-slate-400">
-                Anatomy, physiology, histology, form, and function.
-              </p>
-            </Link>
+          <div className="grid gap-4 sm:grid-cols-1">
             <Link
               href="/platforms/persona/salus"
               className="border border-white/10 bg-white/[0.02] p-4 transition-colors hover:bg-white/[0.045]"
@@ -149,15 +140,6 @@ export default function DomusModulePage() {
               <h3 className="text-lg font-semibold text-blue-400">Salus (Health)</h3>
               <p className="mt-2 text-sm text-slate-400">
                 Health, care, welfare, flourishing, and preservation.
-              </p>
-            </Link>
-            <Link
-              href="/platforms/persona/morbus"
-              className="border border-white/10 bg-white/[0.02] p-4 transition-colors hover:bg-white/[0.045]"
-            >
-              <h3 className="text-lg font-semibold text-emerald-300">Morbus (Disease)</h3>
-              <p className="mt-2 text-sm text-slate-400">
-                Disease, pathology, dysfunction, and clinical categories.
               </p>
             </Link>
           </div>
