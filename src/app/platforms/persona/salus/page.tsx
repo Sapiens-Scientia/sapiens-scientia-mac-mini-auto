@@ -186,8 +186,20 @@ export default function SalusModulePage() {
               </Link>
             </div>
           </div>
+        </section>
 
-          <div className="mt-2 border border-rose-500/20 bg-gradient-to-br from-rose-950/20 via-black to-black p-6 rounded-xl flex flex-col gap-6 transition-all duration-300 hover:border-rose-500/40 hover:shadow-[0_0_30px_rgba(244,63,94,0.06)] relative overflow-hidden group">
+        <section className="flex flex-col gap-7 border-t border-sky-200/15 pt-10">
+          <div className="max-w-3xl">
+            <h2 className="text-3xl font-semibold tracking-normal text-white sm:text-4xl">
+              Human Body
+            </h2>
+            <p className="mt-4 text-base leading-7 text-slate-300">
+              Salus connects the study of pathology and care back to the healthy physical structure of the person — 
+              tracing wellness and disease failures directly to the anatomical and physiological substrates of the organism.
+            </p>
+          </div>
+
+          <div className="border border-rose-500/20 bg-gradient-to-br from-rose-950/20 via-black to-black p-6 rounded-xl flex flex-col gap-6 transition-all duration-300 hover:border-rose-500/40 hover:shadow-[0_0_30px_rgba(244,63,94,0.06)] relative overflow-hidden group">
             {/* Visual glow accent */}
             <div className="absolute top-0 right-0 -mt-6 -mr-6 w-32 h-32 rounded-full bg-rose-500/5 blur-3xl group-hover:bg-rose-500/10 transition-all duration-500 pointer-events-none" />
             
