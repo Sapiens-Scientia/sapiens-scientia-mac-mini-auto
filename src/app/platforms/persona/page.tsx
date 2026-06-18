@@ -40,7 +40,7 @@ export default function PersonaPlatformPage() {
       <section className="mx-auto flex max-w-7xl flex-col gap-12">
         <header className="max-w-4xl">
           <p className="mb-3 text-xl font-medium uppercase tracking-[0.24em] text-blue-400">
-            Sapiens Platforms · Persona
+            Human Individual Platform
           </p>
           <h1 className="text-5xl font-semibold tracking-normal sm:text-7xl">
             Sapiens Scientia Persona
