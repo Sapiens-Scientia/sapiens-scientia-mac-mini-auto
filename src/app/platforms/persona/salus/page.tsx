@@ -161,7 +161,33 @@ export default function SalusModulePage() {
             ))}
           </div>
 
-          <div className="mt-4 border border-rose-500/20 bg-gradient-to-br from-rose-950/20 via-black to-black p-6 rounded-xl flex flex-col gap-6 transition-all duration-300 hover:border-rose-500/40 hover:shadow-[0_0_30px_rgba(244,63,94,0.06)] relative overflow-hidden group">
+          <div className="mt-2 border border-emerald-500/20 bg-gradient-to-br from-emerald-950/20 via-black to-black p-6 rounded-xl flex flex-col gap-6 transition-all duration-300 hover:border-emerald-500/40 hover:shadow-[0_0_30px_rgba(16,185,129,0.06)] relative overflow-hidden group">
+            {/* Visual glow accent */}
+            <div className="absolute top-0 right-0 -mt-6 -mr-6 w-32 h-32 rounded-full bg-emerald-500/5 blur-3xl group-hover:bg-emerald-500/10 transition-all duration-500 pointer-events-none" />
+            
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative z-10">
+              <div className="max-w-xl">
+                <span className="text-xs font-mono font-semibold uppercase tracking-wider text-emerald-400 bg-emerald-400/10 px-2.5 py-1 rounded-full">
+                  Ontology Module
+                </span>
+                <h3 className="text-2xl font-bold tracking-tight text-emerald-200 mt-3">
+                  Morbus
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-300">
+                  Explore the detailed human disease ontology: etiology, physiological failure modes, axis matrices, and classification crosswalks.
+                </p>
+              </div>
+              <Link
+                href="/platforms/persona/salus/soma/morbus"
+                className="inline-flex items-center gap-2 rounded-lg bg-emerald-500/15 px-5 py-2.5 text-sm font-semibold text-emerald-300 transition-all duration-300 hover:bg-emerald-500 hover:text-white hover:scale-[1.02] shadow-md hover:shadow-emerald-500/20"
+              >
+                Open Morbus Explorer
+                <span className="transition-transform group-hover:translate-x-1">→</span>
+              </Link>
+            </div>
+          </div>
+
+          <div className="mt-2 border border-rose-500/20 bg-gradient-to-br from-rose-950/20 via-black to-black p-6 rounded-xl flex flex-col gap-6 transition-all duration-300 hover:border-rose-500/40 hover:shadow-[0_0_30px_rgba(244,63,94,0.06)] relative overflow-hidden group">
             {/* Visual glow accent */}
             <div className="absolute top-0 right-0 -mt-6 -mr-6 w-32 h-32 rounded-full bg-rose-500/5 blur-3xl group-hover:bg-rose-500/10 transition-all duration-500 pointer-events-none" />
             
