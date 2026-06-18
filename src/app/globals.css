@@ -18,6 +18,14 @@
   --accent-amber: #fbbf24;
   --accent-emerald: #34d399;
   --accent-indigo: #818cf8;
+
+  --morbus-card-bg: linear-gradient(135deg, rgba(2, 44, 69, 0.9), #000 55%, #000);
+  --morbus-card-border: rgba(16, 185, 129, 0.2);
+  --morbus-card-shadow: 0 0 30px rgba(16, 185, 129, 0.06);
+  --soma-card-bg: linear-gradient(135deg, rgba(76, 5, 25, 0.76), #000 55%, #000);
+  --soma-card-border: rgba(244, 63, 94, 0.2);
+  --soma-card-shadow: 0 0 30px rgba(244, 63, 94, 0.06);
+  --soma-title-color: #fecdd3;
   
   --grid-line: rgba(255, 255, 255, 0.035);
   --grid-glow: rgba(56, 189, 248, 0.05);
@@ -40,6 +48,24 @@
   --accent-amber: #b45309;
   --accent-emerald: #047857;
   --accent-indigo: #4f46e5;
+
+  --morbus-card-bg: linear-gradient(
+    135deg,
+    rgba(209, 250, 229, 0.78),
+    rgba(250, 248, 245, 0.96) 55%,
+    rgba(236, 253, 245, 0.9)
+  );
+  --morbus-card-border: rgba(5, 150, 105, 0.24);
+  --morbus-card-shadow: 0 14px 36px rgba(6, 78, 59, 0.08);
+  --soma-card-bg: linear-gradient(
+    135deg,
+    rgba(255, 228, 230, 0.82),
+    rgba(250, 248, 245, 0.96) 55%,
+    rgba(255, 241, 242, 0.92)
+  );
+  --soma-card-border: rgba(225, 29, 72, 0.22);
+  --soma-card-shadow: 0 14px 36px rgba(136, 19, 55, 0.08);
+  --soma-title-color: #9f1239;
   
   --grid-line: rgba(28, 25, 23, 0.025);
   --grid-glow: rgba(2, 132, 199, 0.03);
