@@ -18,10 +18,12 @@ export const metadata: Metadata = {
   },
 };
 
-// Applied before first paint so a returning light-mode visitor (or one whose OS
-// prefers light) never sees a flash of the dark theme. Mirrors the storage key
-// and `.light-theme` class that SiteNav toggles.
-const themeInitScript = `(function(){try{var t=localStorage.getItem('sapiens-theme');if(t==='light'||(!t&&window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches)){document.documentElement.classList.add('light-theme');}}catch(e){}})();`;
+// Applied before first paint so a returning light-mode visitor never sees a
+// flash of the dark theme. The site defaults to dark: light mode only applies
+// when the visitor has explicitly chosen it (stored as 'light'); the OS
+// preference is ignored. Mirrors the storage key and `.light-theme` class that
+// SiteNav toggles.
+const themeInitScript = `(function(){try{if(localStorage.getItem('sapiens-theme')==='light'){document.documentElement.classList.add('light-theme');}}catch(e){}})();`;
 
 export default function RootLayout({
   children,
