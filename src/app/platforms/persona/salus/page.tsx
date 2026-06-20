@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { SalusPopulationGlobe } from "@/components/salus-population-globe";
+import { SalusPopulationMap } from "@/components/salus-population-map";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { PlatformCouplingLinks } from "@/components/platform-coupling-links";
@@ -97,14 +97,14 @@ export default function SalusModulePage() {
             Global Human Health
           </h2>
 
-          <SalusPopulationGlobe />
+          <SalusPopulationMap />
           <div className="grid max-w-3xl gap-3 border-l border-sky-200/20 pl-5 text-sm leading-6 text-slate-300">
             <p>
               Salus begins with humanity as a planetary population: unevenly distributed,
               biologically connected, and embedded in local environments.
             </p>
             <p>
-              This globe sketches where human life is concentrated before the module
+              This map shows where human life is concentrated before the module
               descends into health systems, bodies, cells, microbes, bacteria, and viruses.
             </p>
           </div>

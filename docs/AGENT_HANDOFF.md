@@ -35,6 +35,10 @@ If the implementation reveals a conceptual mismatch or durable constraint, updat
   in `public/models/README.md`. Regenerate it from a downloaded Z-Anatomy
   `Startup.blend` with `scripts/build-soma-anatomy.py`; Blender is required only
   for that asset-build step, not at website runtime.
+- The Salus global-health section uses the WorldPop Global 2 graphic at
+  `public/images/salus/worldpop-population-2025.webp`. It depicts estimated 2025
+  residential population in 100 × 100 metre cells; keep the visible source link
+  in `src/components/salus-population-map.tsx` if the presentation changes.
 
 ## Recent Context To Preserve
 

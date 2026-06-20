@@ -26,6 +26,21 @@
   --soma-card-border: rgba(244, 63, 94, 0.2);
   --soma-card-shadow: 0 0 30px rgba(244, 63, 94, 0.06);
   --soma-title-color: #fecdd3;
+
+  --salus-map-bg: #030712;
+  --salus-map-border: rgba(186, 230, 253, 0.15);
+  --salus-map-shadow: 0 0 34px rgba(14, 165, 233, 0.14);
+  --salus-map-wash:
+    radial-gradient(circle at 67% 43%, rgba(14, 165, 233, 0.12), transparent 34%),
+    radial-gradient(circle at 50% 50%, rgba(30, 41, 59, 0.5), transparent 72%);
+  --salus-map-rule: linear-gradient(to right, transparent, rgba(186, 230, 253, 0.3), transparent);
+  --salus-map-image-filter: drop-shadow(0 0 24px rgba(56, 189, 248, 0.12));
+  --salus-map-caption-bg: rgba(0, 0, 0, 0.55);
+  --salus-map-caption-border: rgba(255, 255, 255, 0.1);
+  --salus-map-description: #cbd5e1;
+  --salus-map-eyebrow: rgba(186, 230, 253, 0.9);
+  --salus-map-source: #7dd3fc;
+  --salus-map-source-decoration: rgba(125, 211, 252, 0.35);
   
   --grid-line: rgba(255, 255, 255, 0.035);
   --grid-glow: rgba(56, 189, 248, 0.05);
@@ -66,6 +81,25 @@
   --soma-card-border: rgba(225, 29, 72, 0.22);
   --soma-card-shadow: 0 14px 36px rgba(136, 19, 55, 0.08);
   --soma-title-color: #9f1239;
+
+  --salus-map-bg: #f2eee8;
+  --salus-map-border: rgba(87, 68, 56, 0.16);
+  --salus-map-shadow: 0 18px 48px rgba(73, 54, 40, 0.1);
+  --salus-map-wash:
+    radial-gradient(circle at 67% 43%, rgba(14, 116, 144, 0.1), transparent 34%),
+    radial-gradient(circle at 50% 48%, rgba(255, 255, 255, 0.88), transparent 70%),
+    linear-gradient(rgba(120, 113, 108, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(120, 113, 108, 0.035) 1px, transparent 1px);
+  --salus-map-rule: linear-gradient(to right, transparent, rgba(14, 116, 144, 0.3), transparent);
+  --salus-map-image-filter:
+    saturate(0.86) contrast(1.08)
+    drop-shadow(0 10px 20px rgba(88, 28, 135, 0.12));
+  --salus-map-caption-bg: rgba(250, 248, 245, 0.82);
+  --salus-map-caption-border: rgba(87, 68, 56, 0.13);
+  --salus-map-description: #57534e;
+  --salus-map-eyebrow: #075985;
+  --salus-map-source: #0369a1;
+  --salus-map-source-decoration: rgba(3, 105, 161, 0.32);
   
   --grid-line: rgba(28, 25, 23, 0.025);
   --grid-glow: rgba(2, 132, 199, 0.03);
@@ -107,6 +141,47 @@ body::before {
   pointer-events: none;
   background: radial-gradient(circle at 50% 30%, var(--grid-glow), transparent 70%);
   z-index: 0;
+}
+
+.salus-population-map {
+  background: var(--salus-map-bg);
+  border-color: var(--salus-map-border);
+  box-shadow: var(--salus-map-shadow);
+}
+
+.salus-population-map__wash {
+  background: var(--salus-map-wash);
+  background-size: auto, auto, 32px 32px, 32px 32px;
+}
+
+.salus-population-map__rule {
+  background: var(--salus-map-rule);
+}
+
+.salus-population-map__image {
+  filter: var(--salus-map-image-filter);
+}
+
+.salus-population-map__caption {
+  background: var(--salus-map-caption-bg);
+  border-color: var(--salus-map-caption-border);
+}
+
+.salus-population-map__description {
+  color: var(--salus-map-description);
+}
+
+.salus-population-map__eyebrow {
+  color: var(--salus-map-eyebrow);
+}
+
+.salus-population-map__source {
+  color: var(--salus-map-source);
+  text-decoration-color: var(--salus-map-source-decoration);
+}
+
+.salus-population-map__source:hover {
+  color: var(--foreground);
 }
 
 * {
