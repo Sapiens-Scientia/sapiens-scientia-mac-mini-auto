@@ -47,22 +47,35 @@
 }
 
 .light-theme {
-  --background: #faf8f5; /* Calm off-white / paper */
-  --foreground: #1c1917; /* Dark warm gray / ink */
+  --background: #f3f0ea;
+  --foreground: #211d19;
   
-  --panel-bg: rgba(28, 25, 23, 0.035);
-  --panel-border: rgba(28, 25, 23, 0.08);
-  --panel-hover: rgba(28, 25, 23, 0.06);
-  --border-color: rgba(28, 25, 23, 0.12);
+  --surface-subtle: rgba(255, 255, 255, 0.42);
+  --surface: rgba(255, 255, 255, 0.7);
+  --surface-raised: rgba(255, 255, 255, 0.9);
+  --surface-inset: rgba(96, 78, 62, 0.07);
+  --panel-bg: var(--surface);
+  --panel-border: rgba(68, 56, 46, 0.15);
+  --panel-hover: rgba(255, 255, 255, 0.94);
+  --border-color: rgba(68, 56, 46, 0.21);
   
-  --text-primary: #1c1917;
-  --text-secondary: #44403c;
-  --text-muted: #78716c;
+  --text-primary: #211d19;
+  --text-secondary: #514a43;
+  --text-muted: #716960;
+  --text-faint: #8b8278;
   
-  --accent-blue: #0284c7;
-  --accent-amber: #b45309;
+  --accent-blue: #0369a1;
+  --accent-amber: #a64b08;
   --accent-emerald: #047857;
   --accent-indigo: #4f46e5;
+  --accent-rose: #be123c;
+  --accent-purple: #7e22ce;
+  --accent-orange: #c2410c;
+  --accent-teal: #0f766e;
+  --diagram-core-bg: #fbfaf7;
+  --diagram-core-border: rgba(68, 56, 46, 0.24);
+  --chart-point-bg: #fbfaf7;
+  --rail-node-bg: #f3f0ea;
 
   --morbus-card-bg: linear-gradient(
     135deg,
@@ -101,13 +114,11 @@
   --salus-map-source: #0369a1;
   --salus-map-source-decoration: rgba(3, 105, 161, 0.32);
   
-  --grid-line: rgba(28, 25, 23, 0.025);
-  --grid-glow: rgba(2, 132, 199, 0.03);
+  --grid-line: rgba(68, 56, 46, 0.035);
+  --grid-glow: rgba(3, 105, 161, 0.055);
 
-  /* Translucent paper surface for glass panels (nav, overlays) that use
-     bg-black/XX in the markup. Kept fairly opaque so backdrop-blur text
-     stays readable over busy 3D scenes. */
-  --glass-bg: rgba(250, 248, 245, 0.78);
+  --glass-bg: rgba(248, 246, 241, 0.88);
+  color-scheme: light;
 }
 
 @theme inline {
@@ -225,7 +236,7 @@ canvas {
 }
 
 .light-theme .hover\:bg-black\/60:hover {
-  background-color: var(--panel-hover) !important;
+  background-color: var(--surface-raised) !important;
 }
 
 .light-theme .text-white {
@@ -256,6 +267,10 @@ canvas {
   color: var(--text-muted) !important;
 }
 
+.light-theme .text-slate-600 {
+  color: var(--text-faint) !important;
+}
+
 /* Opacity-suffixed slate variants used by the homepage earth overlay (system
    trees, clock, vitals feed). Without these the text renders near-white on the
    light scene and is barely legible. */
@@ -274,18 +289,65 @@ canvas {
 .light-theme .text-sky-100,
 .light-theme .text-sky-300,
 .light-theme .text-blue-200,
+.light-theme .text-blue-300,
+.light-theme .text-blue-300\/90,
+.light-theme .text-sky-200\/80,
+.light-theme .text-sky-400,
 .light-theme .text-blue-300\/80,
 .light-theme .text-blue-300\/85 {
   color: var(--accent-blue) !important;
 }
 
+.light-theme .text-emerald-100,
+.light-theme .text-emerald-200,
+.light-theme .text-emerald-200\/70,
 .light-theme .text-emerald-300,
+.light-theme .text-emerald-300\/80,
+.light-theme .text-emerald-300\/90,
+.light-theme .text-emerald-400,
 .light-theme .text-emerald-400\/80 {
   color: var(--accent-emerald) !important;
 }
 
+.light-theme .text-amber-200,
+.light-theme .text-amber-200\/70,
+.light-theme .text-amber-300,
+.light-theme .text-amber-400,
 .light-theme .text-amber-400\/80 {
   color: var(--accent-amber) !important;
+}
+
+.light-theme .text-rose-50,
+.light-theme .text-rose-100,
+.light-theme .text-rose-100\/55,
+.light-theme .text-rose-200,
+.light-theme .text-rose-200\/65,
+.light-theme .text-rose-300,
+.light-theme .text-rose-300\/70,
+.light-theme .text-rose-300\/80,
+.light-theme .text-rose-300\/90,
+.light-theme .text-rose-400,
+.light-theme .text-rose-950\/55 {
+  color: var(--accent-rose) !important;
+}
+
+.light-theme .text-indigo-200,
+.light-theme .text-indigo-300,
+.light-theme .text-indigo-400 {
+  color: var(--accent-indigo) !important;
+}
+
+.light-theme .text-purple-300 {
+  color: var(--accent-purple) !important;
+}
+
+.light-theme .text-orange-300\/90,
+.light-theme .text-orange-400 {
+  color: var(--accent-orange) !important;
+}
+
+.light-theme .text-teal-300 {
+  color: var(--accent-teal) !important;
 }
 
 /* Borders */
@@ -293,8 +355,18 @@ canvas {
   border-color: var(--panel-border) !important;
 }
 
+.light-theme .border-white\/5,
+.light-theme .border-white\/8,
+.light-theme .border-white\/12 {
+  border-color: var(--panel-border) !important;
+}
+
 .light-theme .border-white\/15 {
   border-color: var(--border-color) !important;
+}
+
+.light-theme .border-white\/25 {
+  border-color: rgba(68, 56, 46, 0.3) !important;
 }
 
 .light-theme .divide-white\/10 > * + * {
@@ -305,29 +377,49 @@ canvas {
   border-color: var(--border-color) !important;
 }
 
-/* Card/Panel Backgrounds */
-.light-theme .bg-white\/\[0\.025\] {
-  background-color: var(--panel-bg) !important;
-}
-
-.light-theme .bg-white\/\[0\.03\] {
-  background-color: var(--panel-bg) !important;
-}
-
-.light-theme .bg-white\/\[0\.035\] {
-  background-color: var(--panel-bg) !important;
-}
-
+/* Dark mode uses tiny white alpha values to lift cards off black. In light
+   mode those same values disappear, so map them onto an intentional paper
+   elevation system instead of mathematically inverting them. */
+.light-theme .bg-white\/\[0\.01\],
+.light-theme .bg-white\/\[0\.015\],
 .light-theme .bg-white\/\[0\.02\] {
-  background-color: var(--panel-bg) !important;
+  background-color: var(--surface-subtle) !important;
+}
+
+.light-theme .bg-white\/\[0\.025\],
+.light-theme .bg-white\/\[0\.03\],
+.light-theme .bg-white\/\[0\.035\],
+.light-theme .bg-white\/\[0\.04\],
+.light-theme .bg-white\/8,
+.light-theme .bg-white\/10,
+.light-theme .bg-white\/12 {
+  background-color: var(--surface) !important;
+}
+
+.light-theme .bg-white\/70 {
+  background-color: var(--surface-raised) !important;
+}
+
+.light-theme .bg-slate-800,
+.light-theme .bg-slate-900,
+.light-theme .bg-\[\#0a0a0a\] {
+  background-color: var(--surface-inset) !important;
 }
 
 .light-theme .hover\:bg-white\/\[0\.025\]:hover {
-  background-color: var(--panel-hover) !important;
+  background-color: var(--surface-raised) !important;
 }
 
+.light-theme .hover\:bg-white\/\[0\.01\]:hover,
+.light-theme .hover\:bg-white\/\[0\.02\]:hover,
+.light-theme .hover\:bg-white\/\[0\.04\]:hover,
+.light-theme .hover\:bg-white\/\[0\.045\]:hover,
+.light-theme .hover\:bg-white\/\[0\.05\]:hover,
+.light-theme .hover\:bg-white\/\[0\.055\]:hover,
+.light-theme .hover\:bg-white\/\[0\.06\]:hover,
+.light-theme .hover\:bg-white\/\[0\.07\]:hover,
 .light-theme .hover\:bg-white\/\[0\.08\]:hover {
-  background-color: var(--panel-hover) !important;
+  background-color: var(--surface-raised) !important;
 }
 
 .light-theme .group:hover .group-hover\:text-white {
@@ -336,6 +428,38 @@ canvas {
 
 .light-theme .hover\:text-white:hover {
   color: var(--foreground) !important;
+}
+
+.light-theme .hover\:text-slate-200:hover,
+.light-theme .hover\:text-slate-300:hover {
+  color: var(--foreground) !important;
+}
+
+.light-theme .hover\:text-sky-50:hover,
+.light-theme .hover\:text-sky-200:hover,
+.light-theme .hover\:text-sky-300:hover,
+.light-theme .hover\:text-blue-300:hover {
+  color: var(--accent-blue) !important;
+}
+
+.light-theme .hover\:text-emerald-50:hover,
+.light-theme .hover\:text-emerald-100:hover,
+.light-theme .hover\:text-emerald-200:hover {
+  color: var(--accent-emerald) !important;
+}
+
+.light-theme .hover\:text-amber-50:hover,
+.light-theme .hover\:text-amber-200:hover {
+  color: var(--accent-amber) !important;
+}
+
+.light-theme .hover\:text-rose-50:hover,
+.light-theme .hover\:text-rose-200:hover {
+  color: var(--accent-rose) !important;
+}
+
+.light-theme .hover\:text-indigo-50:hover {
+  color: var(--accent-indigo) !important;
 }
 
 /* Accent overrides for platforms and disease groups */
@@ -363,54 +487,158 @@ canvas {
   border-color: var(--panel-border) !important;
 }
 
-.light-theme .border-amber-300\/25 {
+.light-theme .border-amber-200\/15,
+.light-theme .border-amber-300\/25,
+.light-theme .border-amber-300\/40 {
   border-color: var(--accent-amber) !important;
-  opacity: 0.7;
 }
 
-.light-theme .border-emerald-300\/25 {
+.light-theme .border-emerald-200\/15,
+.light-theme .border-emerald-200\/20,
+.light-theme .border-emerald-300\/20,
+.light-theme .border-emerald-300\/25,
+.light-theme .border-emerald-300\/40,
+.light-theme .border-emerald-400\/20,
+.light-theme .border-emerald-400\/25,
+.light-theme .border-emerald-400\/30,
+.light-theme .border-emerald-400\/35,
+.light-theme .border-emerald-500\/20,
+.light-theme .border-emerald-500\/30 {
   border-color: var(--accent-emerald) !important;
-  opacity: 0.7;
+}
+
+.light-theme .border-blue-300\/24,
+.light-theme .border-blue-400\/20,
+.light-theme .border-blue-400\/40 {
+  border-color: rgba(3, 105, 161, 0.34) !important;
+}
+
+.light-theme .border-rose-100\/10,
+.light-theme .border-rose-200\/10,
+.light-theme .border-rose-200\/15,
+.light-theme .border-rose-300\/20,
+.light-theme .border-rose-300\/30,
+.light-theme .border-rose-300\/50,
+.light-theme .border-rose-500\/10,
+.light-theme .border-rose-950\/10 {
+  border-color: rgba(190, 18, 60, 0.25) !important;
+}
+
+.light-theme .border-indigo-300\/20,
+.light-theme .border-indigo-400\/20,
+.light-theme .border-indigo-400\/30 {
+  border-color: rgba(79, 70, 229, 0.28) !important;
+}
+
+.light-theme .border-orange-500\/20,
+.light-theme .border-orange-500\/30 {
+  border-color: rgba(194, 65, 12, 0.3) !important;
+}
+
+.light-theme .border-teal-400\/30 {
+  border-color: rgba(15, 118, 110, 0.3) !important;
 }
 
 .light-theme .bg-emerald-200\/\[0\.035\] {
-  background-color: var(--panel-bg) !important;
+  background-color: rgba(5, 150, 105, 0.08) !important;
 }
 
 .light-theme .bg-emerald-200\/\[0\.055\] {
-  background-color: var(--panel-bg) !important;
+  background-color: rgba(5, 150, 105, 0.1) !important;
 }
 
 .light-theme .bg-sky-200\/\[0\.055\] {
-  background-color: var(--panel-bg) !important;
+  background-color: rgba(3, 105, 161, 0.09) !important;
 }
 
 .light-theme .bg-amber-200\/\[0\.05\] {
-  background-color: var(--panel-bg) !important;
+  background-color: rgba(166, 75, 8, 0.09) !important;
 }
 
 .light-theme .bg-emerald-200\/\[0\.05\] {
-  background-color: var(--panel-bg) !important;
+  background-color: rgba(5, 150, 105, 0.09) !important;
 }
 
 .light-theme .bg-amber-200\/\[0\.035\] {
-  background-color: var(--panel-bg) !important;
+  background-color: rgba(166, 75, 8, 0.075) !important;
 }
 
 .light-theme .bg-emerald-200\/\[0\.03\] {
-  background-color: var(--panel-bg) !important;
+  background-color: rgba(5, 150, 105, 0.07) !important;
 }
 
-.light-theme .text-emerald-100 {
-  color: var(--accent-emerald) !important;
+.light-theme .bg-emerald-300\/10,
+.light-theme .bg-emerald-300\/15,
+.light-theme .bg-emerald-300\/\[0\.02\],
+.light-theme .bg-emerald-300\/\[0\.04\],
+.light-theme .bg-emerald-300\/\[0\.06\],
+.light-theme .bg-emerald-400\/5,
+.light-theme .bg-emerald-400\/10,
+.light-theme .bg-emerald-400\/\[0\.02\],
+.light-theme .bg-emerald-400\/\[0\.03\],
+.light-theme .bg-emerald-400\/\[0\.035\],
+.light-theme .bg-emerald-400\/\[0\.04\],
+.light-theme .bg-emerald-400\/\[0\.05\],
+.light-theme .bg-emerald-500\/5,
+.light-theme .bg-emerald-500\/10,
+.light-theme .bg-emerald-500\/15,
+.light-theme .bg-emerald-500\/\[0\.01\],
+.light-theme .bg-emerald-500\/\[0\.02\] {
+  background-color: rgba(5, 150, 105, 0.09) !important;
 }
 
-.light-theme .text-emerald-200 {
-  color: var(--accent-emerald) !important;
+.light-theme .bg-sky-400\/5,
+.light-theme .bg-sky-400\/10,
+.light-theme .bg-sky-400\/\[0\.02\],
+.light-theme .bg-sky-500\/\[0\.01\] {
+  background-color: rgba(3, 105, 161, 0.085) !important;
 }
 
-.light-theme .text-emerald-300\/90 {
-  color: var(--accent-emerald) !important;
+.light-theme .bg-blue-400\/\[0\.02\] {
+  background-color: rgba(3, 105, 161, 0.075) !important;
+}
+
+.light-theme .bg-amber-200\/\[0\.05\] {
+  background-color: rgba(166, 75, 8, 0.09) !important;
+}
+
+.light-theme .bg-rose-200\/\[0\.05\],
+.light-theme .bg-rose-300\/10,
+.light-theme .bg-rose-300\/\[0\.02\],
+.light-theme .bg-rose-400\/10,
+.light-theme .bg-rose-500\/5,
+.light-theme .bg-rose-500\/15 {
+  background-color: rgba(190, 18, 60, 0.08) !important;
+}
+
+.light-theme .bg-indigo-300\/\[0\.02\],
+.light-theme .bg-indigo-400\/5,
+.light-theme .bg-indigo-400\/\[0\.02\] {
+  background-color: rgba(79, 70, 229, 0.075) !important;
+}
+
+.light-theme .bg-purple-500\/\[0\.01\] {
+  background-color: rgba(126, 34, 206, 0.075) !important;
+}
+
+.light-theme .bg-orange-400\/\[0\.03\],
+.light-theme .bg-orange-500\/10,
+.light-theme .bg-orange-500\/\[0\.02\] {
+  background-color: rgba(194, 65, 12, 0.08) !important;
+}
+
+.light-theme .bg-teal-400\/5 {
+  background-color: rgba(15, 118, 110, 0.075) !important;
+}
+
+.light-theme .hover\:bg-emerald-500:hover {
+  background-color: var(--accent-emerald) !important;
+  color: #ffffff !important;
+}
+
+.light-theme .hover\:bg-rose-500:hover {
+  background-color: var(--accent-rose) !important;
+  color: #ffffff !important;
 }
 
 .light-theme .text-sky-200\/70 {
@@ -429,30 +657,11 @@ canvas {
   color: var(--accent-blue) !important;
 }
 
-.light-theme .text-amber-200\/70 {
-  color: var(--accent-amber) !important;
-}
-
-.light-theme .text-amber-200 {
-  color: var(--accent-amber) !important;
-}
-
-.light-theme .text-amber-300 {
-  color: var(--accent-amber) !important;
-}
-
-.light-theme .text-indigo-400 {
-  color: var(--accent-indigo) !important;
-}
-
-.light-theme .text-indigo-300 {
-  color: var(--accent-indigo) !important;
-}
-
 .light-theme .theme-toggle-btn {
   border-color: var(--panel-border) !important;
-  background-color: var(--panel-bg) !important;
+  background-color: var(--surface-raised) !important;
   color: var(--text-secondary) !important;
+  box-shadow: 0 1px 2px rgba(46, 38, 31, 0.06);
 }
 
 .light-theme .theme-toggle-btn:hover {
@@ -483,7 +692,8 @@ canvas {
 }
 
 .light-theme svg circle[fill="#04060c"] {
-  fill: var(--background) !important;
+  fill: var(--diagram-core-bg) !important;
+  stroke: var(--diagram-core-border) !important;
 }
 
 .light-theme svg path[stroke="#64748b"] {
@@ -504,6 +714,36 @@ canvas {
 .light-theme select option {
   background-color: var(--background) !important;
   color: var(--foreground) !important;
+}
+
+.light-theme input,
+.light-theme textarea {
+  color: var(--foreground);
+  caret-color: var(--accent-blue);
+}
+
+.light-theme input::placeholder,
+.light-theme textarea::placeholder {
+  color: var(--text-faint);
+}
+
+.light-theme .shadow-lg {
+  box-shadow:
+    0 1px 2px rgba(46, 38, 31, 0.06),
+    0 12px 30px rgba(46, 38, 31, 0.08) !important;
+}
+
+.light-theme .site-wordmark {
+  background-image: linear-gradient(90deg, #047857, #0369a1);
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.72));
+}
+
+.light-theme .earth-hero .bg-black\/42,
+.light-theme .earth-hero .bg-black\/48 {
+  border: 1px solid rgba(68, 56, 46, 0.13);
+  box-shadow:
+    0 1px 2px rgba(46, 38, 31, 0.06),
+    0 12px 34px rgba(46, 38, 31, 0.09) !important;
 }
 
 /* Vital-signs sparklines draw their historical line in on first paint. The

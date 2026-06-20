@@ -54,7 +54,7 @@ export function EarthHero() {
   }, []);
 
   return (
-    <section className="relative h-screen min-h-[48rem] overflow-hidden bg-black">
+    <section className="earth-hero relative h-screen min-h-[48rem] overflow-hidden bg-black">
       <div ref={sceneRef} className="absolute inset-0 h-full w-full">
         <Canvas
           camera={{ position: [0, 0.28, 9.99], fov: 45 }}

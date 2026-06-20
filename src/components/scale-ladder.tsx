@@ -188,7 +188,7 @@ export function ScaleLadder() {
                       <span
                         className="relative inline-flex h-2.5 w-2.5 rounded-full"
                         style={{
-                          backgroundColor: isActive || rung.here ? color : "#0f172a",
+                          backgroundColor: isActive || rung.here ? color : "var(--rail-node-bg, #0f172a)",
                           boxShadow: `0 0 0 1.5px ${color}`,
                         }}
                       />

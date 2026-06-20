@@ -223,7 +223,7 @@ export function VitalSignChart({ sign }: { sign: EarthVitalSign }) {
             cx={getX(p.year)}
             cy={getY(p.value)}
             r={hoveredPoint?.year === p.year ? 4 : 2}
-            fill="#0f172a"
+            fill="var(--chart-point-bg, #0f172a)"
             stroke={sign.accent}
             strokeWidth={1.5}
             className="transition-all duration-200"
@@ -237,7 +237,7 @@ export function VitalSignChart({ sign }: { sign: EarthVitalSign }) {
             cx={getX(p.year)}
             cy={getY(p.value)}
             r={hoveredPoint?.year === p.year ? 4 : 2}
-            fill="#0f172a"
+            fill="var(--chart-point-bg, #0f172a)"
             stroke={sign.accent}
             strokeWidth={1.25}
             strokeDasharray="1 1"
@@ -260,7 +260,7 @@ export function VitalSignChart({ sign }: { sign: EarthVitalSign }) {
               cy={getY(livePoint.value)}
               r={4}
               fill={sign.accent}
-              stroke="#0f172a"
+              stroke="var(--chart-point-bg, #0f172a)"
               strokeWidth={1.5}
             />
           </g>

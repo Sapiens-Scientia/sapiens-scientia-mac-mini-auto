@@ -32,6 +32,16 @@ Do not rename these or introduce replacements unless the change intentionally up
 
 The first screen is the actual Sapiens Scientia experience, not a marketing landing page. The homepage should remain centered on the interactive Physical Earth / Digital Halo / Meta Earth model plus the Sapiens Platforms bridge.
 
+## Treat Light Mode As A Distinct Editorial Theme
+
+Light mode is a first-class visual system, not a direct inversion of dark mode.
+It uses a warm paper canvas, raised white surfaces, ink-based text hierarchy,
+stronger warm-gray borders, and darker platform accents chosen for contrast on
+paper. Keep the semantic light-theme tokens in `src/app/globals.css` as the
+central mapping for shared surfaces and controls; avoid adding page-local
+hard-coded white or near-black substitutions when a theme token can express the
+same role.
+
 ## Treat Data Modules As Editorial Sources Of Truth
 
 The most important public concepts are expressed in TypeScript data modules:
@@ -68,4 +78,3 @@ This leaves `Persona` with two direct modules: `Salus` (Health) and `Domus` (Hom
 The disease ontology module (`Morbus`) has been nested under the body module (`Soma`), which resides under the health module (`Salus`). The new path is `/platforms/persona/salus/soma/morbus` (residing in `src/app/platforms/persona/salus/soma/morbus/page.tsx`).
 
 This establishes a nested hierarchy: `Persona` -> `Salus` (Health) -> `Soma` (Body) -> `Morbus` (Disease). Organisms are understood first through their healthy physiological substrate (`Soma`), while pathological states (`Morbus`) are modeled directly as failures of specific body systems.
-

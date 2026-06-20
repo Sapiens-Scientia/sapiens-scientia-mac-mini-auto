@@ -153,7 +153,14 @@ export function TerraExplorer() {
               })}
 
               {/* Central Core Overlay */}
-              <circle cx={cx} cy={cy} r={28} fill="#04060c" stroke="#1e293b" strokeWidth="1.5" />
+              <circle
+                cx={cx}
+                cy={cy}
+                r={28}
+                fill="var(--diagram-core-bg, #04060c)"
+                stroke="var(--diagram-core-border, #1e293b)"
+                strokeWidth="1.5"
+              />
               <text x={cx} y={cy + 3} textAnchor="middle" fontSize="9" fill="#64748b" letterSpacing="1.5" fontWeight="600">
                 PLANET
               </text>

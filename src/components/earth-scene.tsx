@@ -174,7 +174,7 @@ function EarthSunOrbitModel({
             font={labelFont}
             fontSize={0.09}
             fontWeight={300}
-            outlineColor={theme === "light" ? "#faf8f5" : "#000000"}
+            outlineColor={theme === "light" ? "#f3f0ea" : "#000000"}
             outlineWidth={0.008}
             renderOrder={40}
           >
@@ -202,11 +202,11 @@ function EarthSunOrbitModel({
                 <Text
                   anchorX="center"
                   anchorY="middle"
-                  color={theme === "light" ? "#1c1917" : "#d8eeff"}
+                  color={theme === "light" ? "#211d19" : "#d8eeff"}
                   font={labelFont}
                   fontSize={0.08}
                   fontWeight={300}
-                  outlineColor={theme === "light" ? "#faf8f5" : "#000000"}
+                  outlineColor={theme === "light" ? "#f3f0ea" : "#000000"}
                   outlineWidth={0.007}
                   renderOrder={42}
                 >
@@ -224,11 +224,11 @@ function EarthSunOrbitModel({
               <Text
                 anchorX="center"
                 anchorY="middle"
-                color={theme === "light" ? "#0284c7" : "#93c5fd"}
+                color={theme === "light" ? "#0369a1" : "#93c5fd"}
                 font={labelFont}
                 fontSize={0.09}
                 fontWeight={300}
-                outlineColor={theme === "light" ? "#faf8f5" : "#000000"}
+                outlineColor={theme === "light" ? "#f3f0ea" : "#000000"}
                 outlineWidth={0.008}
                 renderOrder={43}
               >
@@ -255,7 +255,7 @@ function EarthSunOrbitModel({
                   font={labelFont}
                   fontSize={0.08}
                   fontWeight={300}
-                  outlineColor={theme === "light" ? "#faf8f5" : "#000000"}
+                  outlineColor={theme === "light" ? "#f3f0ea" : "#000000"}
                   outlineWidth={0.008}
                   renderOrder={44}
                 >
@@ -279,11 +279,11 @@ function EarthSunOrbitModel({
           <Text
             anchorX="center"
             anchorY="middle"
-            color={theme === "light" ? "#0284c7" : "#ffffff"}
+            color={theme === "light" ? "#0369a1" : "#ffffff"}
             font={labelFont}
             fontSize={0.094}
             fontWeight={300}
-            outlineColor={theme === "light" ? "#faf8f5" : "#000000"}
+            outlineColor={theme === "light" ? "#f3f0ea" : "#000000"}
             outlineWidth={0.008}
             renderOrder={45}
           >
@@ -510,7 +510,7 @@ function DigitalHalo({
           <bufferAttribute attach="attributes-position" args={[nodePositions, 3]} />
         </bufferGeometry>
         <pointsMaterial
-          color={theme === "light" ? "#0284c7" : "#b8ecff"}
+          color={theme === "light" ? "#0369a1" : "#b8ecff"}
           size={0.074}
           sizeAttenuation
           transparent
@@ -661,11 +661,11 @@ function DataIndexHaloNode({
           ref={labelRef}
           anchorX="center"
           anchorY="middle"
-          color={theme === "light" ? "#1c1917" : "#ffffff"}
+          color={theme === "light" ? "#211d19" : "#ffffff"}
           font={labelFont}
           fontSize={isHovered ? 0.072 : 0.055}
           fontWeight={300}
-          outlineColor={theme === "light" ? "#faf8f5" : "#000000"}
+          outlineColor={theme === "light" ? "#f3f0ea" : "#000000"}
           outlineWidth={0.008}
           renderOrder={55}
         >
@@ -887,11 +887,11 @@ function GlobeLabel({
         <Text
           anchorX="center"
           anchorY="middle"
-          color={theme === "light" ? "#1c1917" : "#ffffff"}
+          color={theme === "light" ? "#211d19" : "#ffffff"}
           font={earthLabelFont}
           fontSize={0.18}
           fontWeight={700}
-          outlineColor={theme === "light" ? "#faf8f5" : "#000000"}
+          outlineColor={theme === "light" ? "#f3f0ea" : "#000000"}
           outlineWidth={0.012}
           renderOrder={10}
         >
@@ -932,11 +932,11 @@ function MetaEarthLabel({
         <Text
           anchorX="center"
           anchorY="middle"
-          color={isMerged ? (theme === "light" ? "#0284c7" : "#b8ecff") : (theme === "light" ? "#1c1917" : "#ffffff")}
+          color={isMerged ? (theme === "light" ? "#0369a1" : "#b8ecff") : (theme === "light" ? "#211d19" : "#ffffff")}
           font={earthLabelFont}
           fontSize={0.17}
           fontWeight={700}
-          outlineColor={theme === "light" ? "#faf8f5" : "#000000"}
+          outlineColor={theme === "light" ? "#f3f0ea" : "#000000"}
           outlineWidth={0.012}
           renderOrder={12}
         >
@@ -1010,22 +1010,22 @@ export function EarthScene({
 
   return (
     <>
-      <color attach="background" args={[theme === "light" ? "#faf8f5" : "#000000"]} />
-      <ambientLight intensity={theme === "light" ? 1.45 : 0.9} />
+      <color attach="background" args={[theme === "light" ? "#f3f0ea" : "#000000"]} />
+      <ambientLight intensity={theme === "light" ? 1.2 : 0.9} />
       <directionalLight 
         position={[-3, 2.6, 4]} 
-        intensity={theme === "light" ? 2.5 : 2.1} 
-        color={theme === "light" ? "#ffffff" : "#fff4df"} 
+        intensity={theme === "light" ? 2.1 : 2.1}
+        color={theme === "light" ? "#fffdf8" : "#fff4df"}
       />
       <pointLight 
         position={[2.9, 1.6, 2.2]} 
-        intensity={theme === "light" ? 2.4 : 3.2} 
-        color={theme === "light" ? "#0284c7" : "#278aff"} 
+        intensity={theme === "light" ? 1.8 : 3.2}
+        color={theme === "light" ? "#0369a1" : "#278aff"}
       />
       <pointLight 
         position={[0, 1.4, 2.8]} 
-        intensity={theme === "light" ? 0.9 : 1.3} 
-        color={theme === "light" ? "#0ea5e9" : "#8ff2ff"} 
+        intensity={theme === "light" ? 0.65 : 1.3}
+        color={theme === "light" ? "#0e7490" : "#8ff2ff"}
       />
       {theme === "dark" && (
         <Stars radius={16} depth={24} count={900} factor={2.4} saturation={0} fade speed={0.18} />

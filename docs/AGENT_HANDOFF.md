@@ -39,6 +39,10 @@ If the implementation reveals a conceptual mismatch or durable constraint, updat
   `public/images/salus/worldpop-population-2025.webp`. It depicts estimated 2025
   residential population in 100 × 100 metre cells; keep the visible source link
   in `src/components/salus-population-map.tsx` if the presentation changes.
+- Light mode is an independent warm-paper editorial theme. Shared canvas,
+  surface, ink, border, diagram, and accent tokens live in
+  `src/app/globals.css`; extend those semantic tokens rather than adding
+  component-specific inverse colors.
 
 ## Recent Context To Preserve
 
