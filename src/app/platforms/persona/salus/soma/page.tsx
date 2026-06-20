@@ -237,7 +237,14 @@ export default function SomaPage() {
             </div>
           </div>
 
-          <div className="mt-2 border border-emerald-500/20 bg-gradient-to-r from-emerald-950/20 via-black to-black p-6 rounded-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-all hover:border-emerald-500/40 hover:shadow-[0_0_30px_rgba(16,185,129,0.06)] relative overflow-hidden group">
+          <div
+            className="group relative mt-2 flex flex-col items-start justify-between gap-4 overflow-hidden rounded-xl border p-6 transition-all hover:border-emerald-500/40 md:flex-row md:items-center"
+            style={{
+              backgroundImage: "var(--morbus-card-bg)",
+              borderColor: "var(--morbus-card-border)",
+              boxShadow: "var(--morbus-card-shadow)",
+            }}
+          >
             {/* Visual glow accent */}
             <div className="absolute top-0 right-0 -mt-6 -mr-6 w-32 h-32 rounded-full bg-emerald-500/5 blur-3xl group-hover:bg-emerald-500/10 transition-all duration-500 pointer-events-none" />
             
