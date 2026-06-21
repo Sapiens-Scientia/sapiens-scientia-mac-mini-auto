@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "[ -e node_modules ] || ln -s \"$(git rev-parse --git-common-dir)/../node_modules\" node_modules"
+            "command": "[ -d node_modules ] || npm install"
           }
         ]
       }
