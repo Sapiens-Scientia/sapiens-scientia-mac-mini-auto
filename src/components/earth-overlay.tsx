@@ -569,7 +569,7 @@ function EarthSystemsColumn({
               onClick={() => setIsVitalSignsOpen((value) => !value)}
             />
           )}
-          title="Earth Systems"
+          title="Physical Systems"
           nodes={earthSystemNodes}
         />
       </div>
