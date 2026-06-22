@@ -19,7 +19,6 @@ import { useLiveVitalSigns, type LiveVitalSignsStatus } from "@/hooks/use-live-v
 import { VitalSignChart } from "@/components/vital-sign-chart";
 import { useTheme } from "@/lib/use-theme";
 
-type PopoutSide = "left" | "right";
 
 
 
@@ -95,26 +94,31 @@ function ConceptColumn({
   align,
   highlights,
   nodes,
-  headerAction,
-  headerActionPosition = "after",
   noWrapTitle = false,
   onPanelPointerEnter,
   onPanelPointerLeave,
+  onTitleClick,
   panelRef,
   size = "large",
   title,
+  titleControlsId,
+  titleExpanded,
+  titleLabel,
 }: {
   align: "left" | "center" | "right";
-  headerAction?: React.ReactNode;
-  headerActionPosition?: "before" | "after";
   highlights?: ConceptHighlight[];
   noWrapTitle?: boolean;
   nodes: ConceptNode[];
   onPanelPointerEnter?: () => void;
   onPanelPointerLeave?: () => void;
+  /** When set, the header title becomes the button that toggles the panel. */
+  onTitleClick?: () => void;
   panelRef?: RefObject<HTMLElement | null>;
   size?: "large" | "compact";
   title: string;
+  titleControlsId?: string;
+  titleExpanded?: boolean;
+  titleLabel?: string;
 }) {
   const isRightAligned = align === "right";
   const isCenterAligned = align === "center";
@@ -158,16 +162,31 @@ function ConceptColumn({
           isCenterAligned ? "justify-center" : "",
         ].join(" ")}
       >
-        {headerActionPosition === "before" ? headerAction : null}
         <h2
           className={[
             "text-2xl font-semibold leading-none text-white max-lg:text-xl",
             noWrapTitle ? "whitespace-nowrap" : "",
           ].join(" ")}
         >
-          {title}
+          {onTitleClick ? (
+            <button
+              type="button"
+              onClick={onTitleClick}
+              aria-expanded={titleExpanded}
+              aria-controls={titleControlsId}
+              aria-label={
+                titleLabel
+                  ? `${titleExpanded ? "Hide" : "Show"} ${titleLabel}`
+                  : undefined
+              }
+              className="cursor-pointer text-inherit transition-colors hover:text-blue-200 focus:outline-none focus-visible:text-blue-200"
+            >
+              {title}
+            </button>
+          ) : (
+            title
+          )}
         </h2>
-        {headerActionPosition === "after" ? headerAction : null}
       </div>
       <ol className="space-y-1.5">
         {nodes.map((node) => (
@@ -252,42 +271,6 @@ function ConceptColumnNode({
         )}
       </span>
     </li>
-  );
-}
-
-function PopoutToggleButton({
-  controlsId,
-  isOpen,
-  label,
-  side = "right",
-  onClick,
-}: {
-  controlsId: string;
-  isOpen: boolean;
-  label: string;
-  side?: PopoutSide;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      aria-label={isOpen ? `Hide ${label}` : `Show ${label}`}
-      aria-expanded={isOpen}
-      aria-controls={controlsId}
-      className="grid h-7 w-7 shrink-0 place-items-center border border-blue-300/24 bg-black/54 text-blue-200 shadow-[0_0_18px_rgba(59,130,246,0.16)] transition hover:border-blue-300/50 hover:text-white focus:outline-none focus-visible:border-blue-300/75"
-      onClick={onClick}
-    >
-      <span
-        aria-hidden="true"
-        className={[
-          "text-base leading-none transition-transform duration-200",
-          side === "left" ? "rotate-180" : "",
-          isOpen ? (side === "left" ? "rotate-0" : "rotate-180") : "",
-        ].join(" ")}
-      >
-        ›
-      </span>
-    </button>
   );
 }
 
@@ -561,16 +544,12 @@ function EarthSystemsColumn({
           onPanelPointerEnter={onPanelPointerEnter}
           onPanelPointerLeave={onPanelPointerLeave}
           panelRef={panelRef}
-          headerAction={(
-            <PopoutToggleButton
-              controlsId="earth-vital-signs-panel"
-              isOpen={isVitalSignsOpen}
-              label="Earth Vital Signs"
-              onClick={() => setIsVitalSignsOpen((value) => !value)}
-            />
-          )}
           title="Physical Systems"
           noWrapTitle
+          onTitleClick={() => setIsVitalSignsOpen((value) => !value)}
+          titleExpanded={isVitalSignsOpen}
+          titleControlsId="earth-vital-signs-panel"
+          titleLabel="Earth Vital Signs"
           nodes={earthSystemNodes}
         />
       </div>
@@ -620,18 +599,12 @@ function DigitalSystemsColumn({
           onPanelPointerEnter={onPanelPointerEnter}
           onPanelPointerLeave={onPanelPointerLeave}
           panelRef={panelRef}
-          headerActionPosition="before"
           noWrapTitle
-          headerAction={(
-            <PopoutToggleButton
-              controlsId="digital-data-index-panel"
-              isOpen={isDataIndexOpen}
-              label="Global Data Index"
-              side="left"
-              onClick={() => setIsDataIndexOpen((value) => !value)}
-            />
-          )}
           title="Digital Systems"
+          onTitleClick={() => setIsDataIndexOpen((value) => !value)}
+          titleExpanded={isDataIndexOpen}
+          titleControlsId="digital-data-index-panel"
+          titleLabel="Global Data Index"
           nodes={digitalSystemNodes}
         />
       </div>
