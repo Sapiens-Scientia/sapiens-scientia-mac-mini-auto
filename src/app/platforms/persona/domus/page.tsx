@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { SiteNav } from "@/components/site-nav";
+import { BreadcrumbTrail } from "@/components/breadcrumb-trail";
 import { SiteFooter } from "@/components/site-footer";
 import { PlatformCouplingLinks } from "@/components/platform-coupling-links";
 import { ScaleRungLinks } from "@/components/scale-rung-links";
@@ -43,14 +43,7 @@ const domusBridges = [
 export default function DomusModulePage() {
   return (
     <main className="min-h-screen bg-black px-6 py-8 text-white sm:px-10">
-      <SiteNav
-        links={[
-          { href: "/", label: "Home" },
-          { href: "/platforms", label: "Platforms" },
-          { href: "/platforms/persona", label: "Persona" },
-          { href: "/platforms/persona/domus", label: "Domus" },
-        ]}
-      />
+      <BreadcrumbTrail path="/platforms/persona/domus" />
 
       <section className="mx-auto flex max-w-7xl flex-col gap-12">
         <header className="max-w-4xl">

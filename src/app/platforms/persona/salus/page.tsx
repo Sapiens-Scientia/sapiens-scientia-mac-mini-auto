@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SalusPopulationMap } from "@/components/salus-population-map";
-import { SiteNav } from "@/components/site-nav";
+import { BreadcrumbTrail } from "@/components/breadcrumb-trail";
 import { SiteFooter } from "@/components/site-footer";
 import { PlatformCouplingLinks } from "@/components/platform-coupling-links";
 import { ScaleRungLinks } from "@/components/scale-rung-links";
@@ -69,14 +69,7 @@ const burdenSources = [
 export default function SalusModulePage() {
   return (
     <main className="min-h-screen bg-black px-6 py-8 text-white sm:px-10">
-      <SiteNav
-        links={[
-          { href: "/", label: "Home" },
-          { href: "/platforms", label: "Platforms" },
-          { href: "/platforms/persona", label: "Persona" },
-          { href: "/platforms/persona/salus", label: "Salus" },
-        ]}
-      />
+      <BreadcrumbTrail path="/platforms/persona/salus" />
 
       <section className="mx-auto flex max-w-7xl flex-col gap-10">
         <header className="max-w-4xl">
