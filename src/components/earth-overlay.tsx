@@ -797,6 +797,21 @@ export function EarthOverlay({
         <p className="site-wordmark bg-gradient-to-r from-emerald-300/84 to-blue-300/88 bg-clip-text text-3xl font-semibold uppercase tracking-[0.35em] text-transparent drop-shadow-[0_0_18px_rgba(96,165,250,0.42)] sm:text-4xl md:text-5xl">
           Sapiens Scientia
         </p>
+        <div className="pointer-events-auto flex flex-col items-center gap-3">
+          <p className="max-w-md text-center text-sm leading-6 text-slate-300/90 max-sm:hidden">
+            A public atlas for human-scale science.
+          </p>
+          <Link
+            href="/platforms"
+            className="enter-cta group"
+            aria-label="Explore the platforms"
+          >
+            <span>Explore</span>
+            <span aria-hidden className="enter-cta-arrow">
+              →
+            </span>
+          </Link>
+        </div>
         <TimeOverlay
           onPanelPointerEnter={onPanelPointerEnter}
           onPanelPointerLeave={onPanelPointerLeave}
