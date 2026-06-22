@@ -798,7 +798,7 @@ export function EarthOverlay({
           Sapiens Scientia
         </p>
         <div className="pointer-events-auto flex flex-col items-center gap-3">
-          <p className="max-w-md text-center text-sm leading-6 text-slate-300/90 max-sm:hidden">
+          <p className="max-w-md text-center text-sm leading-6 text-slate-300 max-sm:hidden">
             A public atlas for human-scale science.
           </p>
           <Link
