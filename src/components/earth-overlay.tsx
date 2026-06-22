@@ -570,6 +570,7 @@ function EarthSystemsColumn({
             />
           )}
           title="Physical Systems"
+          noWrapTitle
           nodes={earthSystemNodes}
         />
       </div>
