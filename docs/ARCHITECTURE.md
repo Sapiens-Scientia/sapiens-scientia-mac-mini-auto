@@ -36,6 +36,12 @@ npm run build
 The site is mostly static pages with client-side interactive islands.
 
 - `src/app/page.tsx` renders the homepage shell and imports `EarthHero`.
+- `src/app/layout.tsx` renders the sitewide `UniverseTimeline`, a fixed
+  bottom rail of colored universe-history milestones that floats over all
+  routes and links into `/chronos`.
+- `src/app/page.tsx` renders `HomeBigBangExperience`, a client-side landing
+  gate with the "Initiate Big Bang" sequence before revealing the current
+  homepage experience.
 - `EarthHero` is a client component because it owns the 3D canvas, theme state, timeline state, and pointer interlock between overlays and orbit controls.
 - Content pages use server components where possible, with client components for interactive visualizations.
 - `src/app/api/vital-signs/route.ts` provides a route for vital-sign data.
@@ -45,6 +51,10 @@ The site is mostly static pages with client-side interactive islands.
 The homepage is the most sensitive surface.
 
 - `src/components/earth-hero.tsx`: full-screen hero shell and React Three Fiber canvas.
+- `src/components/home-big-bang-experience.tsx`: landing initiation gate and
+  reveal choreography around the existing homepage hero and overview.
+- `src/components/universe-timeline.tsx`: sitewide fixed universe-history
+  timeline rendered from the root layout.
 - `src/components/earth-scene.tsx`: Three.js objects and animation.
 - `src/components/earth-overlay.tsx`: panels, clock, timeline, popouts, and bridge connectors.
 - `src/components/home-nav.tsx`: compact nav shown over the hero.
