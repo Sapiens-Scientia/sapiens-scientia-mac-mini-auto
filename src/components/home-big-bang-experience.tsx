@@ -7,16 +7,63 @@ import { SiteFooter } from "@/components/site-footer";
 
 type Phase = "ready" | "animating" | "revealed";
 
+const BIG_BANG_ANIMATION_MS = 8600;
+const UNIVERSE_AGE_BILLIONS = 13.8;
+const timelineMilestones = [
+  "Big Bang",
+  "First Stars",
+  "Earth Forms",
+  "First Life",
+  "Animals",
+  "Homo Sapiens",
+  "Agriculture",
+  "Knowledge Age",
+];
+
+function formatUniverseAge(ageInBillions: number) {
+  if (ageInBillions < 0.1) {
+    const millions = Math.round(ageInBillions * 1000);
+    return `${millions.toLocaleString()} million years`;
+  }
+
+  return `${ageInBillions.toFixed(1)} billion years`;
+}
+
 export function HomeBigBangExperience() {
   const [phase, setPhase] = useState<Phase>("ready");
+  const [ageInBillions, setAgeInBillions] = useState(0);
+  const [animationProgress, setAnimationProgress] = useState(0);
 
   useEffect(() => {
     if (phase !== "animating") {
       return;
     }
 
-    const timer = window.setTimeout(() => setPhase("revealed"), 4300);
+    const timer = window.setTimeout(() => setPhase("revealed"), BIG_BANG_ANIMATION_MS);
     return () => window.clearTimeout(timer);
+  }, [phase]);
+
+  useEffect(() => {
+    if (phase !== "animating") {
+      return;
+    }
+
+    let animationFrame = 0;
+    const startedAt = performance.now();
+
+    const tick = (now: number) => {
+      const progress = Math.min((now - startedAt) / BIG_BANG_ANIMATION_MS, 1);
+      const easedProgress = 1 - Math.pow(1 - progress, 3);
+      setAnimationProgress(progress);
+      setAgeInBillions(easedProgress * UNIVERSE_AGE_BILLIONS);
+
+      if (progress < 1) {
+        animationFrame = window.requestAnimationFrame(tick);
+      }
+    };
+
+    animationFrame = window.requestAnimationFrame(tick);
+    return () => window.cancelAnimationFrame(animationFrame);
   }, [phase]);
 
   useEffect(() => {
@@ -29,9 +76,18 @@ export function HomeBigBangExperience() {
 
   const begin = () => {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    setAgeInBillions(0);
+    setAnimationProgress(0);
     setPhase(reduceMotion ? "revealed" : "animating");
   };
   const isRevealed = phase === "revealed";
+  const activeMilestoneLabel =
+    timelineMilestones[
+      Math.min(
+        Math.floor(animationProgress * timelineMilestones.length),
+        timelineMilestones.length - 1,
+      )
+    ];
 
   return (
     <main className="relative min-h-screen bg-black text-white">
@@ -65,20 +121,21 @@ export function HomeBigBangExperience() {
               <button
                 type="button"
                 onClick={begin}
-                className="border border-sky-200/35 bg-white/[0.035] px-7 py-4 text-sm font-semibold uppercase tracking-[0.22em] text-sky-100 shadow-[0_0_44px_rgba(56,189,248,0.16)] backdrop-blur-md transition-all hover:border-sky-100/70 hover:bg-sky-200/10 hover:text-white focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sky-200"
+                aria-label="Initiate Big Bang"
+                className="quiet-singularity"
               >
-                Initiate Big Bang
+                <span className="quiet-singularity__core" aria-hidden />
               </button>
             ) : (
               <div className="big-bang-readout" aria-live="polite">
-                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-amber-200">
-                  Big Bang
+                <p className="font-mono text-5xl font-semibold tracking-normal text-white sm:text-7xl">
+                  {formatUniverseAge(ageInBillions)}
                 </p>
-                <p className="mt-4 text-5xl font-semibold tracking-normal text-white sm:text-7xl">
-                  13.8 billion years
-                </p>
-                <p className="mt-4 text-sm font-medium uppercase tracking-[0.22em] text-slate-300">
-                  Cosmos. Earth. Life. Mind. Sapiens.
+                <p
+                  key={activeMilestoneLabel}
+                  className="big-bang-milestone mt-5 text-sm font-semibold uppercase tracking-[0.24em] text-sky-100 sm:text-base"
+                >
+                  {activeMilestoneLabel}
                 </p>
               </div>
             )}
