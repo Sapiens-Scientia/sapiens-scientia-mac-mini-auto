@@ -24,6 +24,13 @@ If the implementation reveals a conceptual mismatch or durable constraint, updat
 ## Current Implementation Notes
 
 - `src/components/earth-hero.tsx` owns the homepage hero shell, React Three Fiber canvas, theme toggle, and timeline state.
+- `src/components/home-big-bang-experience.tsx` wraps the homepage in the
+  "Initiate Big Bang" landing gate and reveals the existing hero/overview after
+  the intro animation.
+- `src/components/universe-timeline.tsx` is rendered from `src/app/layout.tsx`
+  as the sitewide fixed bottom Universe Timeline. It intentionally floats above
+  all routes, links to `/chronos`, and uses a horizontally scrollable milestone
+  rail on narrow screens.
 - `src/components/earth-scene.tsx` owns the 3D scene: Physical Earth, Digital Halo, Meta Earth label, data connectors, solar orbit model, and orbit controls.
 - `src/components/earth-overlay.tsx` owns homepage overlays: Earth Systems, Digital Systems, Sapiens Platforms, vital signs popout, data index popout, and clock.
 - `src/lib/earth-systems.ts` is the homepage taxonomy source for Earth Systems, Digital Systems, and platform bridge highlighting.

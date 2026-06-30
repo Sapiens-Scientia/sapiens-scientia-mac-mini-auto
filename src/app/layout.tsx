@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
+import { UniverseTimeline } from "@/components/universe-timeline";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -72,6 +73,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
         {children}
+        <UniverseTimeline />
       </body>
     </html>
   );

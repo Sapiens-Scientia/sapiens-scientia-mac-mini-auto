@@ -143,6 +143,7 @@ body {
   background-size: 40px 40px;
   background-attachment: fixed;
   position: relative;
+  padding-bottom: 4.75rem;
 }
 
 body::before {
@@ -206,6 +207,274 @@ canvas {
 .earth-hero-canvas canvas {
   height: 100% !important;
   width: 100% !important;
+}
+
+.big-bang-gate {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(251, 191, 36, 0.12), transparent 7%),
+    radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.08), transparent 24%),
+    #000;
+}
+
+.big-bang-stars,
+.big-bang-pulse,
+.big-bang-rings,
+.big-bang-present {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.big-bang-stars {
+  opacity: 0;
+  background-image:
+    radial-gradient(circle at 18% 28%, rgba(255, 255, 255, 0.84) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 72% 19%, rgba(186, 230, 253, 0.72) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 35% 78%, rgba(255, 237, 213, 0.7) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 84% 66%, rgba(255, 255, 255, 0.68) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 48% 39%, rgba(255, 255, 255, 0.58) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 9% 63%, rgba(186, 230, 253, 0.6) 0 1px, transparent 1.5px);
+  transform: scale(0.2);
+}
+
+.big-bang-pulse {
+  margin: auto;
+  width: min(24vw, 17rem);
+  height: min(24vw, 17rem);
+  border-radius: 9999px;
+  background:
+    radial-gradient(circle, #fff 0 3%, #fde68a 4% 15%, #f97316 18% 28%, #38bdf8 45%, transparent 70%);
+  filter: blur(2px);
+  opacity: 0.72;
+  transform: scale(0.05);
+}
+
+.big-bang-rings {
+  opacity: 0;
+  background:
+    radial-gradient(circle at 50% 50%, transparent 0 16%, rgba(251, 191, 36, 0.42) 16.2% 16.7%, transparent 17%),
+    radial-gradient(circle at 50% 50%, transparent 0 28%, rgba(52, 211, 153, 0.22) 28.2% 28.7%, transparent 29%),
+    radial-gradient(circle at 50% 50%, transparent 0 42%, rgba(56, 189, 248, 0.22) 42.2% 42.8%, transparent 43%);
+}
+
+.big-bang-present {
+  opacity: 0;
+  background:
+    radial-gradient(circle at 50% 46%, rgba(56, 189, 248, 0.22), transparent 8%),
+    radial-gradient(circle at 50% 52%, rgba(52, 211, 153, 0.15), transparent 16%),
+    radial-gradient(circle at 50% 50%, transparent 0 23%, rgba(129, 140, 248, 0.14) 24%, transparent 35%);
+  transform: scale(0.8);
+}
+
+.quiet-singularity {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 4.4rem;
+  height: 4.4rem;
+  border: 0;
+  border-radius: 9999px;
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.88) 0 4%, rgba(251, 191, 36, 0.76) 5% 10%, rgba(56, 189, 248, 0.38) 14% 19%, transparent 34%),
+    radial-gradient(circle, rgba(56, 189, 248, 0.1), transparent 66%);
+  cursor: pointer;
+  isolation: isolate;
+  outline: none;
+  transition: transform 420ms ease, filter 420ms ease;
+}
+
+.quiet-singularity::before {
+  content: "";
+  position: absolute;
+  inset: -0.3rem;
+  border-radius: inherit;
+  border: 1px solid rgba(186, 230, 253, 0.2);
+  opacity: 0.45;
+  animation: singularity-ring 4.8s ease-in-out infinite;
+}
+
+.quiet-singularity:hover {
+  transform: scale(1.04);
+  filter: drop-shadow(0 0 20px rgba(56, 189, 248, 0.2));
+}
+
+.quiet-singularity:focus-visible {
+  outline: 2px solid rgba(186, 230, 253, 0.9);
+  outline-offset: 0.9rem;
+}
+
+.quiet-singularity__core {
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle, #fff 0 15%, #fde68a 31%, #fb923c 56%, #0ea5e9 73%, transparent 75%);
+  box-shadow:
+    0 0 14px rgba(251, 191, 36, 0.52),
+    0 0 32px rgba(56, 189, 248, 0.28),
+    0 0 56px rgba(56, 189, 248, 0.11);
+  animation: singularity-core 3.8s ease-in-out infinite;
+}
+
+.big-bang-gate--active .big-bang-stars {
+  animation: big-bang-stars 8.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.big-bang-gate--active .big-bang-pulse {
+  animation: big-bang-pulse 8.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.big-bang-gate--active .big-bang-rings {
+  animation: big-bang-rings 8.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.big-bang-gate--active .big-bang-present {
+  animation: big-bang-present 8.6s ease-in-out forwards;
+}
+
+.big-bang-gate--active .big-bang-readout {
+  animation: big-bang-readout 8.6s ease-in-out forwards;
+}
+
+.big-bang-milestone {
+  animation: big-bang-milestone 1.08s ease-out both;
+}
+
+@keyframes big-bang-stars {
+  0% {
+    opacity: 0;
+    transform: scale(0.16) rotate(0deg);
+  }
+  24% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.7;
+    transform: scale(1.18) rotate(10deg);
+  }
+}
+
+@keyframes big-bang-pulse {
+  0% {
+    opacity: 0.95;
+    transform: scale(0.03);
+    filter: blur(0);
+  }
+  42% {
+    opacity: 0.78;
+    transform: scale(5.2);
+    filter: blur(10px);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(9);
+    filter: blur(22px);
+  }
+}
+
+@keyframes big-bang-rings {
+  0% {
+    opacity: 0;
+    transform: scale(0.15);
+  }
+  25% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.35);
+  }
+}
+
+@keyframes big-bang-present {
+  0%,
+  45% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  72% {
+    opacity: 0.95;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.12);
+  }
+}
+
+@keyframes big-bang-readout {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.96);
+  }
+  16%,
+  74% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px) scale(1.02);
+  }
+}
+
+@keyframes big-bang-milestone {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+    filter: blur(4px);
+  }
+  28%,
+  76% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 0.88;
+    transform: translateY(-2px);
+    filter: blur(0);
+  }
+}
+
+@keyframes singularity-core {
+  0%,
+  100% {
+    transform: scale(0.92);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+@keyframes singularity-ring {
+  0%,
+  100% {
+    opacity: 0.18;
+    transform: scale(0.92);
+  }
+  50% {
+    opacity: 0.48;
+    transform: scale(1.03);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .big-bang-gate--active .big-bang-stars,
+  .big-bang-gate--active .big-bang-pulse,
+  .big-bang-gate--active .big-bang-rings,
+  .big-bang-gate--active .big-bang-present,
+  .big-bang-gate--active .big-bang-readout,
+  .big-bang-milestone,
+  .quiet-singularity::before,
+  .quiet-singularity__core {
+    animation-duration: 1ms;
+  }
+}
+
+@media (max-width: 640px) {
+  body {
+    padding-bottom: 4.25rem;
+  }
 }
 
 .scrollbar-hidden {
