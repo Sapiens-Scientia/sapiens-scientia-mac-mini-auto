@@ -20,13 +20,8 @@ const timelineMilestones = [
   "Knowledge Age",
 ];
 
-function formatUniverseAge(ageInBillions: number) {
-  if (ageInBillions < 0.1) {
-    const millions = Math.round(ageInBillions * 1000);
-    return `${millions.toLocaleString()} million years`;
-  }
-
-  return `${ageInBillions.toFixed(1)} billion years`;
+function formatUniverseAgeValue(ageInBillions: number) {
+  return ageInBillions.toFixed(1);
 }
 
 export function HomeBigBangExperience() {
@@ -80,6 +75,11 @@ export function HomeBigBangExperience() {
     setAnimationProgress(0);
     setPhase(reduceMotion ? "revealed" : "animating");
   };
+  const resetToStart = () => {
+    setAgeInBillions(0);
+    setAnimationProgress(0);
+    setPhase("ready");
+  };
   const isRevealed = phase === "revealed";
   const activeMilestoneLabel =
     timelineMilestones[
@@ -103,6 +103,17 @@ export function HomeBigBangExperience() {
           <SiteFooter />
         </div>
       </div>
+
+      {isRevealed ? (
+        <button
+          type="button"
+          onClick={resetToStart}
+          className="fixed left-5 top-5 z-[120] border border-white/10 bg-black/48 px-3.5 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-300 shadow-[0_10px_30px_rgba(0,0,0,0.22)] backdrop-blur-md transition-colors hover:border-sky-200/35 hover:bg-black/60 hover:text-sky-100 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sky-200 sm:left-6 sm:top-6"
+          aria-label="Return to the start of the Big Bang animation"
+        >
+          Big Bang
+        </button>
+      ) : null}
 
       {!isRevealed ? (
         <section
@@ -128,8 +139,11 @@ export function HomeBigBangExperience() {
               </button>
             ) : (
               <div className="big-bang-readout" aria-live="polite">
-                <p className="font-mono text-5xl font-semibold tracking-normal text-white sm:text-7xl">
-                  {formatUniverseAge(ageInBillions)}
+                <p className="text-center text-6xl font-semibold leading-none tracking-normal text-white sm:text-8xl">
+                  {formatUniverseAgeValue(ageInBillions)}
+                </p>
+                <p className="mt-3 text-center text-sm font-semibold uppercase tracking-[0.24em] text-slate-300 sm:text-base">
+                  Billion Years
                 </p>
                 <p
                   key={activeMilestoneLabel}
