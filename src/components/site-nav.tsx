@@ -49,6 +49,7 @@ const primaryNav: SiteNavItem[] = [
     ],
   },
   { href: "/ontology", label: "The Map" },
+  { href: "/meta-earth", label: "Meta Earth" },
   { href: "/scales", label: "Scales" },
   { href: "/chronos", label: "Chronos" },
   { href: "/vitals", label: "Vitals" },

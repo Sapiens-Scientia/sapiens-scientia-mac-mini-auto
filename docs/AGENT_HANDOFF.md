@@ -6,7 +6,11 @@ This file records practical handoff context for future agents working on the Sap
 
 - The site is a Next.js App Router application using React, Tailwind CSS, and React Three Fiber.
 - Project memory is local to this repository under `docs/`.
-- The homepage is a full-screen 3D experience with overlay panels, time controls, theme support, and platform bridge interactions.
+- The homepage starts with the Big Bang intro and then reveals a homepage-only
+  duplicated Galaxy view from the EarthView scene, with a clear link to Meta
+  Earth.
+- `/meta-earth` is the former homepage: a full-screen 3D experience with overlay
+  panels, time controls, theme support, and platform bridge interactions.
 - The main platform model is `Persona`, `Societas`, `Terra`, with `Salus` and `Domus` nested inside Persona, `Soma` nested inside Salus, and `Morbus` nested inside Soma.
 - Public project routes include the Data Index and EarthView 3D.
 
@@ -23,10 +27,13 @@ If the implementation reveals a conceptual mismatch or durable constraint, updat
 
 ## Current Implementation Notes
 
-- `src/components/earth-hero.tsx` owns the homepage hero shell, React Three Fiber canvas, theme toggle, and timeline state.
+- `src/components/earth-hero.tsx` owns the Meta Earth hero shell, React Three Fiber canvas, theme toggle, and timeline state.
 - `src/components/home-big-bang-experience.tsx` wraps the homepage in the
-  "Initiate Big Bang" landing gate and reveals the existing hero/overview after
+  "Initiate Big Bang" landing gate and reveals the homepage Galaxy view after
   the intro animation.
+- `src/components/home-galaxy-view.tsx` is the homepage-only duplicated Galaxy
+  scene. It uses the lower-level EarthView `UnifiedEarthView` but does not
+  change `/projects/earthview` or its standalone EarthView app wrapper.
 - `src/components/universe-timeline.tsx` is rendered from `src/app/layout.tsx`
   as the sitewide fixed bottom Universe Timeline. It intentionally floats above
   most routes, links to `/chronos`, and uses a horizontally scrollable milestone
@@ -37,9 +44,9 @@ If the implementation reveals a conceptual mismatch or durable constraint, updat
   iframe. Keep the copied textures in `public/earth-blue-marble-5400x2700.jpg`
   and `public/assets/milky-way.jpg` available for the scene.
 - `src/components/earth-scene.tsx` owns the 3D scene: Physical Earth, Digital Halo, Meta Earth label, data connectors, solar orbit model, and orbit controls.
-- `src/components/earth-overlay.tsx` owns homepage overlays: Earth Systems, Digital Systems, Sapiens Platforms, vital signs popout, data index popout, and clock.
-- `src/lib/earth-systems.ts` is the homepage taxonomy source for Earth Systems, Digital Systems, and platform bridge highlighting.
-- `src/lib/vital-signs.ts` feeds both `/vitals` and homepage vital-sign overlays.
+- `src/components/earth-overlay.tsx` owns Meta Earth overlays: Earth Systems, Digital Systems, Sapiens Platforms, vital signs popout, data index popout, and clock.
+- `src/lib/earth-systems.ts` is the Meta Earth taxonomy source for Earth Systems, Digital Systems, and platform bridge highlighting.
+- `src/lib/vital-signs.ts` feeds both `/vitals` and Meta Earth vital-sign overlays.
 - `src/lib/data-index.ts` feeds `/projects/sapiens-scientia-data-index` and the Digital Halo/data index surfaces.
 - `src/lib/soma.ts` feeds `/platforms/persona/salus/soma` and the Soma section on `/platforms/persona/salus`.
 - The Soma hero uses `public/models/soma-anatomy.glb`, a Meshopt-compressed
@@ -66,12 +73,15 @@ If the implementation reveals a conceptual mismatch or durable constraint, updat
 
 - Run `npm install` before checks in fresh Codex worktrees; dependencies may not be present.
 - Standard checks are `npm run lint` and `npm run build`.
-- The homepage can fail visually even when lint/build pass, especially around the Three canvas. Browser verification is important for hero changes.
+- The homepage and Meta Earth can fail visually even when lint/build pass,
+  especially around Three canvases. Browser verification is important for hero
+  changes.
 - When serving the app locally through `127.0.0.1`, Next dev may need `allowedDevOrigins` in `next.config.ts`.
 - **Git workflow rule**: Do not commit, merge, or push changes to remote until the user explicitly requests it.
 
 ## Good Next Improvements
 
-- Add a lightweight visual regression check for the homepage hero.
+- Add a lightweight visual regression check for the homepage Galaxy view and
+  Meta Earth hero.
 - Keep `docs/ROUTES.md` current when adding or removing public pages.
 - Consider adding tests around route metadata or data-module shape if the site continues to grow.

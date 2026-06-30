@@ -35,14 +35,16 @@ npm run build
 
 The site is mostly static pages with client-side interactive islands.
 
-- `src/app/page.tsx` renders the homepage shell and imports `EarthHero`.
+- `src/app/page.tsx` renders the homepage shell and imports
+  `HomeBigBangExperience`.
 - `src/app/layout.tsx` renders the sitewide `UniverseTimeline`, a fixed
   bottom rail of colored universe-history milestones that floats over all
   routes and links into `/chronos`.
-- `src/app/page.tsx` renders `HomeBigBangExperience`, a client-side landing
-  gate with the "Initiate Big Bang" sequence before revealing the current
-  homepage experience.
-- `EarthHero` is a client component because it owns the 3D canvas, theme state, timeline state, and pointer interlock between overlays and orbit controls.
+- `HomeBigBangExperience` is a client-side landing gate with the "Initiate Big
+  Bang" sequence before revealing the homepage Galaxy 3D view.
+- `src/app/meta-earth/page.tsx` renders `MetaEarthExperience`, the former
+  homepage Physical Earth / Digital Halo / Meta Earth product surface.
+- `EarthHero` is a client component because it owns the Meta Earth 3D canvas, theme state, timeline state, and pointer interlock between overlays and orbit controls.
 - `src/app/projects/earthview/page.tsx` renders the imported EarthView 3D
   React/Three experience directly from `src/components/earthview/`; it is not
   an iframe wrapper.
@@ -53,9 +55,14 @@ The site is mostly static pages with client-side interactive islands.
 
 The homepage is the most sensitive surface.
 
-- `src/components/earth-hero.tsx`: full-screen hero shell and React Three Fiber canvas.
 - `src/components/home-big-bang-experience.tsx`: landing initiation gate and
-  reveal choreography around the existing homepage hero and overview.
+  reveal choreography around the homepage Galaxy view.
+- `src/components/home-galaxy-view.tsx`: duplicated Galaxy-only EarthView scene
+  used only by the homepage so `/projects/earthview` keeps its standalone app
+  wrapper unchanged.
+- `src/components/home-galaxy-experience.tsx`: full-screen Galaxy homepage shell
+  with the clear Meta Earth link.
+- `src/components/earth-hero.tsx`: full-screen Meta Earth hero shell and React Three Fiber canvas.
 - `src/components/universe-timeline.tsx`: sitewide fixed universe-history
   timeline rendered from the root layout.
 - `src/components/earth-scene.tsx`: Three.js objects and animation.
@@ -63,7 +70,7 @@ The homepage is the most sensitive surface.
 - `src/components/home-nav.tsx`: compact nav shown over the hero.
 - `src/components/home-overview.tsx`: content below the hero.
 
-When editing the homepage, verify in a browser. Build and lint can pass even if the canvas is visually blank or incorrectly sized.
+When editing the homepage or Meta Earth, verify in a browser. Build and lint can pass even if a Three canvas is visually blank or incorrectly sized.
 
 ## EarthView 3D
 
@@ -98,11 +105,11 @@ Most durable content lives in `src/lib/` modules instead of page-local arrays.
 | `platforms.ts` | Platform names, labels, colors, and cross-platform couplings. |
 | `scales.ts` | Ladder of Scale tiers (projected from `ontology.ts`), length-anchored rungs, and sources. |
 | `chronos.ts` | Arc of Time eons, moments, platforms, and sources. |
-| `earth-systems.ts` | Projection logic for the homepage Earth/Digital system trees and platform bridge highlights (all derived from `ontology/`). |
+| `earth-systems.ts` | Projection logic for the Meta Earth system trees and platform bridge highlights (all derived from `ontology/`). |
 | `data-index.ts` | Data Index categories, entries, slugs, and counts. |
 | `vital-signs.ts` | Planetary vital-sign domains, indicator values, history, projection, and sources. |
 | `morbus.ts` | Morbus disease groups, exemplars, axes, crosswalks, and counts. |
-| `projects.ts` | Public project links and EarthView route/external URL. |
+| `projects.ts` | Public project links and EarthView route path. |
 
 Prefer updating these modules over duplicating content in individual pages.
 

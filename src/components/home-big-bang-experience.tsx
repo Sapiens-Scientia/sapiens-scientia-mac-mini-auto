@@ -1,9 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { EarthHero } from "@/components/earth-hero";
-import { HomeOverview } from "@/components/home-overview";
-import { SiteFooter } from "@/components/site-footer";
+import { HomeGalaxyExperience } from "@/components/home-galaxy-experience";
 
 type Phase = "ready" | "animating" | "revealed";
 
@@ -110,11 +108,7 @@ export function HomeBigBangExperience({ skipIntro = false }: HomeBigBangExperien
         }`}
         aria-hidden={!isRevealed}
       >
-        <EarthHero />
-        <HomeOverview />
-        <div className="bg-black px-6 pb-24 text-white sm:px-10 sm:pb-28">
-          <SiteFooter />
-        </div>
+        <HomeGalaxyExperience />
       </div>
 
       {isRevealed ? (

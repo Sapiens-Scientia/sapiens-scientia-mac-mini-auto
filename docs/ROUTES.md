@@ -6,7 +6,8 @@ This is the current public route inventory for the Sapiens Scientia website.
 
 | Route | File | Purpose |
 |---|---|---|
-| `/` | `src/app/page.tsx` | Homepage with Physical Earth / Digital Halo / Meta Earth hero and overview content. |
+| `/` | `src/app/page.tsx` | Homepage with Big Bang intro that reveals a Galaxy 3D view and a clear Meta Earth link. |
+| `/meta-earth` | `src/app/meta-earth/page.tsx` | Meta Earth page with the original Physical Earth / Digital Halo / Meta Earth hero and overview content. |
 | `/scales` | `src/app/scales/page.tsx` | Ladder of Scale, from particles to the Sun. |
 | `/chronos` | `src/app/chronos/page.tsx` | Arc of Time, from the Big Bang to the present. |
 | `/platforms` | `src/app/platforms/page.tsx` | Cross-platform systems map and simulator. |
@@ -42,7 +43,7 @@ This is the current public route inventory for the Sapiens Scientia website.
 
 ## Navigation Notes
 
-- `src/components/home-nav.tsx` controls the homepage overlay navigation.
+- `src/components/home-nav.tsx` controls the Meta Earth overlay navigation.
 - `src/components/site-nav.tsx` controls standard page navigation.
 - `src/components/site-footer.tsx` controls the sitewide footer.
 - Public project links are centralized in `src/lib/projects.ts`.
