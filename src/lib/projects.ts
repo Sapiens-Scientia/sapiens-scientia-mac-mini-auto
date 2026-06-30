@@ -10,7 +10,7 @@ export const projectLinks = [
   {
     href: EARTHVIEW_PAGE_PATH,
     label: "EarthView 3D",
-    description: "Detailed terrain and globe exploration — embedded from the Physical Earth on the homepage.",
+    description: "Detailed terrain and globe exploration — embedded from the Physical Earth in Meta Earth.",
     external: false as const,
   },
 ];

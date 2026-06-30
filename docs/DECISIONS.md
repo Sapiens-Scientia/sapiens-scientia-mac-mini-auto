@@ -30,7 +30,11 @@ Do not rename these or introduce replacements unless the change intentionally up
 
 ## Keep The Homepage As A Real Product Surface
 
-The first screen is the actual Sapiens Scientia experience, not a marketing landing page. The homepage should remain centered on the interactive Physical Earth / Digital Halo / Meta Earth model plus the Sapiens Platforms bridge.
+The first screen is the actual Sapiens Scientia experience, not a marketing landing page. The homepage begins with the Big Bang intro, then reveals a Galaxy 3D view from the imported EarthView scene with a clear link into Meta Earth.
+
+## Move The Original Homepage To Meta Earth
+
+The original interactive Physical Earth / Digital Halo / Meta Earth model plus the Sapiens Platforms bridge now lives at `/meta-earth`. Treat Meta Earth as the home for that product surface, its overview, and its Earth/Digital side-panel maps.
 
 ## Treat Light Mode As A Distinct Editorial Theme
 

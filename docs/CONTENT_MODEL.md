@@ -13,9 +13,9 @@ The full Sapiens Scientia Ontology lives in `src/lib/ontology/` and spans three 
 - **Digital Systems** (Digital Halo) — computation, communication, data, and intelligence systems. `ontology/digital-systems.ts`.
 - **Relationships** — platform→entity "studies" edges and platform↔platform couplings. `ontology/relationships.ts`.
 
-This is the single source of truth: the Ladder of Scale (`src/lib/scales.ts`), the homepage Earth/Digital trees and platform bridges (`src/lib/earth-systems.ts`) all project from it, so every entity label lives in exactly one place. A human-readable rendering is generated to `docs/ONTOLOGY.md` via `npm run gen:ontology` — do not edit that file by hand.
+This is the single source of truth: the Ladder of Scale (`src/lib/scales.ts`), the Meta Earth trees and platform bridges (`src/lib/earth-systems.ts`) all project from it, so every entity label lives in exactly one place. A human-readable rendering is generated to `docs/ONTOLOGY.md` via `npm run gen:ontology` — do not edit that file by hand.
 
-The homepage visualizes this as:
+The Meta Earth page visualizes this as:
 
 - Physical Earth: the material planet and Earth systems.
 - Digital Halo: orbiting digital knowledge infrastructure, data systems, models, and networks.
@@ -63,7 +63,7 @@ year 0 and the present as roughly 13.8 billion years.
 
 ## Earth And Digital Systems
 
-The homepage side panels are not arbitrary navigation lists. They are conceptual maps:
+The Meta Earth side panels are not arbitrary navigation lists. They are conceptual maps:
 
 - Earth Systems: nested physical, biological, social, and planetary systems.
 - Digital Systems: compute, communication, data systems, and intelligence systems, visualized as the Digital Halo rather than as a second Earth.
@@ -106,7 +106,7 @@ Domus is the home/domestic life module inside Persona. It models:
 
 ## Planetary Vital Signs
 
-Vital signs are sourced Earth-system indicators shared by the homepage and `/vitals`.
+Vital signs are sourced Earth-system indicators shared by Meta Earth and `/vitals`.
 
 Domains:
 

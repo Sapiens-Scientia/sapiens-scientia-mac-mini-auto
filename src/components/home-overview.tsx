@@ -46,7 +46,7 @@ export function HomeOverview() {
               A public atlas for human-centered science.
             </h2>
             <p className="mt-5 text-lg leading-8 text-slate-300">
-              The homepage globe is the entry point. Below it, the site turns
+              The Meta Earth globe is the entry point. Below it, the site turns
               into a working map: scale explains where a system lives,
               platforms explain which lens is useful, and the data index points
               toward the source material.
