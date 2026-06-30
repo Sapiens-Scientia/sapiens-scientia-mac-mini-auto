@@ -730,46 +730,36 @@ function TimeOverlay({
 
   return (
     <aside
-      className="pointer-events-auto w-[min(34rem,calc(100vw-2rem))] bg-black/48 px-4 py-3 text-center text-white shadow-[0_0_28px_rgba(59,130,246,0.16)] backdrop-blur-sm"
+      className="pointer-events-auto w-[min(22rem,calc(100vw-2rem))] bg-black/48 px-4 py-3 text-center text-white shadow-[0_0_28px_rgba(59,130,246,0.16)] backdrop-blur-sm"
       onPointerEnter={onPanelPointerEnter}
       onPointerLeave={onPanelPointerLeave}
       onWheelCapture={stopPanelScrollPropagation}
       onTouchMoveCapture={stopPanelScrollPropagation}
     >
-      <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4 max-sm:grid-cols-1 max-sm:gap-3">
-        <div className="grid min-w-0 grid-rows-[2.35rem_auto_auto]">
-          <p className="flex items-center justify-center text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-blue-300/80">
-            UTC Time
-          </p>
-          <p className="font-mono text-2xl leading-none text-sky-100">{formatClockTime(now, "UTC")}</p>
-          <p className="mt-1 text-xs text-slate-300/80">{formatClockDate(now, "UTC")}</p>
+      <div className="grid min-w-0 grid-rows-[2.35rem_auto_auto]">
+        <div className="flex items-center justify-center gap-3">
+          <label
+            className="text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-blue-300/80"
+            htmlFor="timezone-clock-select"
+          >
+            Timezone
+          </label>
+          <select
+            id="timezone-clock-select"
+            value={selectedTimeZone}
+            className="max-w-32 border border-white/12 bg-black/55 px-2 py-1 text-xs text-slate-100 outline-none transition focus:border-sky-300/70"
+            onChange={(event) => setSelectedTimeZone(event.target.value)}
+          >
+            {selectedOption ? null : <option value={selectedTimeZone}>{selectedLabel}</option>}
+            {timeZoneOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
         </div>
-        <div className="h-14 w-px bg-white/12 max-sm:h-px max-sm:w-full" />
-        <div className="grid min-w-0 grid-rows-[2.35rem_auto_auto]">
-          <div className="flex items-center justify-center gap-3">
-            <label
-              className="text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-blue-300/80"
-              htmlFor="timezone-clock-select"
-            >
-              Timezone
-            </label>
-            <select
-              id="timezone-clock-select"
-              value={selectedTimeZone}
-              className="max-w-32 border border-white/12 bg-black/55 px-2 py-1 text-xs text-slate-100 outline-none transition focus:border-sky-300/70"
-              onChange={(event) => setSelectedTimeZone(event.target.value)}
-            >
-              {selectedOption ? null : <option value={selectedTimeZone}>{selectedLabel}</option>}
-              {timeZoneOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
-          <p className="font-mono text-2xl leading-none text-white">{formatClockTime(now, selectedTimeZone)}</p>
-          <p className="mt-1 text-xs text-slate-300/80">{formatClockDate(now, selectedTimeZone)}</p>
-        </div>
+        <p className="font-mono text-2xl leading-none text-white">{formatClockTime(now, selectedTimeZone)}</p>
+        <p className="mt-1 text-xs text-slate-300/80">{formatClockDate(now, selectedTimeZone)}</p>
       </div>
     </aside>
   );
