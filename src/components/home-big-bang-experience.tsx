@@ -25,10 +25,22 @@ function formatUniverseAgeValue(ageInBillions: number) {
   return ageInBillions.toFixed(1);
 }
 
-export function HomeBigBangExperience() {
-  const [phase, setPhase] = useState<Phase>("ready");
+type HomeBigBangExperienceProps = {
+  skipIntro?: boolean;
+};
+
+export function HomeBigBangExperience({ skipIntro = false }: HomeBigBangExperienceProps) {
+  const [phase, setPhase] = useState<Phase>(() => (skipIntro ? "revealed" : "ready"));
   const [ageInBillions, setAgeInBillions] = useState(0);
   const [animationProgress, setAnimationProgress] = useState(0);
+
+  useEffect(() => {
+    if (!skipIntro) {
+      return;
+    }
+
+    window.history.replaceState(null, "", "/");
+  }, [skipIntro]);
 
   useEffect(() => {
     if (phase !== "animating") {
