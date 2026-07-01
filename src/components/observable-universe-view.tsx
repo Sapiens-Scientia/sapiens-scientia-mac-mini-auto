@@ -1,7 +1,12 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 export function ObservableUniverseView() {
+  const [imageLoaded, setImageLoaded] = useState(false);
+
   return (
     <section
       className="relative flex min-h-screen items-center justify-center overflow-hidden bg-black text-white"
@@ -26,7 +31,10 @@ export function ObservableUniverseView() {
           width={1920}
           height={1920}
           priority
-          className="h-full w-full object-contain drop-shadow-[0_0_42px_rgba(186,230,253,0.2)]"
+          onLoad={() => setImageLoaded(true)}
+          className={`h-full w-full object-contain drop-shadow-[0_0_42px_rgba(186,230,253,0.2)] transition-opacity duration-[4000ms] ease-out ${
+            imageLoaded ? "opacity-100" : "opacity-0"
+          }`}
         />
         <Link
           href="/?intro=skip"
