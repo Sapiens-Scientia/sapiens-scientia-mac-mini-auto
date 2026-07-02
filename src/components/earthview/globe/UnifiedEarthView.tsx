@@ -1435,13 +1435,18 @@ function GalaxyHistoryModel({
     const presentMotionDirection = galaxyMotionDirection(0)
     const futureEndPoint = galaxyPoint(-FUTURE_PROJECTION_MA)
     const historyStartPoint = galaxyPoint(EARTH_AGE_MA)
-    const galaxyDiskPosition = useMemo(
+    const galaxyTopDiskPosition = useMemo(
         () => new THREE.Vector3(0, historyStartPoint.y, 0),
         [historyStartPoint.y],
     )
+    const galaxyBottomDiskPosition = useMemo(
+        () => new THREE.Vector3(0, futureEndPoint.y, 0),
+        [futureEndPoint.y],
+    )
     return (
         <group>
-            <GalaxyDisk position={galaxyDiskPosition} isDark={isDark} size={galaxyDiskSize} rotationDeg={galaxyDiskRotationDeg} />
+            <GalaxyDisk position={galaxyTopDiskPosition} isDark={isDark} size={galaxyDiskSize} rotationDeg={galaxyDiskRotationDeg} />
+            <GalaxyDisk position={galaxyBottomDiskPosition} isDark={isDark} size={galaxyDiskSize} rotationDeg={galaxyDiskRotationDeg - 30} />
             <Line
                 points={[new THREE.Vector3(0, historyStartPoint.y + 0.5, 0), new THREE.Vector3(0, futureEndPoint.y - 0.5, 0)]}
                 color={isDark ? '#64748b' : '#94a3b8'}
