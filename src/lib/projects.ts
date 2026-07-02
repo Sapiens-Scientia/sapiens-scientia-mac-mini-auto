@@ -13,4 +13,10 @@ export const projectLinks = [
     description: "Detailed terrain and globe exploration — embedded from the Physical Earth in Meta Earth.",
     external: false as const,
   },
+  {
+    href: "/projects/big-bang-universe",
+    label: "Big Bang Universe",
+    description: "Standalone animated inflation diagram from the Big Bang to today.",
+    external: false as const,
+  },
 ];

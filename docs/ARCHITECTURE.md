@@ -35,13 +35,13 @@ npm run build
 
 The site is mostly static pages with client-side interactive islands.
 
-- `src/app/page.tsx` renders the homepage shell and imports
-  `HomeBigBangExperience`.
+- `src/app/page.tsx` renders the homepage shell as a full-screen iframe of the
+  standalone Big Bang Universe app in site-intro mode.
 - `src/app/layout.tsx` renders the sitewide `UniverseTimeline`, a fixed
   bottom rail of colored universe-history milestones that floats over all
   routes and links into `/chronos`.
-- `HomeBigBangExperience` is a client-side landing gate with the Big Bang
-  sequence before routing into the Observable Universe view.
+- The homepage Big Bang Universe iframe navigates to `/observable-universe`
+  when the user clicks the bottom/today rim of the completed history bell.
 - `src/app/history-of-planet-earth/page.tsx` renders the Galaxy 3D history
   view as its own public route.
 - `src/app/meta-earth/page.tsx` renders `MetaEarthExperience`, the former
@@ -57,8 +57,9 @@ The site is mostly static pages with client-side interactive islands.
 
 The homepage is the most sensitive surface.
 
-- `src/components/home-big-bang-experience.tsx`: landing initiation gate and
-  reveal choreography into `/observable-universe`.
+- `public/standalone/big-bang-universe/index.html`: standalone Big Bang
+  Universe canvas app. The homepage loads it with `?siteIntro=1`, which enables
+  the bottom/today rim click-through into `/observable-universe`.
 - `src/components/home-galaxy-view.tsx`: duplicated Galaxy-only EarthView scene
   used by `/history-of-planet-earth` so `/projects/earthview` keeps its
   standalone app wrapper unchanged.

@@ -23,6 +23,7 @@ const routes = [
   "/projects",
   "/projects/sapiens-scientia-data-index",
   "/projects/earthview",
+  "/projects/big-bang-universe",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
