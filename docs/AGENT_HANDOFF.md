@@ -6,14 +6,16 @@ This file records practical handoff context for future agents working on the Sap
 
 - The site is a Next.js App Router application using React, Tailwind CSS, and React Three Fiber.
 - Project memory is local to this repository under `docs/`.
-- The homepage starts with the Big Bang intro, which resolves into the
-  Observable Universe view at `/observable-universe`. From there the central
-  target ring links to the Galaxy view / History of Planet Earth at
-  `/history-of-planet-earth`, which then links onward to Meta Earth.
+- The homepage starts with the Big Bang Universe standalone animation. In
+  homepage mode, clicking the bottom/today rim of the completed history bell
+  navigates into the Observable Universe view at `/observable-universe`. From
+  there the central target ring links to the Galaxy view / History of Planet
+  Earth at `/history-of-planet-earth`, which then links onward to Meta Earth.
 - `/meta-earth` is the former homepage: a full-screen 3D experience with overlay
   panels, time controls, theme support, and platform bridge interactions.
 - The main platform model is `Persona`, `Societas`, `Terra`, with `Salus` and `Domus` nested inside Persona, `Soma` nested inside Salus, and `Morbus` nested inside Soma.
-- Public project routes include the Data Index and EarthView 3D.
+- Public project routes include the Data Index, EarthView 3D, and Big Bang
+  Universe.
 
 ## Read Before Conceptual Changes
 
@@ -29,9 +31,9 @@ If the implementation reveals a conceptual mismatch or durable constraint, updat
 ## Current Implementation Notes
 
 - `src/components/earth-hero.tsx` owns the Meta Earth hero shell, React Three Fiber canvas, theme toggle, and timeline state.
-- `src/components/home-big-bang-experience.tsx` wraps the homepage in the
-  Big Bang landing gate and routes to `/observable-universe` after the intro
-  animation.
+- `src/app/page.tsx` wraps the standalone Big Bang Universe HTML app in a
+  full-screen iframe with `?siteIntro=1`; that query enables the completed
+  bell/rim click-through to `/observable-universe`.
 - `src/components/home-galaxy-view.tsx` is the duplicated Galaxy scene used by
   `/history-of-planet-earth`. It uses the lower-level EarthView
   `UnifiedEarthView` but does not change `/projects/earthview` or its
@@ -45,6 +47,11 @@ If the implementation reveals a conceptual mismatch or durable constraint, updat
   project. `/projects/earthview` renders it directly rather than using an
   iframe. Keep the copied textures in `public/earth-blue-marble-5400x2700.jpg`
   and `public/assets/milky-way.jpg` available for the scene.
+- `/projects/big-bang-universe` wraps the standalone, dependency-free
+  BigBangUniverse HTML app copied to
+  `public/standalone/big-bang-universe/index.html`. The sitewide Universe
+  Timeline is hidden on that route so the standalone app's controls are not
+  covered.
 - `src/components/earth-scene.tsx` owns the 3D scene: Physical Earth, Digital Halo, Meta Earth label, data connectors, solar orbit model, and orbit controls.
 - `src/components/earth-overlay.tsx` owns Meta Earth overlays: Earth Systems, Digital Systems, Sapiens Platforms, vital signs popout, data index popout, and clock.
 - `src/lib/earth-systems.ts` is the Meta Earth taxonomy source for Earth Systems, Digital Systems, and platform bridge highlighting.

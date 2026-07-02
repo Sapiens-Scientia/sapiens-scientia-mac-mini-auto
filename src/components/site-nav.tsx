@@ -60,6 +60,7 @@ const primaryNav: SiteNavItem[] = [
       { href: "/projects", label: "All projects" },
       { href: "/projects/sapiens-scientia-data-index", label: "Data Index" },
       { href: "/projects/earthview", label: "EarthView 3D" },
+      { href: "/projects/big-bang-universe", label: "Big Bang Universe" },
     ],
   },
 ];

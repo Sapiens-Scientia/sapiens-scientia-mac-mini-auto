@@ -7,7 +7,7 @@ import { projectLinks } from "@/lib/projects";
 export const metadata: Metadata = {
   title: "Projects | Sapiens Scientia",
   description:
-    "Public Sapiens Scientia projects, including the data index and EarthView 3D.",
+    "Public Sapiens Scientia projects, including the data index, EarthView 3D, and Big Bang Universe.",
 };
 
 export default function ProjectsPage() {
@@ -22,8 +22,8 @@ export default function ProjectsPage() {
           </p>
           <h1 className="text-5xl font-semibold tracking-normal sm:text-7xl">Projects</h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
-            Public tools and indexes that extend Meta Earth — curated knowledge infrastructure
-            and immersive Earth exploration.
+            Public tools and indexes that extend Meta Earth — curated knowledge infrastructure,
+            immersive Earth exploration, and cosmic-scale visualizations.
           </p>
         </div>
 

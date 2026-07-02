@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The History of the Universe — Big Bang to Now</title>
+<meta name="description" content="An animated inflation diagram of the universe: 13.8 billion years from the singularity to today on a logarithmic timeline, with milestones and composition changes." />
+<meta property="og:title" content="The History of the Universe" />
+<meta property="og:description" content="Watch 13.8 billion years unfold — from the Big Bang to today." />
+<meta property="og:type" content="website" />
+<meta name="theme-color" content="#060b18" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌌</text></svg>" />
+<style>
+  :root {
+    --page: #000000;
+    --ink: #eaf0ff;
+    --muted: #97a3c9;
+    --panel-brd: rgba(140, 160, 255, 0.16);
+    --accent: #8fb3ff;
+    --accent-contrast: #08122b;
+    --glass1: rgba(20, 24, 52, .72);
+    --glass2: rgba(9, 11, 28, .55);
+    --glass1-hover: rgba(28, 33, 68, .8);
+    --glass2-hover: rgba(12, 15, 36, .65);
+    --bar1: rgba(16, 19, 44, .6);
+    --bar2: rgba(7, 9, 24, .5);
+    --btnbg: rgba(255, 255, 255, .045);
+    --btnhover: rgba(255, 255, 255, .11);
+    --btnglow: rgba(143, 179, 255, .6);
+    --track: rgba(255, 255, 255, .13);
+    --thumb: #fff;
+    --thumbglow: rgba(160, 190, 255, .95);
+    --tipbg: rgba(10, 13, 32, .92);
+    --tipink: #dfe7ff;
+    --tipbrd: rgba(160, 180, 255, .4);
+    --hint: rgba(151, 163, 201, .55);
+    --hintb: rgba(200, 212, 245, .7);
+    --shadow: rgba(0, 0, 0, .7);
+    --compbar-bg: #000;
+    --compbar-ring: rgba(255, 255, 255, .07);
+    --title-grad: linear-gradient(92deg, #ffffff 10%, #aebfff 35%, #8fe3cf 55%, #e8bfff 75%, #ffffff 95%);
+  }
+  body.light {
+    --page: #ffffff;
+    --ink: #1c2340;
+    --muted: #5c6688;
+    --panel-brd: rgba(70, 85, 160, .2);
+    --accent: #4a63d8;
+    --accent-contrast: #ffffff;
+    --glass1: rgba(255, 255, 255, .78);
+    --glass2: rgba(243, 245, 252, .62);
+    --glass1-hover: rgba(255, 255, 255, .92);
+    --glass2-hover: rgba(240, 243, 252, .78);
+    --bar1: rgba(255, 255, 255, .72);
+    --bar2: rgba(243, 245, 252, .55);
+    --btnbg: rgba(30, 40, 90, .05);
+    --btnhover: rgba(74, 99, 216, .12);
+    --btnglow: rgba(74, 99, 216, .35);
+    --track: rgba(30, 40, 90, .14);
+    --thumb: #2c3a80;
+    --thumbglow: rgba(74, 99, 216, .55);
+    --tipbg: rgba(255, 255, 255, .95);
+    --tipink: #1c2340;
+    --tipbrd: rgba(70, 85, 160, .35);
+    --hint: rgba(80, 90, 130, .6);
+    --hintb: rgba(40, 50, 90, .8);
+    --shadow: rgba(60, 70, 140, .3);
+    --compbar-bg: #e8eaf4;
+    --compbar-ring: rgba(0, 0, 0, .06);
+    --title-grad: linear-gradient(92deg, #141a3e 10%, #4a63d8 40%, #1f9e82 60%, #7a4ad8 80%, #141a3e 95%);
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; height: 100%; overflow: hidden;
+    background: var(--page);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  #stage { position: fixed; inset: 0; }
+  canvas { position: absolute; inset: 0; display: block; }
+
+  /* ---- Title ---- */
+  #title {
+    position: absolute; top: 20px; left: 24px; z-index: 5;
+    pointer-events: none; max-width: 46%;
+  }
+  #title h1 {
+    margin: 0; font-size: 23px; font-weight: 750; letter-spacing: .3px;
+    background: var(--title-grad);
+    background-size: 220% 100%;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: sheen 16s ease-in-out infinite alternate;
+  }
+  @keyframes sheen { from { background-position: 0% 0; } to { background-position: 100% 0; } }
+  @media (prefers-reduced-motion: reduce) { #title h1 { animation: none; } }
+  #title p {
+    margin: 7px 0 0; font-size: 10.5px; color: var(--muted); line-height: 1.5;
+    text-transform: uppercase; letter-spacing: .18em;
+  }
+
+  /* ---- Composition panel ---- */
+  #composition {
+    position: absolute; top: 84px; right: 18px; z-index: 6;
+    width: 228px; padding: 13px 14px 12px;
+    background: linear-gradient(160deg, var(--glass1), var(--glass2));
+    border: 1px solid var(--panel-brd);
+    border-radius: 14px; backdrop-filter: blur(14px) saturate(1.4);
+    box-shadow: 0 10px 34px -14px var(--shadow);
+  }
+  #composition h2 { margin: 0 0 3px; font-size: 11.5px; font-weight: 650; letter-spacing: .5px; }
+  #comp-era { font-size: 10.5px; color: var(--muted); margin-bottom: 10px; min-height: 13px;
+              text-transform: uppercase; letter-spacing: .08em; }
+  #comp-bar {
+    display: flex; height: 14px; width: 100%; border-radius: 7px; overflow: hidden;
+    background: var(--compbar-bg); box-shadow: inset 0 0 0 1px var(--compbar-ring);
+  }
+  #comp-bar > span { height: 100%; transition: width .18s linear; }
+  .seg-rad { background: linear-gradient(#ffd27f, #ff8a5c); }
+  .seg-mat { background: linear-gradient(#8fb3ff, #6b7bff); }
+  .seg-de  { background: linear-gradient(#9a7bff, #66e0c0); }
+  #comp-legend { margin-top: 10px; display: grid; gap: 5px; }
+  .lg { display: flex; align-items: center; font-size: 11px; color: var(--muted); }
+  .lg i { width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; flex: none; }
+  .lg b { color: var(--ink); font-weight: 600; margin-left: auto; font-variant-numeric: tabular-nums; }
+
+  /* ---- Milestone cards ---- */
+  .card {
+    position: absolute; z-index: 4; width: 214px;
+    padding: 9px 12px 10px; border-radius: 11px;
+    background: linear-gradient(135deg, var(--glass1), var(--glass2));
+    border: 1px solid var(--panel-brd);
+    border-left: 2px solid var(--mcol);
+    backdrop-filter: blur(10px) saturate(1.3);
+    box-shadow: 0 6px 26px -10px var(--shadow);
+    opacity: 0; transform: translateY(8px);
+    transition: opacity .55s ease, transform .55s cubic-bezier(.2,.7,.3,1.15),
+                box-shadow .4s ease, border-color .3s ease, background .3s ease;
+    pointer-events: none; cursor: pointer;
+  }
+  .card.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+  .card.pop { box-shadow: 0 0 0 1px var(--mcol), 0 0 26px -4px var(--mcol); }
+  .card:hover {
+    border-color: var(--mcol);
+    transform: translateY(-2px) scale(1.015);
+    box-shadow: 0 10px 32px -8px var(--shadow), 0 0 20px -6px var(--mcol);
+    background: linear-gradient(135deg, var(--glass1-hover), var(--glass2-hover));
+  }
+  .card .ct { font-size: 12.5px; font-weight: 650; display: flex; align-items: center; gap: 7px; }
+  .card .ct i { width: 7px; height: 7px; border-radius: 50%; background: var(--mcol);
+                box-shadow: 0 0 9px var(--mcol); flex: none; }
+  .card .ctime { font-size: 10.5px; color: var(--accent); margin: 3px 0 3px;
+                 font-variant-numeric: tabular-nums; letter-spacing: .04em; }
+  .card .cdesc { font-size: 11px; color: var(--muted); line-height: 1.4; }
+
+  /* ---- Controls ---- */
+  #controls {
+    position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%);
+    z-index: 7; width: min(780px, calc(100% - 32px));
+    display: flex; align-items: center; gap: 13px;
+    padding: 10px 16px;
+    background: linear-gradient(160deg, var(--bar1), var(--bar2));
+    border: 1px solid var(--panel-brd); border-radius: 17px;
+    backdrop-filter: blur(16px) saturate(1.4);
+    box-shadow: 0 12px 40px -16px var(--shadow);
+  }
+  body.site-intro #controls {
+    display: none;
+  }
+  .btn {
+    appearance: none; border: 1px solid var(--panel-brd); background: var(--btnbg);
+    color: var(--ink); cursor: pointer; line-height: 1;
+    transition: background .15s, border-color .15s, box-shadow .2s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .btn:hover { background: var(--btnhover); box-shadow: 0 0 14px -4px var(--btnglow); }
+  .btn.icon { width: 34px; height: 34px; border-radius: 50%; flex: none; }
+  .btn.icon svg { display: block; }
+  #age { font-variant-numeric: tabular-nums; font-size: 12.5px; min-width: 152px;
+         color: var(--ink); white-space: nowrap; }
+  #temp { font-variant-numeric: tabular-nums; font-size: 12.5px; min-width: 96px;
+          color: var(--ink); white-space: nowrap; }
+  #age small, #temp small { color: var(--muted); font-size: 9.5px; text-transform: uppercase; letter-spacing: .12em; margin-right: 2px; }
+  #scrubwrap { position: relative; flex: 1; height: 24px; display: flex; align-items: center; }
+  #scrub {
+    -webkit-appearance: none; appearance: none; width: 100%; height: 4px; border-radius: 2px;
+    background: linear-gradient(90deg, var(--accent) var(--fill, 0%), var(--track) var(--fill, 0%));
+    outline: none; cursor: pointer; margin: 0;
+  }
+  #scrub::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 13px; height: 13px; border-radius: 50%; background: var(--thumb);
+    box-shadow: 0 0 10px var(--thumbglow), 0 0 0 3px var(--track); cursor: pointer;
+  }
+  #scrub::-moz-range-thumb {
+    width: 13px; height: 13px; border-radius: 50%; background: var(--thumb); border: none;
+    box-shadow: 0 0 10px var(--thumbglow), 0 0 0 3px var(--track); cursor: pointer;
+  }
+  .tick { position: absolute; top: 50%; width: 4px; height: 4px; margin: -2px 0 0 -2px;
+          border-radius: 50%; opacity: .8; pointer-events: none; }
+  #scrubtip {
+    position: absolute; bottom: 24px; transform: translateX(-50%);
+    padding: 4px 9px; border-radius: 8px; white-space: nowrap;
+    background: var(--tipbg); border: 1px solid var(--tipbrd);
+    font-size: 10.5px; color: var(--tipink); font-variant-numeric: tabular-nums;
+    opacity: 0; transition: opacity .15s ease; pointer-events: none;
+    box-shadow: 0 4px 16px -6px var(--shadow);
+  }
+  .speeds { display: flex; gap: 4px; }
+  .speeds .btn { padding: 7px 9px; font-size: 11.5px; border-radius: 9px; font-weight: 600; }
+  .speeds .btn.active { background: var(--accent); color: var(--accent-contrast); border-color: var(--accent); }
+
+  @media (max-width: 720px) {
+    #title { display: none; }
+    #composition { width: 192px; padding: 10px 11px 9px; }
+    .card { width: 150px; }
+    .card .cdesc { display: none; }
+    #controls { flex-wrap: wrap; justify-content: center; gap: 8px; }
+    #scrubwrap { order: 5; flex-basis: 100%; }
+    #age, #temp { min-width: 0; }
+    #comp-legend { display: none; }
+    #comp-era { margin-bottom: 8px; }
+  }
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="c"></canvas>
+
+  <div id="title">
+    <h1>The History of the Universe</h1>
+    <p>13.8 billion years · logarithmic time</p>
+  </div>
+
+  <div id="composition">
+    <h2>Composition of the Universe</h2>
+    <div id="comp-era">Radiation-dominated era</div>
+    <div id="comp-bar">
+      <span class="seg-rad" id="seg-rad" style="width:100%"></span>
+      <span class="seg-mat" id="seg-mat" style="width:0%"></span>
+      <span class="seg-de"  id="seg-de"  style="width:0%"></span>
+    </div>
+    <div id="comp-legend">
+      <div class="lg"><i style="background:#ff9a5c"></i>Radiation <b id="v-rad">100%</b></div>
+      <div class="lg"><i style="background:#7f8dff"></i>Matter <b id="v-mat">0%</b></div>
+      <div class="lg"><i style="background:#84c8d8"></i>Dark energy <b id="v-de">0%</b></div>
+    </div>
+  </div>
+
+  <div id="cards"></div>
+
+  <div id="controls">
+    <button class="btn icon" id="playBtn" aria-label="Play or pause"></button>
+    <button class="btn icon" id="restartBtn" aria-label="Restart" title="Restart">
+      <svg viewBox="0 0 24 24" width="13" height="13"><path d="M12 5V2L7 6l5 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z" fill="currentColor"/></svg>
+    </button>
+    <div id="age">—</div>
+    <div id="temp">—</div>
+    <div id="scrubwrap">
+      <input type="range" id="scrub" min="0" max="1000" value="0" aria-label="Scrub through time" />
+      <div id="scrubtip"></div>
+    </div>
+    <div class="speeds" id="speeds">
+      <button class="btn" data-s="0.5">0.5×</button>
+      <button class="btn active" data-s="1">1×</button>
+      <button class="btn" data-s="2">2×</button>
+    </div>
+    <button class="btn icon" id="themeBtn" aria-label="Toggle light or dark void" title="Toggle void theme" style="font-size:14px;">☾</button>
+  </div>
+
+</div>
+
+<script>
+"use strict";
+(function () {
+  const YR = 3.1557e7; // seconds in a year
+  const T_MIN = 1e-43;                 // Planck time
+  const T_MAX = 13.8e9 * YR;           // ~4.355e17 s (present)
+  const L0 = Math.log10(T_MIN);
+  const L1 = Math.log10(T_MAX);
+  const LR = L1 - L0;
+  const BASE_DURATION = 48;            // seconds for currentP 0 -> 1 at 1x
+  const TAU = Math.PI * 2;
+  const siteIntroMode = new URLSearchParams(window.location.search).has("siteIntro");
+
+  // time (s) <-> progress (0..1), logarithmic
+  const timeToP = (t) => (Math.log10(t) - L0) / LR;
+  const pToTime = (p) => Math.pow(10, L0 + p * LR);
+  const clamp01 = (v) => v < 0 ? 0 : v > 1 ? 1 : v;
+
+  // Deterministic RNG so starfields/galaxies are stable between frames & resizes
+  function mulberry32(seed) {
+    let a = seed >>> 0;
+    return function () {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  // ---- Milestones ---------------------------------------------------------
+  // `fill` (optional) overrides the color used in the funnel gradient so the
+  // wash can be art-directed without changing node/card accent colors.
+  // `color` must read on both the dark cosmos and a white page; `fill`
+  // (optional) overrides the hue used inside the funnel gradient.
+  const MS = [
+    { name: "Planck epoch",            t: 1e-43,       side: "L", color: "#a9bce8", fill: "#f2f7ff", desc: "Physics as we know it begins." },
+    { name: "Cosmic inflation",        t: 1e-35,       side: "R", color: "#8fa9f5", fill: "#b9cdff", desc: "Space expands faster than light, smoothing the cosmos." },
+    { name: "Quark–gluon plasma",      t: 1e-9,        side: "L", color: "#6f95f0", fill: "#8fb3ff", desc: "A dense soup of fundamental particles." },
+    { name: "Protons & neutrons form", t: 1e-6,        side: "R", color: "#9678f0", fill: "#a98cff", desc: "Quarks bind into the first hadrons." },
+    { name: "Neutrinos decouple",      t: 1,           side: "L", color: "#46bff0", fill: "#7fd4ff", desc: "Electrons and positrons annihilate." },
+    { name: "Nucleosynthesis",         t: 180,         side: "R", color: "#f5a53a", fill: "#ffb347", desc: "First light nuclei form: hydrogen, helium, lithium." },
+    { name: "Matter–radiation equality", t: 5e4 * YR,  side: "L", color: "#eeb64e", fill: "#ffd27f", desc: "Matter's density overtakes radiation." },
+    { name: "Recombination (CMB)",     t: 3.8e5 * YR,  side: "R", color: "#f57a4a", fill: "#ff8a5c", desc: "Atoms form and light escapes — the cosmic microwave background." },
+    { name: "The Dark Ages",           t: 1e7 * YR,    side: "L", color: "#6a6a92", fill: "#23233f", desc: "No stars yet — only cooling neutral gas." },
+    { name: "First stars",             t: 2e8 * YR,    side: "R", color: "#e3c25d", fill: "#8a86b8", desc: "Cosmic dawn: the first stars ignite." },
+    { name: "Reionization & galaxies", t: 7e8 * YR,    side: "L", color: "#64b4ef", fill: "#9ad0ff", desc: "Starlight reionizes gas; the first galaxies grow." },
+    { name: "Peak galaxy formation",   t: 3.5e9 * YR,  side: "R", color: "#b184f5", fill: "#c9a0ff", desc: "The busiest era of star and galaxy building." },
+    { name: "Our Solar System",        t: 9.2e9 * YR,  side: "L", color: "#eebc45", fill: "#ffd36b", desc: "The Sun and Earth form, 4.6 billion years ago." },
+    { name: "Dark energy takes over",  t: 9.8e9 * YR,  side: "R", color: "#7f6bff", desc: "Cosmic expansion begins to accelerate." },
+    { name: "Today",                   t: 13.8e9 * YR, side: "L", color: "#3ecfae", fill: "#57d9b8", desc: "13.8 billion years after the Big Bang." },
+  ];
+  MS.forEach(m => { m.p = clamp01(timeToP(m.t)); });
+  const RECOMB = MS[7]; // CMB flash trigger
+
+  // Vertical placement (vy) blends true log-time progress with even milestone
+  // spacing, so the crowded late universe isn't squished into the bottom sliver.
+  // The TIME axis (age readout + physics) stays purely logarithmic; only the
+  // vertical position on screen is warped.
+  const BETA = 0.2; // 1 = pure log, 0 = evenly spaced milestones
+  MS.forEach((m, i) => { m.vy = BETA * m.p + (1 - BETA) * (i / (MS.length - 1)); });
+  if (MS[0]) MS[0].vy = 0.001; // first scrubber unit past 0, so the first card waits for motion
+
+  // Continuous, invertible piecewise-linear map between log-progress p and
+  // display position vy, anchored on the milestones (both are monotonic 0..1).
+  function warp(p) {
+    if (p <= 0) return 0; if (p >= 1) return 1;
+    for (let i = 0; i < MS.length - 1; i++)
+      if (p >= MS[i].p && p <= MS[i + 1].p) {
+        const f = (p - MS[i].p) / ((MS[i + 1].p - MS[i].p) || 1);
+        return MS[i].vy + (MS[i + 1].vy - MS[i].vy) * f;
+      }
+    return 1;
+  }
+  function invWarp(vy) {
+    if (vy <= 0) return 0; if (vy >= 1) return 1;
+    for (let i = 0; i < MS.length - 1; i++)
+      if (vy >= MS[i].vy && vy <= MS[i + 1].vy) {
+        const f = (vy - MS[i].vy) / ((MS[i + 1].vy - MS[i].vy) || 1);
+        return MS[i].p + (MS[i + 1].p - MS[i].p) * f;
+      }
+    return 1;
+  }
+
+  // Era captions rendered faintly inside the funnel
+  const CAPTIONS = [
+    ["INFLATION", 0.125],
+    ["PRIMORDIAL PLASMA", 0.335],
+    ["FIRST NUCLEI", 0.475],
+    ["THE DARK AGES", 0.615],
+    ["COSMIC DAWN", 0.735],
+    ["AGE OF GALAXIES", 0.865],
+    ["ACCELERATING EXPANSION", 0.968],
+  ];
+
+  // ---- Composition keyframes (fractions r,m,de by cosmic time) ------------
+  const COMP = [
+    { t: 1e-40,       r: 1.000, m: 0.000, de: 0.000 },
+    { t: 1,           r: 0.960, m: 0.040, de: 0.000 },
+    { t: 5e4 * YR,    r: 0.500, m: 0.500, de: 0.000 },
+    { t: 3.8e5 * YR,  r: 0.230, m: 0.769, de: 0.001 },
+    { t: 2e8 * YR,    r: 0.060, m: 0.920, de: 0.020 },
+    { t: 3.5e9 * YR,  r: 0.010, m: 0.700, de: 0.290 },
+    { t: 9.8e9 * YR,  r: 0.002, m: 0.500, de: 0.498 },
+    { t: 13.8e9 * YR, r: 0.000, m: 0.315, de: 0.685 },
+  ];
+  // ---- Temperature keyframes (kelvin by cosmic time, log-log) -------------
+  const TEMP = [
+    [1e-43, 1.4e32],   // Planck temperature
+    [1e-32, 1e27],     // reheating after inflation
+    [1e-6, 1.5e12],    // quark–hadron transition
+    [1, 1e10],         // neutrino decoupling
+    [180, 1e9],        // nucleosynthesis
+    [5e4 * YR, 9400],  // matter–radiation equality
+    [3.8e5 * YR, 3000],// recombination
+    [2e8 * YR, 60],    // cosmic dawn
+    [1e9 * YR, 19],    // reionization era
+    [13.8e9 * YR, 2.725], // CMB today
+  ];
+  function tempAt(t) {
+    if (t <= TEMP[0][0]) return TEMP[0][1];
+    if (t >= TEMP[TEMP.length - 1][0]) return TEMP[TEMP.length - 1][1];
+    for (let i = 0; i < TEMP.length - 1; i++) {
+      const [t0, k0] = TEMP[i], [t1, k1] = TEMP[i + 1];
+      if (t >= t0 && t <= t1) {
+        const f = (Math.log10(t) - Math.log10(t0)) / (Math.log10(t1) - Math.log10(t0));
+        return Math.pow(10, Math.log10(k0) + (Math.log10(k1) - Math.log10(k0)) * f);
+      }
+    }
+    return TEMP[TEMP.length - 1][1];
+  }
+  function formatTemp(k) {
+    if (k >= 1e5) {
+      const e = Math.floor(Math.log10(k));
+      const m = k / Math.pow(10, e);
+      return `${m > 1.15 ? Math.round(m) + "×" : ""}10${sup(e)} K`;
+    }
+    if (k >= 1000) return `${commas(k)} K`;
+    return `${k < 10 ? k.toFixed(1) : Math.round(k)} K`;
+  }
+
+  function compAt(t) {
+    if (t <= COMP[0].t) return COMP[0];
+    if (t >= COMP[COMP.length - 1].t) return COMP[COMP.length - 1];
+    for (let i = 0; i < COMP.length - 1; i++) {
+      const a = COMP[i], b = COMP[i + 1];
+      if (t >= a.t && t <= b.t) {
+        const f = (Math.log10(t) - Math.log10(a.t)) / (Math.log10(b.t) - Math.log10(a.t));
+        return { r: a.r + (b.r - a.r) * f, m: a.m + (b.m - a.m) * f, de: a.de + (b.de - a.de) * f };
+      }
+    }
+    return COMP[COMP.length - 1];
+  }
+
+  // ---- Age formatting -----------------------------------------------------
+  const SUP = { "-": "⁻", "0": "⁰", "1": "¹", "2": "²", "3": "³", "4": "⁴", "5": "⁵", "6": "⁶", "7": "⁷", "8": "⁸", "9": "⁹" };
+  const sup = (n) => String(n).split("").map(c => SUP[c] || c).join("");
+  function commas(n) { return Math.round(n).toLocaleString("en-US"); }
+  function formatAge(t) {
+    if (t < 1e-3) {
+      const e = Math.floor(Math.log10(t));
+      const m = t / Math.pow(10, e);
+      const mant = m > 1.15 ? Math.round(m) + "×" : "";
+      return `${mant}10${sup(e)} s`;
+    }
+    if (t < 1)       return `${t.toPrecision(2)} s`;
+    if (t < 90)      return `${t < 10 ? t.toFixed(1) : Math.round(t)} s`;
+    if (t < 5400)    return `${(t / 60).toFixed(1)} min`;
+    if (t < 129600)  return `${(t / 3600).toFixed(1)} hours`;
+    if (t < 3 * YR)  return `${(t / 86400).toFixed(1)} days`;
+    const y = t / YR;
+    if (y < 1e3)  return `${commas(y)} years`;
+    if (y < 1e6)  return `${(y / 1e3).toFixed(y < 1e4 ? 1 : 0)} thousand yr`;
+    if (y < 1e9)  return `${(y / 1e6).toFixed(y < 1e7 ? 1 : 0)} million yr`;
+    return `${(y / 1e9).toFixed(2)} billion yr`;
+  }
+
+  // ---- DOM ----------------------------------------------------------------
+  const canvas = document.getElementById("c");
+  const ctx = canvas.getContext("2d");
+  const cardsRoot = document.getElementById("cards");
+  const scrub = document.getElementById("scrub");
+  const scrubwrap = document.getElementById("scrubwrap");
+  const ageEl = document.getElementById("age");
+  const tempEl = document.getElementById("temp");
+  const playBtn = document.getElementById("playBtn");
+  const restartBtn = document.getElementById("restartBtn");
+  const segRad = document.getElementById("seg-rad"), segMat = document.getElementById("seg-mat"), segDe = document.getElementById("seg-de");
+  const vRad = document.getElementById("v-rad"), vMat = document.getElementById("v-mat"), vDe = document.getElementById("v-de");
+  const eraEl = document.getElementById("comp-era");
+  const controlsEl = document.getElementById("controls");
+  const compEl = document.getElementById("composition");
+  document.body.classList.toggle("site-intro", siteIntroMode);
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const SVG_PLAY = '<svg viewBox="0 0 24 24" width="13" height="13"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>';
+  const SVG_PAUSE = '<svg viewBox="0 0 24 24" width="13" height="13"><path d="M6 5h4v14H6zM14 5h4v14h-4z" fill="currentColor"/></svg>';
+
+  // Milestone tick dots on the scrubber (thumb is ~13px wide)
+  MS.forEach(m => {
+    const tk = document.createElement("i");
+    tk.className = "tick";
+    tk.style.background = m.color;
+    tk.style.left = `calc(6.5px + (100% - 13px) * ${m.vy.toFixed(4)})`;
+    scrubwrap.appendChild(tk);
+  });
+
+  // Build cards (clickable: travel to that moment; hover: highlight node)
+  MS.forEach((m) => {
+    const el = document.createElement("div");
+    el.className = "card";
+    el.style.setProperty("--mcol", m.color);
+    el.innerHTML =
+      `<div class="ct"><i></i>${m.name}</div>` +
+      `<div class="ctime">${formatAge(m.t)}</div>` +
+      `<div class="cdesc">${m.desc}</div>`;
+    el.addEventListener("click", () => travelTo(m.vy));
+    el.addEventListener("mouseenter", () => { m.hover = true; });
+    el.addEventListener("mouseleave", () => { m.hover = false; });
+    cardsRoot.appendChild(el);
+    m.el = el;
+  });
+
+  // ---- Geometry -----------------------------------------------------------
+  let W = 0, H = 0, dpr = 1;
+  let centerX = 0, topPad = 0, usableH = 0, maxHW = 0, cardW = 214;
+
+  // Trumpet-bell silhouette: narrow Planck neck -> violent inflation flare ->
+  // slow decelerating growth -> renewed dark-energy flare at the bottom.
+  // Catmull-Rom through control points, sampled into a LUT.
+  const FUN = [
+    [0.00, 0.006], [0.05, 0.020], [0.09, 0.050], [0.15, 0.280], [0.28, 0.440],
+    [0.50, 0.560], [0.72, 0.660], [0.90, 0.760], [1.00, 1.000],
+  ];
+  const LUT_N = 512;
+  const funLUT = new Float32Array(LUT_N + 1);
+  (function buildLUT() {
+    const P = (i) => FUN[Math.max(0, Math.min(FUN.length - 1, i))];
+    for (let k = 0; k <= LUT_N; k++) {
+      const v = k / LUT_N;
+      let i = 0;
+      while (i < FUN.length - 2 && v > FUN[i + 1][0]) i++;
+      const p0 = P(i - 1), p1 = P(i), p2 = P(i + 1), p3 = P(i + 2);
+      const u = (v - p1[0]) / ((p2[0] - p1[0]) || 1);
+      const u2 = u * u, u3 = u2 * u;
+      const w = 0.5 * ((2 * p1[1]) + (-p0[1] + p2[1]) * u +
+        (2 * p0[1] - 5 * p1[1] + 4 * p2[1] - p3[1]) * u2 +
+        (-p0[1] + 3 * p1[1] - 3 * p2[1] + p3[1]) * u3);
+      funLUT[k] = Math.max(0.004, Math.min(1, w));
+    }
+    // space only ever expands: enforce monotonic width (kills CR overshoot dips)
+    for (let k = 1; k <= LUT_N; k++) funLUT[k] = Math.max(funLUT[k], funLUT[k - 1]);
+  })();
+  function funnelHW(p) {
+    const q = clamp01(p) * LUT_N, i = q | 0, fr = q - i;
+    const a = funLUT[i], b = funLUT[Math.min(LUT_N, i + 1)];
+    return maxHW * (a + (b - a) * fr);
+  }
+  const pToY = (p) => topPad + p * usableH;
+  // Downward sag of the expanding "now" front (and the bottom rim)
+  const sagAt = (hw) => Math.min(hw * 0.06, 26);
+
+  function layout() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = window.innerWidth; H = window.innerHeight;
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    canvas.style.width = W + "px"; canvas.style.height = H + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    centerX = W / 2;
+    const mobile = W < 720;
+    compEl.style.top = (mobile ? 14 : 18) + "px";
+    topPad = mobile ? 76 : 88;
+    // the controls bar lives at the bottom now — leave room for it + the rim
+    const bottomReserve = controlsEl.offsetHeight + 14 + 30;
+    usableH = H - topPad - bottomReserve;
+    maxHW = Math.min(W * 0.44, centerX - (mobile ? 24 : 244));
+    cardW = mobile ? 150 : 214;
+
+    computeCardLayout();
+  }
+
+  function computeCardLayout() {
+    // lowest allowed card BOTTOM edge sits above the bottom controls bar
+    const bottomLimit = H - controlsEl.offsetHeight - 26;
+    const pad = 12;              // vertical gap between adjacent cards
+    // Set widths first so wrapped heights measure correctly, then read heights.
+    MS.forEach(m => { m.el.style.width = cardW + "px"; m.ch = m.el.offsetHeight || 70; });
+
+    const compB = compEl.offsetTop + compEl.offsetHeight;
+    ["L", "R"].forEach(side => {
+      // Left column clears the title (desktop); right clears the composition panel.
+      const minY = side === "L" ? (W < 720 ? 16 : 96) : compB + 12;
+      const list = MS.filter(m => m.side === side).sort((a, b) => a.vy - b.vy);
+      const n = list.length;
+      // forward pass: node-centred, then pushed down to clear the previous card
+      for (let i = 0; i < n; i++) {
+        let y = Math.max(pToY(list[i].vy) - list[i].ch / 2, minY);
+        if (i > 0) y = Math.max(y, list[i - 1].cardY + list[i - 1].ch + pad);
+        list[i].cardY = y;
+      }
+      // backward pass: keep the last card's bottom on-screen, cascade upward
+      if (n) list[n - 1].cardY = Math.min(list[n - 1].cardY, bottomLimit - list[n - 1].ch);
+      for (let i = n - 2; i >= 0; i--)
+        list[i].cardY = Math.min(list[i].cardY, list[i + 1].cardY - list[i].ch - pad);
+      for (let i = 0; i < n; i++)
+        list[i].cardY = Math.max(list[i].cardY, minY);
+
+      list.forEach(m => {
+        m.cardX = side === "L" ? 22 : W - 22 - cardW;
+        m.el.style.left = m.cardX + "px";
+        m.el.style.top = m.cardY + "px";
+        m.anchorX = side === "L" ? m.cardX + cardW : m.cardX;
+      });
+    });
+  }
+
+  // ---- The Void (outside the universe) -------------------------------------
+  // A perfectly flat, featureless field — dark blue-black or blank white.
+  // Nothing exists out there; the universe is the only object on the page.
+  const PALETTES = {
+    dark: {
+      bg: "#000000",
+      flash: "235,242,255", flashA: 0.6,
+      ring: "#cfe0ff",
+      spike: "255,255,255", singCore: "255,255,255", singComp: "lighter", haloLift: 60,
+      edgeFaint: "rgba(150,180,255,0.10)", edgeBright: "rgba(175,198,255,0.55)",
+      edgeShadow: "rgba(150,180,255,0.7)", rimPhoton: "rgba(255,255,255,0.5)",
+      partComp: "lighter",
+      bangColors: ["#ffffff", "#cfe0ff", "#ffe9c0"],
+      sparkA: "#cfe0ff", sparkB: "#ffcf9a", sparkC: "#bfe8ff",
+      todayRim: "102,224,192", todayRimHi: "160,255,225",
+      funnelShadow: null,
+      pillBg: "rgba(10,13,32,0.85)", pillBrd: "rgba(160,180,255,0.45)", pillInk: "#dfe7ff",
+      captionInk: "222,232,255",
+      inviteInk: "205,218,255",
+    },
+    light: {
+      bg: "#ffffff",
+      flash: "70,60,190", flashA: 0.45,
+      ring: "#4d5fc9",
+      spike: "90,100,220", singCore: "80,90,215", singComp: "source-over", haloLift: -50,
+      edgeFaint: "rgba(70,85,170,0.12)", edgeBright: "rgba(70,90,180,0.6)",
+      edgeShadow: "rgba(90,110,220,0.5)", rimPhoton: "rgba(60,75,180,0.55)",
+      partComp: "source-over",
+      bangColors: ["#5a6fd8", "#8fa9f5", "#e8a83a"],
+      sparkA: "#5a6fd8", sparkB: "#d88a3a", sparkC: "#2ea0a0",
+      todayRim: "35,170,140", todayRimHi: "46,207,174",
+      funnelShadow: "rgba(50,60,140,0.35)",
+      pillBg: "rgba(255,255,255,0.94)", pillBrd: "rgba(70,85,160,0.4)", pillInk: "#1c2340",
+      captionInk: "222,232,255",
+      inviteInk: "70,82,140",
+    },
+  };
+  let PAL = PALETTES.dark;
+
+  // ---- Galaxy & star sprites (structure inside the late funnel) ------------
+  function makeSprite(kind, seed) {
+    const s = document.createElement("canvas");
+    s.width = s.height = 44;
+    const g = s.getContext("2d");
+    const rng = mulberry32(seed);
+    g.translate(22, 22);
+    if (kind === "spiral") {
+      const core = g.createRadialGradient(0, 0, 0, 0, 0, 6);
+      core.addColorStop(0, "rgba(255,250,235,0.95)");
+      core.addColorStop(1, "rgba(255,240,210,0)");
+      g.fillStyle = core; g.fillRect(-8, -8, 16, 16);
+      for (let arm = 0; arm < 2; arm++) {
+        for (let k = 0; k < 34; k++) {
+          const t = k / 34;
+          const r = 2.5 + t * 16;
+          const a = arm * Math.PI + t * 2.7 + (rng() - 0.5) * 0.3;
+          g.globalAlpha = (1 - t) * 0.75;
+          g.fillStyle = t < 0.35 ? "#fff6e8" : (rng() < 0.5 ? "#cfe0ff" : "#ffd9b0");
+          g.fillRect(Math.cos(a) * r - 0.7, Math.sin(a) * r * 0.62 - 0.7, 1.4, 1.4);
+        }
+      }
+    } else if (kind === "ell") {
+      const blob = g.createRadialGradient(0, 0, 0, 0, 0, 13);
+      blob.addColorStop(0, "rgba(255,244,220,0.9)");
+      blob.addColorStop(0.4, "rgba(255,228,190,0.35)");
+      blob.addColorStop(1, "rgba(255,220,180,0)");
+      g.fillStyle = blob;
+      g.save(); g.scale(1, 0.68); g.beginPath(); g.arc(0, 0, 13, 0, TAU); g.fill(); g.restore();
+    } else { // irregular cluster
+      for (let k = 0; k < 14; k++) {
+        const a = rng() * TAU, r = rng() * 9;
+        g.globalAlpha = 0.35 + rng() * 0.55;
+        g.fillStyle = rng() < 0.6 ? "#e6efff" : "#ffe9c8";
+        g.fillRect(Math.cos(a) * r - 0.8, Math.sin(a) * r * 0.8 - 0.8, 1.6, 1.6);
+      }
+    }
+    return s;
+  }
+  const SPRITES = { spiral: makeSprite("spiral", 7), spiral2: makeSprite("spiral", 19), ell: makeSprite("ell", 3), irr: makeSprite("irr", 11) };
+
+  const gals = [];
+  (function buildGalaxies() {
+    const rng = mulberry32(77);
+    for (let i = 0; i < 130; i++) {
+      const early = i < 30; // cosmic dawn: lone stars before galaxies assemble
+      const vy = early ? 0.66 + rng() * 0.13 : 0.72 + Math.pow(rng(), 0.8) * 0.28;
+      let type;
+      if (early || vy < 0.78) type = rng() < 0.72 ? "star" : "irr";
+      else { const r = rng(); type = r < 0.4 ? (rng() < 0.5 ? "spiral" : "spiral2") : r < 0.68 ? "ell" : "star"; }
+      gals.push({
+        vy, type,
+        relX: (rng() * 2 - 1) * 0.88,
+        dy: (rng() - 0.5) * 14,
+        scale: type === "star" ? 0.5 + rng() * 0.7 : 0.45 + rng() * 0.95,
+        rot: rng() * TAU,
+        rotSp: (rng() - 0.5) * 0.00045,
+        tw: 0.5 + rng() * 1.6,
+        ph: rng() * TAU,
+      });
+    }
+    gals.sort((a, b) => a.vy - b.vy);
+  })();
+
+  // ---- Density texture (structure formation) ------------------------------
+  // A ridged fractal-noise texture, built once, painted inside the funnel with
+  // contrast that GROWS with cosmic time: the early universe is nearly smooth
+  // (tiny fluctuations) and it wrinkles into filaments & voids toward today.
+  function hash2(ix, iy) {
+    let n = (ix * 374761393 + iy * 668265263) | 0;
+    n = (n ^ (n >> 13)) * 1274126177 | 0;
+    return ((n ^ (n >> 16)) >>> 0) / 4294967295;
+  }
+  function vnoise(x, y) {
+    const ix = Math.floor(x), iy = Math.floor(y), fx = x - ix, fy = y - iy;
+    const ux = fx * fx * (3 - 2 * fx), uy = fy * fy * (3 - 2 * fy);
+    const a = hash2(ix, iy), b = hash2(ix + 1, iy), c = hash2(ix, iy + 1), d = hash2(ix + 1, iy + 1);
+    return a + (b - a) * ux + (c - a) * uy + (a - b - c + d) * ux * uy;
+  }
+  function fbm(x, y) {
+    let v = 0, amp = 0.5, f = 1;
+    for (let o = 0; o < 4; o++) { v += amp * vnoise(x * f, y * f); f *= 2; amp *= 0.5; }
+    return v;
+  }
+  const NW = 256, NH = 512;
+  const noiseCanvas = document.createElement("canvas");
+  noiseCanvas.width = NW; noiseCanvas.height = NH;
+  (function buildNoise() {
+    const nctx = noiseCanvas.getContext("2d");
+    const img = nctx.createImageData(NW, NH);
+    const d = img.data;
+    for (let y = 0; y < NH; y++) {
+      for (let x = 0; x < NW; x++) {
+        const f = fbm(x / NW * 10, y / NH * 11);
+        let ridge = 1 - Math.abs(2 * f - 1);   // bright ridges = filaments
+        ridge = Math.pow(Math.max(0, ridge), 1.7);
+        const g = Math.round(38 + ridge * 202); // ~38 (voids) .. ~240 (filaments)
+        const idx = (y * NW + x) * 4;
+        d[idx] = d[idx + 1] = d[idx + 2] = g; d[idx + 3] = 255;
+      }
+    }
+    nctx.putImageData(img, 0, 0);
+  })();
+
+  // Contrast of the density field as a function of display progress (time).
+  function structureAmp(vy) {
+    const s = clamp01((vy - 0.28) / 0.62);
+    return 0.08 + 0.92 * s * s;
+  }
+  // Paint the wrinkles/ripples inside the current funnel clip, up to frontY.
+  function drawWrinkles(frontY, tsec) {
+    const h = frontY - topPad;
+    if (h <= 2) return;
+    const t = reduceMotion ? 0 : tsec;
+    const srcSpan = NH * 0.82;                                    // most of the texture height
+    const drift = (Math.sin(t * 0.16) * 0.5 + 0.5) * (NH - srcSpan); // ping-pong, no wrap seams
+    const bands = 40, bandH = h / bands, srcH = srcSpan / bands;
+    ctx.globalCompositeOperation = "overlay";
+    for (let i = 0; i < bands; i++) {
+      const y0 = topPad + i * bandH;
+      const vy = (y0 + bandH / 2 - topPad) / usableH;
+      ctx.globalAlpha = structureAmp(vy);
+      const srcY = drift + (i / bands) * srcSpan;
+      ctx.drawImage(noiseCanvas, 0, srcY, NW, srcH, 0, y0, W, bandH + 1);
+    }
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = "source-over";
+  }
+
+  // ---- Particles ----------------------------------------------------------
+  const parts = [];
+  const MAX_PARTS = reduceMotion ? 0 : 700;
+  function spawnBurst(m) {
+    if (reduceMotion) return;
+    if (m === RECOMB) cmbGlow = 1;   // the universe becomes transparent: flash!
+    const y = pToY(m.vy), hw = funnelHW(m.vy);
+    const n = m.vy < 0.3 ? 46 : m.vy < 0.7 ? 34 : 24;
+    for (let i = 0; i < n; i++) {
+      if (parts.length >= MAX_PARTS) break;
+      const ang = Math.random() * TAU;
+      const spd = (0.6 + Math.random() * 2.4) * (m.vy < 0.3 ? 2.1 : 1.3);
+      const spread = hw * (0.15 + Math.random() * 0.85);
+      parts.push({
+        x: centerX + Math.cos(ang) * spread * 0.4,
+        y: y + (Math.random() - 0.5) * 10,
+        vx: Math.cos(ang) * spd, vy: Math.sin(ang) * spd * 0.7 + 0.3,
+        life: 1, decay: 0.006 + Math.random() * 0.014,
+        size: 1 + Math.random() * 2.4, color: m.color,
+      });
+    }
+  }
+  // Sparks shed along the expanding "now" front
+  function spawnSparks(currentP, frontY) {
+    if (reduceMotion || parts.length >= MAX_PARTS - 4) return;
+    const hw = funnelHW(currentP), sag = sagAt(hw);
+    for (let i = 0; i < 2; i++) {
+      const u = Math.random();
+      parts.push({
+        x: centerX + hw * (2 * u - 1),
+        y: frontY + 4 * sag * u * (1 - u),
+        vx: (u - 0.5) * 1.6, vy: 0.3 + Math.random() * 0.7,
+        life: 0.8, decay: 0.02 + Math.random() * 0.025,
+        size: 0.6 + Math.random() * 1.5,
+        color: currentP < 0.35 ? PAL.sparkA : currentP < 0.72 ? PAL.sparkB : PAL.sparkC,
+      });
+    }
+  }
+  // The Bang itself: a violent radial burst from the singularity
+  function spawnBang() {
+    if (reduceMotion) return;
+    for (let i = 0; i < 70; i++) {
+      if (parts.length >= MAX_PARTS) break;
+      const ang = Math.random() * TAU;
+      const spd = 1 + Math.random() * 5;
+      const r = Math.random();
+      parts.push({
+        x: centerX, y: topPad,
+        vx: Math.cos(ang) * spd,
+        vy: Math.abs(Math.sin(ang)) * spd * 0.8 + 0.4, // downward bias
+        life: 1, decay: 0.008 + Math.random() * 0.02,
+        size: 1 + Math.random() * 2.8,
+        color: r < 0.6 ? PAL.bangColors[0] : (r < 0.8 ? PAL.bangColors[1] : PAL.bangColors[2]),
+      });
+    }
+  }
+  function updateParticles() {
+    for (let i = parts.length - 1; i >= 0; i--) {
+      const p = parts[i];
+      p.x += p.vx; p.y += p.vy; p.vy += 0.008; p.vx *= 0.992;
+      p.life -= p.decay;
+      if (p.life <= 0) parts.splice(i, 1);
+    }
+  }
+
+  // ---- Cinematic state ------------------------------------------------------
+  let flashA = 0;      // full-screen bang flash
+  let cmbGlow = 0;     // warm recombination glow
+  const rings = [];    // expanding shockwave rings
+  const PREROLL_T = 1.5;
+  let preroll = 0;     // seconds of held breath before the bang
+  let focusVy = 0, focusA = 0; // glow band lighting up a visited moment
+  function bang() {
+    if (reduceMotion) return;
+    flashA = 0.85;
+    rings.length = 0;
+    rings.push({ a: 0 }, { a: -0.22 }, { a: -0.45 });
+    spawnBang();
+  }
+
+  // ---- Funnel gradient (era tinted) ---------------------------------------
+  function funnelGradient(y0, y1) {
+    const g = ctx.createLinearGradient(0, y0, 0, y1);
+    const span = y1 - y0 || 1;
+    g.addColorStop(0, "#ffffff");
+    MS.forEach(m => {
+      let stop = (pToY(m.vy) - y0) / span;
+      stop = clamp01(stop);
+      g.addColorStop(stop, m.fill || m.color);
+    });
+    return g;
+  }
+
+  // Epoch color grading: a whisper of tint that follows the current era
+  const GRADE = [[150, 170, 255], [255, 170, 110], [110, 230, 200]];
+  function gradeRGB(p) {
+    const f = p < 0.5 ? p / 0.5 : (p - 0.5) / 0.5;
+    const a = p < 0.5 ? GRADE[0] : GRADE[1];
+    const b = p < 0.5 ? GRADE[1] : GRADE[2];
+    return [
+      Math.round(a[0] + (b[0] - a[0]) * f),
+      Math.round(a[1] + (b[1] - a[1]) * f),
+      Math.round(a[2] + (b[2] - a[2]) * f),
+    ];
+  }
+
+  // Soft lens-flare spike through the singularity
+  function drawSpike(x, y, len, thick, alpha) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(1, thick / len);
+    const g = ctx.createRadialGradient(0, 0, 0, 0, 0, len);
+    g.addColorStop(0, `rgba(${PAL.spike},${alpha})`);
+    g.addColorStop(0.4, `rgba(${PAL.spike},${alpha * 0.45})`);
+    g.addColorStop(1, `rgba(${PAL.spike},0)`);
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(0, 0, len, 0, TAU); ctx.fill();
+    ctx.restore();
+  }
+
+  // ---- Drawing ------------------------------------------------------------
+  function draw(currentP, tsec) {
+    ctx.clearRect(0, 0, W, H);
+
+    // the void: one flat, featureless color — nothing exists out here
+    ctx.fillStyle = PAL.bg;
+    ctx.fillRect(0, 0, W, H);
+
+    const frontY = pToY(currentP);
+    const hwF = funnelHW(currentP);
+    const sag = sagAt(hwF);
+    const steps = 90;
+
+    // ---- funnel fill (revealed portion, arced bottom) ----
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(centerX, topPad);
+    for (let i = 0; i <= steps; i++) {
+      const p = currentP * (i / steps), y = pToY(p);
+      ctx.lineTo(centerX + funnelHW(p), y);
+    }
+    ctx.quadraticCurveTo(centerX, frontY + sag * 2, centerX - hwF, frontY);
+    for (let i = steps; i >= 0; i--) {
+      const p = currentP * (i / steps), y = pToY(p);
+      ctx.lineTo(centerX - funnelHW(p), y);
+    }
+    ctx.closePath();
+    // on the white page, the universe floats — it casts a soft shadow
+    if (PAL.funnelShadow) {
+      ctx.save();
+      ctx.shadowColor = PAL.funnelShadow; ctx.shadowBlur = 48; ctx.shadowOffsetY = 12;
+      ctx.fillStyle = "#0b0722";
+      ctx.fill();
+      ctx.restore();
+    }
+    ctx.clip();
+
+    // opaque dark interior: the cosmos stays vivid whatever the page color
+    const base = ctx.createLinearGradient(0, topPad, 0, pToY(1));
+    base.addColorStop(0, "#0b0722"); base.addColorStop(1, "#050313");
+    ctx.fillStyle = base;
+    ctx.fillRect(0, 0, W, H);
+
+    const grad = funnelGradient(topPad, pToY(1));
+    ctx.globalAlpha = 0.5;
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+
+    // brighten core column
+    ctx.globalAlpha = 0.35;
+    const core = ctx.createLinearGradient(centerX - maxHW, 0, centerX + maxHW, 0);
+    core.addColorStop(0, "rgba(0,0,0,0)");
+    core.addColorStop(0.5, "rgba(255,255,255,0.14)");
+    core.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle = core; ctx.fillRect(0, 0, W, H);
+    ctx.globalAlpha = 1;
+
+    // inner rim light: the walls of the cosmos catch the light, giving the
+    // bell volume (stroke is clipped, so only the inward half shows)
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    for (const sgn of [-1, 1]) {
+      ctx.beginPath();
+      for (let i = 0; i <= steps; i++) {
+        const p = currentP * (i / steps), y = pToY(p), x = centerX + sgn * funnelHW(p);
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.lineWidth = 16;
+      ctx.strokeStyle = "rgba(150,175,255,0.10)";
+      ctx.shadowColor = "rgba(160,185,255,0.5)"; ctx.shadowBlur = 22;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+    }
+    ctx.restore();
+
+    // CMB flash: warm glow blooming from recombination's row
+    if (cmbGlow > 0.01) {
+      const gy = pToY(RECOMB.vy);
+      const g = ctx.createRadialGradient(centerX, gy, 0, centerX, gy, maxHW * 1.1);
+      g.addColorStop(0, `rgba(255,160,90,${cmbGlow * 0.5})`);
+      g.addColorStop(0.5, `rgba(255,120,60,${cmbGlow * 0.22})`);
+      g.addColorStop(1, "rgba(255,100,50,0)");
+      ctx.globalCompositeOperation = "lighter";
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      ctx.globalCompositeOperation = "source-over";
+    }
+
+    // density ripples & wrinkles (structure formation)
+    drawWrinkles(frontY, tsec);
+
+    // focus glow: the moment you traveled to lights up, then fades
+    if (focusA > 0.01) {
+      const fy = pToY(focusVy);
+      const g = ctx.createLinearGradient(0, fy - 44, 0, fy + 44);
+      g.addColorStop(0, "rgba(210,225,255,0)");
+      g.addColorStop(0.5, `rgba(210,225,255,${focusA * 0.22})`);
+      g.addColorStop(1, "rgba(210,225,255,0)");
+      ctx.globalCompositeOperation = "lighter";
+      ctx.fillStyle = g;
+      ctx.fillRect(0, fy - 44, W, 88);
+      ctx.globalCompositeOperation = "source-over";
+    }
+
+    // galaxies & first stars bloom inside the late funnel
+    ctx.globalCompositeOperation = "lighter";
+    for (const g of gals) {
+      if (currentP < g.vy - 0.001) continue;
+      const fade = Math.min(1, (currentP - g.vy) / 0.025);
+      const tw = reduceMotion ? 0.85 : 0.72 + 0.28 * Math.sin(tsec * g.tw + g.ph);
+      const x = centerX + g.relX * funnelHW(g.vy);
+      const y = pToY(g.vy) + g.dy;
+      if (g.type === "star") {
+        ctx.globalAlpha = fade * tw * 0.9;
+        ctx.fillStyle = "#ffffff";
+        ctx.beginPath(); ctx.arc(x, y, 0.8 + g.scale, 0, TAU); ctx.fill();
+      } else {
+        const spr = SPRITES[g.type];
+        const rot = g.rot + (reduceMotion ? 0 : tsec * 1000 * g.rotSp);
+        ctx.globalAlpha = fade * tw * 0.8;
+        ctx.save();
+        ctx.translate(x, y); ctx.rotate(rot); ctx.scale(g.scale, g.scale);
+        ctx.drawImage(spr, -22, -22);
+        ctx.restore();
+      }
+    }
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = "source-over";
+
+    // era captions, whispered across the funnel
+    ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.font = "600 11px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+    try { ctx.letterSpacing = "4px"; } catch (e) {}
+    for (const [label, cvy] of CAPTIONS) {
+      const reveal = clamp01((currentP - cvy) / 0.03);
+      if (reveal <= 0) continue;
+      const cw = ctx.measureText(label).width;
+      if (funnelHW(cvy) * 2 - 44 < cw) continue;
+      ctx.fillStyle = `rgba(${PAL.captionInk},${0.15 * reveal})`;
+      ctx.fillText(label, centerX, pToY(cvy));
+    }
+    try { ctx.letterSpacing = "0px"; } catch (e) {}
+    ctx.restore(); // end funnel clip
+
+    // ---- funnel outline (dual-stroke glow) ----
+    ctx.save();
+    for (const sgn of [-1, 1]) {
+      ctx.beginPath();
+      for (let i = 0; i <= steps; i++) {
+        const p = currentP * (i / steps), y = pToY(p), x = centerX + sgn * funnelHW(p);
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.lineWidth = 5; ctx.strokeStyle = PAL.edgeFaint; ctx.stroke();
+      ctx.lineWidth = 1.4; ctx.strokeStyle = PAL.edgeBright;
+      ctx.shadowColor = PAL.edgeShadow; ctx.shadowBlur = 10;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+      // photons streaming down the rim
+      if (!reduceMotion) {
+        ctx.setLineDash([3, 42]);
+        ctx.lineDashOffset = -tsec * 46;
+        ctx.lineWidth = 2.2; ctx.strokeStyle = PAL.rimPhoton;
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+    }
+    ctx.restore();
+
+    // ---- particles (drawn as velocity streaks — fireworks, not dots) ----
+    ctx.save();
+    ctx.globalCompositeOperation = PAL.partComp;
+    ctx.lineCap = "round";
+    for (const p of parts) {
+      const r = p.size * (0.6 + p.life * 0.6);
+      ctx.globalAlpha = Math.max(0, p.life) * 0.9;
+      ctx.strokeStyle = p.color;
+      ctx.lineWidth = r * 1.6;
+      ctx.beginPath();
+      ctx.moveTo(p.x - p.vx * 2.5, p.y - p.vy * 2.5);
+      ctx.lineTo(p.x, p.y);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // ---- milestone nodes + curved leader lines (revealed) ----
+    ctx.save();
+    for (const m of MS) {
+      if (currentP < m.vy - 0.0005) continue;
+      const y = pToY(m.vy);
+      const sgn = m.side === "L" ? -1 : 1;
+      const nx = centerX + sgn * funnelHW(m.vy);
+      const t = clamp01((currentP - m.vy) / 0.02);
+      const ax = m.anchorX, ay = m.cardY + (m.ch || 64) / 2;
+      // curved leader
+      ctx.globalAlpha = (m.hover ? 0.85 : 0.30) * t;
+      ctx.strokeStyle = m.color; ctx.lineWidth = m.hover ? 1.5 : 1;
+      ctx.beginPath();
+      ctx.moveTo(nx, y);
+      ctx.bezierCurveTo(nx + (ax - nx) * 0.45, y, ax - (ax - nx) * 0.30, ay, ax, ay);
+      ctx.stroke();
+      if (m.hover && !reduceMotion) {
+        // photons run from the universe out to the card you're reading
+        ctx.setLineDash([3, 11]);
+        ctx.lineDashOffset = -tsec * 46;
+        ctx.globalAlpha = t;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+      // endpoint dot at the card
+      ctx.globalAlpha = 0.55 * t;
+      ctx.fillStyle = m.color;
+      ctx.beginPath(); ctx.arc(ax, ay, 1.8, 0, TAU); ctx.fill();
+      // node on the funnel edge (pulses just after crossing, glows on hover)
+      const pulse = 1 + (1 - t) * 0.9 + (m.hover ? 0.5 : 0);
+      ctx.globalAlpha = t;
+      ctx.fillStyle = m.color;
+      ctx.shadowColor = m.color; ctx.shadowBlur = m.hover ? 22 : 14;
+      ctx.beginPath(); ctx.arc(nx, y, 3.6 * pulse, 0, TAU); ctx.fill();
+      ctx.shadowBlur = 0;
+      ctx.globalAlpha = 0.35 * t;
+      ctx.strokeStyle = m.color; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(nx, y, 6.5 * pulse, 0, TAU); ctx.stroke();
+    }
+    ctx.restore();
+
+    // ---- time probe: hairline + age pill under the cursor ----
+    if (probe !== null && probe <= currentP) {
+      const py = pToY(probe), phw = funnelHW(probe);
+      ctx.save();
+      ctx.strokeStyle = "rgba(255,255,255,0.6)"; ctx.lineWidth = 1;
+      ctx.shadowColor = "rgba(200,220,255,0.8)"; ctx.shadowBlur = 6;
+      ctx.setLineDash([4, 5]);
+      ctx.beginPath(); ctx.moveTo(centerX - phw, py); ctx.lineTo(centerX + phw, py); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.shadowBlur = 0;
+      const label = formatAge(pToTime(invWarp(probe)));
+      ctx.font = "600 11px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+      const tw2 = ctx.measureText(label).width;
+      // pill sits beside the funnel edge; falls back above the line when cramped
+      let lx = centerX + phw + 12, ly = py;
+      if (lx + tw2 + 18 > W) { lx = centerX - tw2 / 2; ly = py - 18; }
+      const bx = lx - 8, by = ly - 10, bw = tw2 + 16, bh = 20;
+      ctx.fillStyle = PAL.pillBg;
+      ctx.strokeStyle = PAL.pillBrd; ctx.lineWidth = 1;
+      ctx.beginPath();
+      if (ctx.roundRect) ctx.roundRect(bx, by, bw, bh, 10); else ctx.rect(bx, by, bw, bh);
+      ctx.fill(); ctx.stroke();
+      ctx.fillStyle = PAL.pillInk; ctx.textAlign = "left"; ctx.textBaseline = "middle";
+      ctx.fillText(label, lx, ly + 0.5);
+      ctx.restore();
+    }
+
+    // ---- expanding "now" front (arced, glowing) ----
+    if (currentP < 0.997) {
+      ctx.save();
+      ctx.globalCompositeOperation = PAL.partComp;
+      const fg = ctx.createLinearGradient(centerX - hwF, 0, centerX + hwF, 0);
+      fg.addColorStop(0, `rgba(${PAL.singCore},0)`);
+      fg.addColorStop(0.5, `rgba(${PAL.singCore},0.9)`);
+      fg.addColorStop(1, `rgba(${PAL.singCore},0)`);
+      ctx.beginPath();
+      ctx.moveTo(centerX - hwF, frontY);
+      ctx.quadraticCurveTo(centerX, frontY + sag * 2, centerX + hwF, frontY);
+      ctx.strokeStyle = fg;
+      ctx.lineWidth = 7; ctx.globalAlpha = 0.16; ctx.stroke();
+      ctx.lineWidth = 2.2; ctx.globalAlpha = 1;
+      ctx.shadowColor = PAL.ring; ctx.shadowBlur = 16;
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // ---- "today" rim: the face of the observable universe ----
+    if (currentP > 0.96) {
+      // once parked at today, the rim keeps breathing — expansion never stops
+      const breathe = (currentP >= 1 && !reduceMotion) ? 0.8 + 0.2 * Math.sin(tsec * 1.1) : 1;
+      const a = clamp01((currentP - 0.96) / 0.04) * breathe;
+      const ry = sagAt(maxHW);
+      const yb = pToY(1);
+      ctx.save();
+      ctx.globalCompositeOperation = PAL.partComp;
+      ctx.globalAlpha = a * 0.10;
+      ctx.fillStyle = `rgb(${PAL.todayRim})`;
+      ctx.beginPath(); ctx.ellipse(centerX, yb, maxHW, ry, 0, 0, TAU); ctx.fill();
+      const rim = ctx.createLinearGradient(centerX - maxHW, 0, centerX + maxHW, 0);
+      rim.addColorStop(0, `rgba(${PAL.todayRim},0)`);
+      rim.addColorStop(0.5, `rgba(${PAL.todayRimHi},${a * 0.85})`);
+      rim.addColorStop(1, `rgba(${PAL.todayRim},0)`);
+      ctx.strokeStyle = rim; ctx.lineWidth = 1.6;
+      ctx.shadowColor = `rgb(${PAL.todayRim})`; ctx.shadowBlur = 14;
+      ctx.globalAlpha = a;
+      ctx.beginPath(); ctx.ellipse(centerX, yb, maxHW, ry, 0, 0, TAU); ctx.stroke();
+      // the payoff: what this rim actually is
+      if (currentP >= 0.995) {
+        const la = clamp01((currentP - 0.995) / 0.005) * a;
+        ctx.font = "600 10px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+        try { ctx.letterSpacing = "3px"; } catch (err) {}
+        const label = "93 BILLION LIGHT-YEARS ACROSS";
+        if (ctx.measureText(label).width < maxHW * 2 - 40) {
+          ctx.globalAlpha = la * 0.7;
+          ctx.fillStyle = `rgb(${PAL.todayRimHi})`;
+          ctx.textAlign = "center"; ctx.textBaseline = "middle";
+          ctx.shadowBlur = 0;
+          ctx.fillText(label, centerX, yb - ry - 12);
+        }
+        if (siteIntroMode) {
+          const prompt = "CLICK THE RIM TO ENTER THE OBSERVABLE UNIVERSE";
+          if (ctx.measureText(prompt).width < maxHW * 2 - 40) {
+            ctx.globalAlpha = la * 0.56;
+            ctx.fillStyle = `rgb(${PAL.todayRimHi})`;
+            ctx.textAlign = "center"; ctx.textBaseline = "middle";
+            ctx.shadowBlur = 0;
+            ctx.fillText(prompt, centerX, yb + ry + 18);
+          }
+        }
+        try { ctx.letterSpacing = "0px"; } catch (err) {}
+      }
+      ctx.restore();
+    }
+
+    // ---- shockwave rings from the bang ----
+    if (rings.length) {
+      ctx.save();
+      ctx.globalCompositeOperation = PAL.partComp;
+      for (const r of rings) {
+        if (r.a <= 0) continue;
+        const e = 1 - Math.pow(1 - Math.min(1, r.a), 2.2); // ease-out
+        const rad = e * maxHW * 0.85;
+        ctx.globalAlpha = (1 - r.a) * 0.5;
+        ctx.strokeStyle = PAL.ring;
+        ctx.lineWidth = 1.5 + (1 - r.a) * 2.5;
+        ctx.beginPath(); ctx.ellipse(centerX, topPad, rad, rad * 0.55, 0, 0, TAU); ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    // ---- the singularity: pulsing bloom + lens spikes ----
+    ctx.save();
+    ctx.globalCompositeOperation = PAL.singComp;
+    const ant = preroll > 0 ? 1 - preroll / PREROLL_T : 0; // pre-bang anticipation
+    let pul = reduceMotion ? 1 : 1 + 0.12 * Math.sin(tsec * 2.1);
+    if (ant > 0) pul *= 1 + 0.25 * ant * Math.sin(tsec * 13); // shiver builds
+    const gc = gradeRGB(currentP); // the halo remembers what era it has reached
+    const glow = ctx.createRadialGradient(centerX, topPad, 0, centerX, topPad, 26 * pul);
+    const lift = (v) => Math.max(0, Math.min(255, v + PAL.haloLift));
+    glow.addColorStop(0, `rgba(${PAL.singCore},0.85)`);
+    glow.addColorStop(0.3, `rgba(${lift(gc[0])},${lift(gc[1])},${lift(gc[2])},0.45)`);
+    glow.addColorStop(1, `rgba(${gc[0]},${gc[1]},${gc[2]},0)`);
+    ctx.fillStyle = glow;
+    ctx.beginPath(); ctx.arc(centerX, topPad, 26 * pul, 0, TAU); ctx.fill();
+    drawSpike(centerX, topPad, 58 * pul, 2.4, 0.32);
+    ctx.save(); ctx.translate(centerX, topPad); ctx.rotate(Math.PI / 2); ctx.translate(-centerX, -topPad);
+    drawSpike(centerX, topPad, 36 * pul, 2.4, 0.26);
+    ctx.restore();
+    // the void inhales: a ring collapses into the singularity before the bang
+    if (ant > 0 && !reduceMotion) {
+      const r = (1 - ant) * 150 + 6;
+      ctx.globalAlpha = ant * 0.55;
+      ctx.strokeStyle = PAL.ring; ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.ellipse(centerX, topPad, r, r * 0.55, 0, 0, TAU); ctx.stroke();
+      ctx.globalAlpha = 1;
+    }
+    ctx.restore();
+
+    // ---- the invitation: everything begins with a click ----
+    if (waiting()) {
+      const breathe = reduceMotion ? 0.5 : 0.38 + 0.18 * Math.sin(tsec * 1.6);
+      ctx.save();
+      ctx.font = "600 10.5px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+      try { ctx.letterSpacing = "3px"; } catch (err) {}
+      ctx.fillStyle = `rgba(${PAL.inviteInk},${breathe})`;
+      ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillText("CLICK THE SINGULARITY TO BEGIN", centerX, topPad + 52);
+      try { ctx.letterSpacing = "0px"; } catch (err) {}
+      ctx.restore();
+    }
+
+    // ---- bang flash (an event, not a backdrop — the void stays flat) ----
+    if (flashA > 0.005) {
+      ctx.fillStyle = `rgba(${PAL.flash},${flashA * PAL.flashA})`;
+      ctx.fillRect(0, 0, W, H);
+    }
+  }
+
+  // ---- Overlay update (cards + composition + readout) ---------------------
+  function updateOverlay(currentP) {
+    const cardsVisible = !waiting();
+    for (const m of MS) {
+      const on = cardsVisible && currentP >= m.vy - 0.0005;
+      m.el.classList.toggle("show", on);
+      const justCrossed = on && (currentP - m.vy) < 0.02;
+      m.el.classList.toggle("pop", justCrossed);
+    }
+    const t = pToTime(invWarp(currentP));
+    const c = compAt(t);
+    const r = Math.round(c.r * 100), mm = Math.round(c.m * 100);
+    const de = Math.max(0, 100 - r - mm);
+    segRad.style.width = r + "%"; segMat.style.width = mm + "%"; segDe.style.width = de + "%";
+    vRad.textContent = r + "%"; vMat.textContent = mm + "%"; vDe.textContent = de + "%";
+    eraEl.textContent = c.de > c.m ? "Dark-energy-dominated era"
+                      : c.m > c.r ? "Matter-dominated era" : "Radiation-dominated era";
+
+    ageEl.innerHTML = `<small>Age</small> ${formatAge(t)}`;
+    tempEl.innerHTML = `<small>Temp</small> ${formatTemp(tempAt(t))}`;
+    if (!scrubbing) scrub.value = Math.round(currentP * 1000);
+    scrub.style.setProperty("--fill", (currentP * 100).toFixed(2) + "%");
+  }
+
+  // ---- Loop / state -------------------------------------------------------
+  let currentP = 0, prevP = 0, playing = true, speed = siteIntroMode ? 2 : 1;
+  let scrubbing = false, targetP = null, last = performance.now();
+
+  function crossings(from, to) {
+    const hit = MS.filter(m => from < m.vy && to >= m.vy);
+    // A big scrub jump crosses many milestones at once — bursting them all
+    // washes the screen out. Only celebrate the last couple.
+    for (const m of (hit.length > 4 ? hit.slice(-2) : hit)) spawnBurst(m);
+  }
+
+  function travelTo(vy) {
+    targetP = clamp01(vy);
+    playing = false;
+    preroll = 0;
+    focusVy = targetP; focusA = 1; // light up the destination
+    syncPlay();
+  }
+
+  function frame(now) {
+    const raw = Math.max(0, now - last); last = now;
+    const dt = Math.min(raw, 60);        // simulation step (pauses gracefully)
+    const wdt = Math.min(raw, 500);      // wall-clock step for cinematic decays,
+                                         // so flashes/rings fade even in throttled tabs
+    const tsec = now * 0.001;
+
+    if (preroll > 0) {
+      // held breath: the singularity shivers, the void inhales… then bang
+      preroll -= wdt / 1000;
+      if (preroll <= 0) bang();
+    } else if (targetP !== null && !scrubbing) {
+      // smooth flight to a clicked milestone
+      prevP = currentP;
+      const k = reduceMotion ? 1 : 1 - Math.exp(-dt * 0.006);
+      currentP += (targetP - currentP) * k;
+      if (currentP > prevP) crossings(prevP, currentP);
+      if (Math.abs(targetP - currentP) < 0.0015) { currentP = targetP; targetP = null; updateHash(); }
+    } else if (playing && !scrubbing) {
+      prevP = currentP;
+      currentP += (dt / 1000) / BASE_DURATION * speed;
+      if (currentP >= 1) {
+        currentP = 1;
+        playing = false; syncPlay();
+      }
+      crossings(prevP, currentP);
+      if (currentP < 1) spawnSparks(currentP, pToY(currentP));
+    }
+
+    // decay cinematic state
+    flashA = Math.max(0, flashA - wdt * 0.0011);
+    cmbGlow = Math.max(0, cmbGlow - wdt * 0.0006);
+    if (targetP === null) focusA = Math.max(0, focusA - wdt * 0.0005);
+    for (let i = rings.length - 1; i >= 0; i--) {
+      rings[i].a += wdt * 0.00075;
+      if (rings[i].a > 1) rings.splice(i, 1);
+    }
+
+    updateParticles();
+    draw(currentP, tsec);
+    updateOverlay(currentP);
+    requestAnimationFrame(frame);
+  }
+
+  function resetRun() {
+    currentP = 0; prevP = 0; targetP = null; parts.length = 0; cmbGlow = 0;
+    playing = true;
+    preroll = reduceMotion ? 0 : PREROLL_T;
+    syncPlay();
+  }
+  function syncPlay() { playBtn.innerHTML = playing ? SVG_PAUSE : SVG_PLAY; }
+
+  // ---- Events -------------------------------------------------------------
+  // True while the page waits for its first spark
+  function waiting() { return !playing && currentP === 0 && preroll <= 0 && targetP === null; }
+  function ignite() {
+    preroll = PREROLL_T;
+    playing = true;
+    last = performance.now();
+    syncPlay();
+  }
+  function togglePlay() {
+    if (currentP >= 1) { resetRun(); return; }
+    if (waiting()) { ignite(); return; }
+    targetP = null;
+    playing = !playing;
+    last = performance.now(); syncPlay();
+  }
+  playBtn.addEventListener("click", togglePlay);
+  restartBtn.addEventListener("click", () => { resetRun(); last = performance.now(); });
+
+  scrub.addEventListener("input", () => {
+    scrubbing = true; targetP = null; preroll = 0;
+    const to = (+scrub.value) / 1000;
+    if (to > currentP) crossings(currentP, to);
+    prevP = currentP = to;
+  });
+  scrub.addEventListener("change", () => { scrubbing = false; last = performance.now(); updateHash(); });
+
+  // hover tooltip: read any moment's age straight off the scrubber
+  const scrubtip = document.getElementById("scrubtip");
+  scrub.addEventListener("mousemove", (e) => {
+    const rect = scrub.getBoundingClientRect();
+    const f = clamp01((e.clientX - rect.left) / rect.width);
+    scrubtip.textContent = formatAge(pToTime(invWarp(f)));
+    scrubtip.style.left = (e.clientX - rect.left) + "px";
+    scrubtip.style.opacity = 1;
+  });
+  scrub.addEventListener("mouseleave", () => { scrubtip.style.opacity = 0; });
+
+  document.getElementById("speeds").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-s]"); if (!b) return;
+    speed = +b.dataset.s;
+    [...e.currentTarget.children].forEach(c => c.classList.toggle("active", c === b));
+  });
+
+  // Theme: the void flips between deep space and blank page; the cosmos stays dark.
+  const themeBtn = document.getElementById("themeBtn");
+  function setTheme(name, persist) {
+    PAL = PALETTES[name] || PALETTES.light;
+    document.body.classList.toggle("light", name === "light");
+    themeBtn.textContent = name === "light" ? "☾" : "☀";
+    const tc = document.querySelector('meta[name="theme-color"]');
+    if (tc) tc.setAttribute("content", name === "light" ? "#ffffff" : "#060b18");
+    // only an explicit toggle saves the preference — a shared link shouldn't
+    if (persist) try { localStorage.setItem("bbu-theme", name); } catch (err) {}
+  }
+  themeBtn.addEventListener("click", () => {
+    setTheme(document.body.classList.contains("light") ? "dark" : "light", true);
+    updateHash();
+  });
+  let savedTheme = "dark";
+  try { savedTheme = localStorage.getItem("bbu-theme") || "dark"; } catch (err) {}
+  setTheme(savedTheme);
+
+  // Deep links: #t=0.62&theme=dark restores a moment in cosmic history.
+  function updateHash() {
+    const th = document.body.classList.contains("light") ? "light" : "dark";
+    // some browsers refuse replaceState on file:// — deep links are a nicety,
+    // never let them break scrubbing
+    try { history.replaceState(null, "", `#t=${currentP.toFixed(3)}&theme=${th}`); } catch (err) {}
+  }
+  function applyHash() {
+    const th = location.hash.match(/theme=(light|dark)/);
+    if (th) setTheme(th[1]);
+    const m = location.hash.match(/t=([\d.]+)/);
+    if (m) {
+      const v = clamp01(parseFloat(m[1]));
+      if (!isNaN(v) && v > 0) {
+        preroll = 0; playing = false;
+        prevP = currentP = v;
+        crossings(0, v);
+        syncPlay();
+      }
+    }
+  }
+
+  document.addEventListener("keydown", (e) => {
+    if (e.target.tagName === "INPUT" || e.target.tagName === "BUTTON") return;
+    if (e.code === "Space") { e.preventDefault(); togglePlay(); }
+    else if (e.code === "ArrowRight") {
+      targetP = null; preroll = 0; const to = Math.min(1, currentP + 0.015);
+      crossings(currentP, to); prevP = currentP = to;
+    }
+    else if (e.code === "ArrowLeft") { targetP = null; preroll = 0; prevP = currentP = Math.max(0, currentP - 0.015); }
+    else if (e.code === "KeyR") { resetRun(); last = performance.now(); }
+    else if (e.code === "KeyT") { themeBtn.click(); }
+  });
+
+  // Time probe: hover the revealed universe to read its age, click to travel.
+  // Clicking the waiting singularity ignites the whole thing.
+  let probe = null;
+  const nearSingularity = (e) => {
+    const dx = e.clientX - centerX, dy = e.clientY - topPad;
+    return dx * dx + dy * dy < 48 * 48;
+  };
+  const nearTodayRim = (e) => {
+    if (!siteIntroMode || currentP < 0.995) return false;
+    const rx = Math.max(maxHW, 1);
+    const ry = Math.max(sagAt(maxHW), 24);
+    const dx = (e.clientX - centerX) / rx;
+    const dy = (e.clientY - pToY(1)) / ry;
+    return dx * dx + dy * dy <= 1.12;
+  };
+  const enterObservableUniverse = () => {
+    try {
+      window.parent.location.href = "/observable-universe";
+    } catch (err) {
+      window.location.href = "/observable-universe";
+    }
+  };
+  canvas.addEventListener("mousemove", (e) => {
+    const vy = (e.clientY - topPad) / usableH;
+    const inside = vy >= 0 && vy <= Math.min(1, currentP) &&
+                   Math.abs(e.clientX - centerX) <= funnelHW(vy) + 10;
+    probe = inside ? vy : null;
+    canvas.style.cursor = (waiting() && nearSingularity(e)) ? "pointer"
+                        : nearTodayRim(e) ? "pointer"
+                        : inside ? "crosshair" : "default";
+  });
+  canvas.addEventListener("mouseout", () => { probe = null; canvas.style.cursor = "default"; });
+  canvas.addEventListener("click", (e) => {
+    if (waiting() && nearSingularity(e)) { ignite(); return; }
+    if (nearTodayRim(e)) { enterObservableUniverse(); return; }
+    if (probe !== null) travelTo(probe);
+  });
+
+  // No visibilitychange time-reset needed: dt is capped at 60ms per frame, so
+  // returning to a hidden tab can never produce a time jump — and resetting
+  // `last` on visibility churn starves the simulation in throttled tabs.
+  window.addEventListener("resize", layout);
+  // The bar's height changes when its content wraps (mobile) or the age text
+  // grows — re-flow everything positioned beneath it.
+  if (window.ResizeObserver) new ResizeObserver(layout).observe(controlsEl);
+
+  // ---- Go -----------------------------------------------------------------
+  layout();
+  if (reduceMotion) { playing = false; currentP = 1; }
+  else playing = false; // the universe waits for a click on the singularity
+  applyHash(); // a shared #t link lands straight on the moment
+  syncPlay();
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
