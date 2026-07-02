@@ -111,7 +111,6 @@ export function HomeBigBangExperience() {
           }`}
           aria-label="Big Bang introduction"
         >
-          <div className="big-bang-stars" aria-hidden />
           <div className="big-bang-pulse" aria-hidden />
           <div className="big-bang-rings" aria-hidden />
           <div className="big-bang-present" aria-hidden />
