@@ -498,29 +498,24 @@
 
   // Trumpet-bell silhouette: narrow Planck neck -> violent inflation flare ->
   // slow decelerating growth -> renewed dark-energy flare at the bottom.
-  // Catmull-Rom through control points, sampled into a LUT.
+  // Smooth monotone interpolation through control points, sampled into a LUT.
   const FUN = [
     [0.00, 0.006], [0.05, 0.020], [0.09, 0.050], [0.15, 0.280], [0.28, 0.440],
     [0.50, 0.560], [0.72, 0.660], [0.90, 0.760], [1.00, 1.000],
   ];
   const LUT_N = 512;
   const funLUT = new Float32Array(LUT_N + 1);
+  const smootherstep = (u) => u * u * u * (u * (u * 6 - 15) + 10);
   (function buildLUT() {
-    const P = (i) => FUN[Math.max(0, Math.min(FUN.length - 1, i))];
     for (let k = 0; k <= LUT_N; k++) {
       const v = k / LUT_N;
       let i = 0;
       while (i < FUN.length - 2 && v > FUN[i + 1][0]) i++;
-      const p0 = P(i - 1), p1 = P(i), p2 = P(i + 1), p3 = P(i + 2);
-      const u = (v - p1[0]) / ((p2[0] - p1[0]) || 1);
-      const u2 = u * u, u3 = u2 * u;
-      const w = 0.5 * ((2 * p1[1]) + (-p0[1] + p2[1]) * u +
-        (2 * p0[1] - 5 * p1[1] + 4 * p2[1] - p3[1]) * u2 +
-        (-p0[1] + 3 * p1[1] - 3 * p2[1] + p3[1]) * u3);
+      const p1 = FUN[i], p2 = FUN[i + 1];
+      const u = smootherstep(clamp01((v - p1[0]) / ((p2[0] - p1[0]) || 1)));
+      const w = p1[1] + (p2[1] - p1[1]) * u;
       funLUT[k] = Math.max(0.004, Math.min(1, w));
     }
-    // space only ever expands: enforce monotonic width (kills CR overshoot dips)
-    for (let k = 1; k <= LUT_N; k++) funLUT[k] = Math.max(funLUT[k], funLUT[k - 1]);
   })();
   function funnelHW(p) {
     const q = clamp01(p) * LUT_N, i = q | 0, fr = q - i;
@@ -885,21 +880,37 @@
     const frontY = pToY(currentP);
     const hwF = funnelHW(currentP);
     const sag = sagAt(hwF);
-    const steps = 90;
+    const steps = 320;
+    const rightEdge = [];
+    const leftEdge = [];
+    for (let i = 0; i <= steps; i++) {
+      const p = currentP * (i / steps), y = pToY(p), hw = funnelHW(p);
+      rightEdge.push({ x: centerX + hw, y });
+      leftEdge.push({ x: centerX - hw, y });
+    }
+    function traceSmoothEdge(points, reverse = false, move = true) {
+      if (points.length === 0) return;
+      const start = reverse ? points.length - 1 : 0;
+      const end = reverse ? 0 : points.length - 1;
+      const step = reverse ? -1 : 1;
+      const first = points[start];
+      move ? ctx.moveTo(first.x, first.y) : ctx.lineTo(first.x, first.y);
+      for (let i = start + step; reverse ? i > end : i < end; i += step) {
+        const next = points[i + step];
+        const midX = (points[i].x + next.x) * 0.5;
+        const midY = (points[i].y + next.y) * 0.5;
+        ctx.quadraticCurveTo(points[i].x, points[i].y, midX, midY);
+      }
+      if (points.length > 1) ctx.lineTo(points[end].x, points[end].y);
+    }
 
     // ---- funnel fill (revealed portion, arced bottom) ----
     ctx.save();
     ctx.beginPath();
     ctx.moveTo(centerX, topPad);
-    for (let i = 0; i <= steps; i++) {
-      const p = currentP * (i / steps), y = pToY(p);
-      ctx.lineTo(centerX + funnelHW(p), y);
-    }
+    traceSmoothEdge(rightEdge, false, false);
     ctx.quadraticCurveTo(centerX, frontY + sag * 2, centerX - hwF, frontY);
-    for (let i = steps; i >= 0; i--) {
-      const p = currentP * (i / steps), y = pToY(p);
-      ctx.lineTo(centerX - funnelHW(p), y);
-    }
+    traceSmoothEdge(leftEdge, true, false);
     ctx.closePath();
     // on the white page, the universe floats — it casts a soft shadow
     if (PAL.funnelShadow) {
@@ -934,13 +945,12 @@
     // inner rim light: the walls of the cosmos catch the light, giving the
     // bell volume (stroke is clipped, so only the inward half shows)
     ctx.save();
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
     ctx.globalCompositeOperation = "lighter";
-    for (const sgn of [-1, 1]) {
+    for (const edge of [leftEdge, rightEdge]) {
       ctx.beginPath();
-      for (let i = 0; i <= steps; i++) {
-        const p = currentP * (i / steps), y = pToY(p), x = centerX + sgn * funnelHW(p);
-        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-      }
+      traceSmoothEdge(edge);
       ctx.lineWidth = 16;
       ctx.strokeStyle = "rgba(150,175,255,0.10)";
       ctx.shadowColor = "rgba(160,185,255,0.5)"; ctx.shadowBlur = 22;
@@ -1019,12 +1029,11 @@
 
     // ---- funnel outline (dual-stroke glow) ----
     ctx.save();
-    for (const sgn of [-1, 1]) {
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
+    for (const edge of [leftEdge, rightEdge]) {
       ctx.beginPath();
-      for (let i = 0; i <= steps; i++) {
-        const p = currentP * (i / steps), y = pToY(p), x = centerX + sgn * funnelHW(p);
-        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-      }
+      traceSmoothEdge(edge);
       ctx.lineWidth = 5; ctx.strokeStyle = PAL.edgeFaint; ctx.stroke();
       ctx.lineWidth = 1.4; ctx.strokeStyle = PAL.edgeBright;
       ctx.shadowColor = PAL.edgeShadow; ctx.shadowBlur = 10;
